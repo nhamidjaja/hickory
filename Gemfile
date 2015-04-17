@@ -36,6 +36,11 @@ gem 'activeuuid'
 
 gem 'devise'
 
+gem 'rspec-rails', group: [:development, :test]
+gem 'guard-rspec', group: :test
+gem 'factory_girl_rails', group: [:development, :test]
+gem 'faker', group: [:development, :test]
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
