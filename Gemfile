@@ -37,7 +37,7 @@ gem 'activeuuid'
 gem 'devise'
 
 gem 'rspec-rails', group: [:development, :test]
-gem 'guard-rspec', group: :test
+gem 'guard-rspec', group: :development, require: false
 gem 'factory_girl_rails', group: [:development, :test]
 gem 'faker', group: [:development, :test]
 
