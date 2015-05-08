@@ -5,5 +5,5 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
 
-  validates :username, presence: true, uniqueness: true
+  validates :username, uniqueness: true, format: { with: /\A[a-z0-9_.]{1,15}\z/ }
 end
