@@ -26,39 +26,44 @@ Make sure you have the latest update from 'brew'
 
 ```
 $ brew update
+$ git clone git@gitlab.com:nhamidjaja/hickory.git
+$ cd hickory // the PROJECT DIRECTORY
+$ git check  out develop // cause we use git flow
 ```
-
-
-  $ git clone git@gitlab.com:nhamidjaja/licorice.git
-  $ cd licorice // the PROJECT DIRECTORY
-  $ git checkout develop // cause we use git flow
 
 *More about [git flow](http://nvie.com/posts/a-successful-git-branching-model/)*
 
 
 Now that the gemset is set, run this
 
-  $ echo gem: --no-ri --no-rdoc > ~/.gemrc  // this option is to skip gem docs
-  $ bundle install //this will install the gems
+```
+$ echo gem: --no-ri --no-rdoc > ~/.gemrc  // this option is to skip gem docs
+$ bundle install //this will install the gems
+```
 
 Next, config/create database.yml and config/application.yml and other settings. Don't worry we have a template
 
-  $ cp config/database.yml.example config/database.yml
+```
+$ cp config/database.template.yml config/database.yml
+```
+And adjust the config if needed.
 
-And adjust the settings.
+####MySQL
 
-####Setup Redis (not necessary yet)
+Install and run **mysql**, with brew:
 
-  $ brew install redis
-  $ redis-server /usr/local/etc/redis.conf
+```
+$ brew install mysql
+$ mysql.server start
+```
 
+Then you're finally ready to see the working app :)
 
-Install and run **mysql**, then you're finally ready to see the working app :)
-
-  $ rake db:setup
-  $ rake db:migrate
-  $ rails s
-
+```
+$ rake db:setup
+$ rake db:migrate
+$ rails s
+```
 
 
 
