@@ -1,6 +1,6 @@
-#Hickory
+# Hickory
 
-##Rails
+## Rails
 
 
 Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Control pattern.
@@ -13,7 +13,7 @@ the following resources handy:
 * Debugging rails: <http://guides.rubyonrails.org/debugging_rails_applications.html>
 
 
-##Installing Rails
+## Installing Rails
 
 
 
@@ -48,7 +48,7 @@ $ cp config/database.template.yml config/database.yml
 ```
 And adjust the config if needed.
 
-####MySQL
+#### MySQL
 
 Install and run **mysql**, with brew:
 
@@ -67,14 +67,14 @@ $ rails s
 
 
 
-####Ready to go!
+#### Ready to go!
 Open it on <http://localhost:3000>
 
 
 ***
 
 
-##Console
+## Console
 
 The console is a Ruby shell, which allows you to interact with your
 application's domain model. Here you'll have all parts of the application
@@ -99,7 +99,7 @@ More information about irb can be found at:
 link:http://www.rubycentral.org/pickaxe/irb.html
 
 
-##dbconsole
+## dbconsole
 
 You can go to the command line of your database directly through <tt>rails
 dbconsole</tt>. You would be connected to the database with the credentials
