@@ -35,6 +35,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'activeuuid'
 
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
 
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
