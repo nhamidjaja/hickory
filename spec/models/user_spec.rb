@@ -28,20 +28,20 @@ RSpec.describe User, type: :model do
     let(:info) { double(email: 'a@b.com') }
     let(:callback) { double(provider: 'facebook', uid: '123', info: info ) }
 
+    subject { User.from_omniauth(callback) }
+
     context 'when email already exists' do
       it 'returns same user' do
         user = FactoryGirl.create(:user, email: 'a@b.com', provider: 'facebook', uid: '123')
         
-        expect(User.from_omniauth(callback)).to eq(user)
+        is_expected.to eq(user)
       end
 
       it 'updates provider and uid' do
         user = FactoryGirl.create(:user, email: 'a@b.com')
-
-        found = User.from_omniauth(callback) 
         
-        expect(found.provider).to eq('facebook')
-        expect(found.uid).to eq('123')        
+        expect(subject.provider).to eq('facebook')
+        expect(subject.uid).to eq('123')        
       end
     end
 
@@ -49,13 +49,11 @@ RSpec.describe User, type: :model do
       it 'returns same user' do
         user = FactoryGirl.create(:user, email: 'x@y.com', provider: 'facebook', uid: '123')
         
-        expect(User.from_omniauth(callback)).to eq(user)
+        is_expected.to eq(user)
       end
     end
 
     context 'when new' do
-      subject { User.from_omniauth(callback) }
-
       it { is_expected.to be_a_new(User) }
       it { expect(subject.provider).to eq('facebook') }
       it { expect(subject.uid).to eq('123') }
