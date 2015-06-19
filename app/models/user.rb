@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable, :omniauthable, omniauth_providers: [ :facebook ]
+         :omniauthable, omniauth_providers: [ :facebook ]
 
   validates :username, uniqueness: true, format: { with: /\A[a-z0-9_.]{1,15}\z/ }
 
