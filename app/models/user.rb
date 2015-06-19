@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
     user.provider = auth.provider
     user.uid = auth.uid
     user.email = auth.info.email
+    user.omniauth_token = auth.credentials.token
 
     return user
   end

@@ -26,7 +26,8 @@ RSpec.describe User, type: :model do
 
   describe '#from_omniauth' do
     let(:info) { double(email: 'a@b.com') }
-    let(:callback) { double(provider: 'facebook', uid: '123', info: info ) }
+    let(:credentials) { double(token: 'abc098') }
+    let(:callback) { double(provider: 'facebook', uid: '123', info: info, credentials: credentials) }
 
     subject { User.from_omniauth(callback) }
 
@@ -37,11 +38,12 @@ RSpec.describe User, type: :model do
         is_expected.to eq(user)
       end
 
-      it 'updates provider and uid' do
+      it 'updates user metadata' do
         user = FactoryGirl.create(:user, email: 'a@b.com')
         
         expect(subject.provider).to eq('facebook')
-        expect(subject.uid).to eq('123')        
+        expect(subject.uid).to eq('123')
+        expect(subject.omniauth_token).to eq('abc098')
       end
     end
 
