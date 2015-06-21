@@ -62,4 +62,18 @@ RSpec.describe User, type: :model do
       it { expect(subject.email).to eq('a@b.com') }
     end
   end
+
+  describe '#apply_omniauth' do
+    let(:info) { double(email: 'a@b.com') }
+    let(:credentials) { double(token: 'abc098') }
+    let(:callback) { double(provider: 'facebook', uid: '123', info: info, credentials: credentials) }
+    subject(:user) { FactoryGirl.build(:user) }
+
+    before { user.apply_omniauth(callback) }
+
+    it { expect(user.provider).to eq('facebook') }
+    it { expect(user.uid).to eq('123') }
+    it { expect(user.email).to eq('a@b.com') }
+    it { expect(user.omniauth_token).to eq('abc098') }    
+  end
 end

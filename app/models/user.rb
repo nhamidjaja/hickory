@@ -9,11 +9,15 @@ class User < ActiveRecord::Base
 
   def self.from_omniauth(auth)
     user = find_by_email(auth.info.email) || where(provider: auth.provider, uid: auth.uid).first || User.new
-    user.provider = auth.provider
-    user.uid = auth.uid
-    user.email = auth.info.email
-    user.omniauth_token = auth.credentials.token
-
+    user.apply_omniauth(auth)
+    
     return user
+  end
+
+  def apply_omniauth(auth)
+    self.provider = auth.provider
+    self.uid = auth.uid
+    self.email = auth.info.email
+    self.omniauth_token = auth.credentials.token
   end
 end
