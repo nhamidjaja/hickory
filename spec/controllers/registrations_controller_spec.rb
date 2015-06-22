@@ -16,5 +16,13 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it { expect(assigns(:user).omniauth_token).to eq('abc098') }
     end
+
+    context 'no omniauth session' do
+      before do
+        get :new
+      end
+
+      it { expect(assigns(:user).omniauth_token).to eq(nil) }
+    end
   end
 end

@@ -10,6 +10,9 @@ AllCops:
     - 'bin/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
 
+Documentation:
+  Enabled: false
+
 Style/Encoding:
   Enabled: false
 

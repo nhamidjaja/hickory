@@ -38,7 +38,7 @@ RSpec.describe User, type: :model do
       end
 
       it 'updates user metadata' do
-        user = FactoryGirl.create(:user, email: 'a@b.com')
+        FactoryGirl.create(:user, email: 'a@b.com')
 
         expect(subject.provider).to eq('facebook')
         expect(subject.uid).to eq('123')
