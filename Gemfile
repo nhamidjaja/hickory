@@ -43,6 +43,7 @@ gem 'guard-rspec', group: :development, require: false
 gem 'factory_girl_rails', group: [:development, :test]
 gem 'faker', group: [:development, :test]
 
+gem 'rubocop', group: :development, require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
