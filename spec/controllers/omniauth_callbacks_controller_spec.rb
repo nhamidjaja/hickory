@@ -17,10 +17,10 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
 
     context 'new user' do
       let(:user) { FactoryGirl.build(:user, provider: 'facebook', uid: 'x123') }
-      before { 
-        allow(User).to receive(:from_omniauth) { user } 
-        controller.request.env['omniauth.auth'] = Hash.new
-      }
+      before do
+        allow(User).to receive(:from_omniauth) { user }
+        controller.request.env['omniauth.auth'] = {}
+      end
 
       it 'stores omniauth in session' do
         post :facebook

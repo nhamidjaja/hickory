@@ -12,7 +12,6 @@ RSpec.describe User, type: :model do
     it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: '1234567890123456')).to_not be_valid }
 
-
     it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
     it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
     it { expect(FactoryGirl.build(:user, username: '0')).to be_valid }
@@ -34,13 +33,13 @@ RSpec.describe User, type: :model do
     context 'when email already exists' do
       it 'returns same user' do
         user = FactoryGirl.create(:user, email: 'a@b.com', provider: 'facebook', uid: '123')
-        
+
         is_expected.to eq(user)
       end
 
       it 'updates user metadata' do
         user = FactoryGirl.create(:user, email: 'a@b.com')
-        
+
         expect(subject.provider).to eq('facebook')
         expect(subject.uid).to eq('123')
         expect(subject.omniauth_token).to eq('abc098')
@@ -50,7 +49,7 @@ RSpec.describe User, type: :model do
     context 'when provider and uid already exists' do
       it 'returns same user' do
         user = FactoryGirl.create(:user, email: 'x@y.com', provider: 'facebook', uid: '123')
-        
+
         is_expected.to eq(user)
       end
     end
@@ -74,6 +73,6 @@ RSpec.describe User, type: :model do
     it { expect(user.provider).to eq('facebook') }
     it { expect(user.uid).to eq('123') }
     it { expect(user.email).to eq('a@b.com') }
-    it { expect(user.omniauth_token).to eq('abc098') }    
+    it { expect(user.omniauth_token).to eq('abc098') }
   end
 end
