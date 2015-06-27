@@ -5,9 +5,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
   describe '#new' do
     context 'has omniauth session' do
-      let(:info) { double(email: 'a@b.com') }
-      let(:credentials) { double(token: 'abc098') }
-      let(:callback) { double(provider: 'facebook', uid: '123', info: info, credentials: credentials) }
+      let(:callback) { { 'provider' => 'facebook', 'uid' => '123', 'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } } }
 
       before do
         request.session[:omniauth] = callback
