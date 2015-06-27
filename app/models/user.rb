@@ -8,16 +8,22 @@ class User < ActiveRecord::Base
   validates :username, uniqueness: true, format: { with: /\A[a-z0-9_.]{1,15}\z/ }
 
   def self.from_omniauth(auth)
-    user = find_by_email(auth.info.email) || find_by(provider: auth.provider, uid: auth.uid) || User.new
+    user = find_by_email(auth['info']['email']) || find_by(provider: auth['provider'], uid: auth['uid']) || User.new
     user.apply_omniauth(auth)
 
     user
   end
 
   def apply_omniauth(auth)
-    self.provider = auth.provider
-    self.uid = auth.uid
-    self.email = auth.info.email
-    self.omniauth_token = auth.credentials.token
+    self.provider = auth['provider']
+    self.uid = auth['uid']
+    self.email = auth['info']['email']
+    self.omniauth_token = auth['credentials']['token']
+  end
+
+  protected
+
+  def password_required?
+    (provider.blank? || uid.blank? || !password.blank?) && super
   end
 end

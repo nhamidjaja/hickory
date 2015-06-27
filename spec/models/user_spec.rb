@@ -24,9 +24,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#from_omniauth' do
-    let(:info) { double(email: 'a@b.com') }
-    let(:credentials) { double(token: 'abc098') }
-    let(:callback) { double(provider: 'facebook', uid: '123', info: info, credentials: credentials) }
+    let(:callback) { { 'provider' => 'facebook', 'uid' => '123', 'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } } }
 
     subject { User.from_omniauth(callback) }
 
@@ -63,9 +61,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#apply_omniauth' do
-    let(:info) { double(email: 'a@b.com') }
-    let(:credentials) { double(token: 'abc098') }
-    let(:callback) { double(provider: 'facebook', uid: '123', info: info, credentials: credentials) }
+    let(:callback) { { 'provider' => 'facebook', 'uid' => '123', 'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } } }
     subject(:user) { FactoryGirl.build(:user) }
 
     before { user.apply_omniauth(callback) }
@@ -74,5 +70,35 @@ RSpec.describe User, type: :model do
     it { expect(user.uid).to eq('123') }
     it { expect(user.email).to eq('a@b.com') }
     it { expect(user.omniauth_token).to eq('abc098') }
+  end
+
+  describe '#password_required?' do
+    subject { user.send(:password_required?) }
+
+    context 'no provider' do
+      let(:user) { FactoryGirl.build(:user, provider: '', password: '') }
+
+      it { is_expected.to eq(true) }
+    end
+    
+    context 'no uid' do
+      let(:user) { FactoryGirl.build(:user, uid: '', password: '') }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'has provider and uid' do
+      let(:user) { FactoryGirl.build(:user, password: '', provider: 'oauth', uid: '321') }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context 'has a password' do
+      let(:user) { FactoryGirl.build(:user, password: 'whatever') }
+
+      it { is_expected.to eq(true) }
+    end
+
+
   end
 end
