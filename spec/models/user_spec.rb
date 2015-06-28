@@ -24,7 +24,10 @@ RSpec.describe User, type: :model do
   end
 
   describe '#from_omniauth' do
-    let(:callback) { { 'provider' => 'facebook', 'uid' => '123', 'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } } }
+    let(:callback) do
+      { 'provider' => 'facebook', 'uid' => '123',
+        'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } }
+    end
 
     subject { User.from_omniauth(callback) }
 
@@ -61,7 +64,10 @@ RSpec.describe User, type: :model do
   end
 
   describe '#apply_omniauth' do
-    let(:callback) { { 'provider' => 'facebook', 'uid' => '123', 'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } } }
+    let(:callback) do
+      { 'provider' => 'facebook', 'uid' => '123',
+        'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } }
+    end
     before { user.apply_omniauth(callback) }
 
     context 'new user' do
@@ -88,7 +94,7 @@ RSpec.describe User, type: :model do
 
       it { is_expected.to eq(true) }
     end
-    
+
     context 'no uid' do
       let(:user) { FactoryGirl.build(:user, uid: '', password: '') }
 
@@ -106,7 +112,5 @@ RSpec.describe User, type: :model do
 
       it { is_expected.to eq(true) }
     end
-
-
   end
 end
