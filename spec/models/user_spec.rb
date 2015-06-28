@@ -72,6 +72,12 @@ RSpec.describe User, type: :model do
       it { expect(user.email).to eq('a@b.com') }
       it { expect(user.omniauth_token).to eq('abc098') }
     end
+
+    context 'existing user' do
+      subject(:user) { FactoryGirl.create(:user, email: 'do-not@change.com') }
+
+      it { expect(user.email).to eq('do-not@change.com') }
+    end
   end
 
   describe '#password_required?' do

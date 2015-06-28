@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   def apply_omniauth(auth)
     self.provider = auth['provider']
     self.uid = auth['uid']
-    self.email = auth['info']['email']
+    self.email = auth['info']['email'] if self.new_record?
     self.omniauth_token = auth['credentials']['token']
   end
 
