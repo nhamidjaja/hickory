@@ -16,4 +16,13 @@
 !/log/.keep
 /tmp
 
+
+.powenv
+
+Procfile
+dump.rdb
+
+.DS_Store
+
+# Ignore settings.
 /config/database.yml
