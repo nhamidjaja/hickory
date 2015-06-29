@@ -36,6 +36,7 @@ gem 'activeuuid'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'doorkeeper'
 
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
