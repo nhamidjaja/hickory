@@ -9,7 +9,8 @@ Follow the guidelines to start developing your application. You can find
 the following resources handy:
 
 * The Getting Started Guide: <http://guides.rubyonrails.org/getting_started.html> <-- **New at rails? At least read this doc**
-* Ruby on Rails Tutorial Book: <http://www.railstutorial.org/>
+* Railscasts: <http://railscasts.com>
+* Ruby on Rails Tutorial Book: <http://www.railstutorial.org>
 * Debugging rails: <http://guides.rubyonrails.org/debugging_rails_applications.html>
 
 
@@ -59,7 +60,7 @@ $ mysql.server start
 ```
 #### Cassandra
 
-Install and run **cassandra** with brew by following this guide [http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html](http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html)
+Install and run **cassandra** with brew by following this guide <http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html>
 
 
 #### Run rails server
