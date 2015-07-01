@@ -56,6 +56,12 @@ Install and run **mysql**, with brew:
 $ brew install mysql
 $ mysql.server start
 ```
+#### Cassandra
+
+Install and run **cassandra** with brew by following this guide [http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html](http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html)
+
+
+#### Run rails server
 
 Then you're finally ready to see the working app :)
 
@@ -64,7 +70,6 @@ $ rake db:setup
 $ rake db:migrate
 $ rails s
 ```
-
 
 
 #### Ready to go!
