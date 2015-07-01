@@ -19,7 +19,7 @@ the following resources handy:
 
 For Mac OS X I recommend you to use [Homebrew](http://mxcl.github.io/homebrew/) for package manager.
 
-And use [Ruby Version Manager](https://rvm.io/), and here's the [link](http://www.stewgleadow.com/blog/2011/12/10/installing-rvm-on-os-x-lion/) to install it on Mac. We're using **ruby-2.2.0**
+And use [Ruby Version Manager](https://rvm.io/), and here's the [link](http://www.stewgleadow.com/blog/2011/12/10/installing-rvm-on-os-x-lion/) to install it on Mac.
 
 
 Make sure you have the latest update from 'brew'
@@ -28,7 +28,7 @@ Make sure you have the latest update from 'brew'
 $ brew update
 $ git clone git@gitlab.com:nhamidjaja/hickory.git
 $ cd hickory // the PROJECT DIRECTORY
-$ git check  out develop // cause we use git flow
+$ git checkout develop // cause we use git flow
 ```
 
 *More about [git flow](http://nvie.com/posts/a-successful-git-branching-model/)*
@@ -38,13 +38,14 @@ Now that the gemset is set, run this
 
 ```
 $ echo gem: --no-ri --no-rdoc > ~/.gemrc  // this option is to skip gem docs
-$ bundle install //this will install the gems
+$ bundle install  // this will install the gems
 ```
 
-Next, config/create database.yml and config/application.yml and other settings. Don't worry we have a template
+Next, copy config/create database.yml and other configurations. Don't worry we have a template
 
 ```
 $ cp config/database.template.yml config/database.yml
+$ cp config/cequel.template.yml config/cequel.yml  // ORM for Cassandra
 ```
 And adjust the config if needed.
 
