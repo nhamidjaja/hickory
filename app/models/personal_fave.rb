@@ -6,4 +6,5 @@ class PersonalFave
   column :headline, :text
   column :header_image_url, :text
   column :following_fave_count, :int
+  timestamps
 end
