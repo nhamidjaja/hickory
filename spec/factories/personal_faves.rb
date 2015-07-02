@@ -1,6 +1,4 @@
 FactoryGirl.define do
-  factory :personal_fafe, :class => 'PersonalFave' do
-    
+  factory :personal_fafe, class: 'PersonalFave' do
   end
-
 end
