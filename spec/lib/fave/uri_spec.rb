@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'fave/uri'
 
 RSpec.describe Fave::Uri do
   describe '#canon' do
