@@ -1,5 +1,5 @@
 module Fave
-  class Uri
+  class Url
     @parsed = nil
 
     def initialize(uri_string)
