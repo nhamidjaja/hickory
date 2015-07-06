@@ -51,6 +51,7 @@ gem 'sidekiq'
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
+gem 'guard-sidekiq', group: :development, require: false
 gem 'factory_girl_rails', group: [:development, :test]
 gem 'faker', group: [:development, :test]
 
