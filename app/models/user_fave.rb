@@ -1,4 +1,4 @@
-class PersonalFave
+class UserFave
   include Cequel::Record
 
   key :user_id, :uuid

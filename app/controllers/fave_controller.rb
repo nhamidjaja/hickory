@@ -13,7 +13,7 @@ class FaveController < ApplicationController
     rescue Cequel::Record::RecordNotFound
     end
 
-    PersonalFave.create(user_id: current_user.id.to_s, content_url: url.canon,
+    UserFave.create(user_id: current_user.id.to_s, content_url: url.canon,
       headline: article.headline, header_image_url: article.header_image_url, published_at: article.published_at)
   end
 end
