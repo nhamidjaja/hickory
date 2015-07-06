@@ -10,7 +10,7 @@ RSpec.describe User, type: :model do
     it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: '1234567890123456')).to_not be_valid }
+    it { expect(FactoryGirl.build(:user, username: '1' * 16)).to_not be_valid }
 
     it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
     it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
@@ -26,14 +26,17 @@ RSpec.describe User, type: :model do
   describe '#from_omniauth' do
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => '123',
-        'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } }
+        'info' => { 'email' => 'a@b.com' },
+        'credentials' => { 'token' => 'abc098' } }
     end
 
     subject { User.from_omniauth(callback) }
 
     context 'when email already exists' do
       it 'returns same user' do
-        user = FactoryGirl.create(:user, email: 'a@b.com', provider: 'facebook', uid: '123')
+        user = FactoryGirl.create(:user,
+                                  email: 'a@b.com',
+                                  provider: 'facebook', uid: '123')
 
         is_expected.to eq(user)
       end
@@ -49,7 +52,8 @@ RSpec.describe User, type: :model do
 
     context 'when provider and uid already exists' do
       it 'returns same user' do
-        user = FactoryGirl.create(:user, email: 'x@y.com', provider: 'facebook', uid: '123')
+        user = FactoryGirl.create(:user, email: 'x@y.com',
+                                         provider: 'facebook', uid: '123')
 
         is_expected.to eq(user)
       end
@@ -66,7 +70,8 @@ RSpec.describe User, type: :model do
   describe '#apply_omniauth' do
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => '123',
-        'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } }
+        'info' => { 'email' => 'a@b.com' },
+        'credentials' => { 'token' => 'abc098' } }
     end
     before { user.apply_omniauth(callback) }
 
@@ -102,7 +107,10 @@ RSpec.describe User, type: :model do
     end
 
     context 'has provider and uid' do
-      let(:user) { FactoryGirl.build(:user, password: '', provider: 'oauth', uid: '321') }
+      let(:user) do
+        FactoryGirl.build(:user, password: '',
+                                 provider: 'oauth', uid: '321')
+      end
 
       it { is_expected.to eq(false) }
     end

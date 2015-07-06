@@ -45,7 +45,9 @@ RSpec.configure do |config|
   end
 
   def clean_cequel!
-    Cequel::Record.descendants.each { |klass| Cequel::Record.connection.schema.truncate_table(klass.table_name) }
+    Cequel::Record.descendants.each do |klass|
+      Cequel::Record.connection.schema.truncate_table(klass.table_name)
+    end
   end
 
   config.before :suite do
