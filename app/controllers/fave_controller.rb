@@ -5,12 +5,7 @@ class FaveController < ApplicationController
     url = Fave::Url.new(params[:url])
 
     # Move everything below to worker
-    article = MasterFeed.new
-
-    begin
-      article = MasterFeed.find(url.canon)
-    rescue Cequel::Record::RecordNotFound
-    end
+    article = MasterFeed.where(content_url: url.canon).first || MasterFeed.new
 
     UserFave.create(user_id: current_user.id.to_s, content_url: url.canon,
                     headline: article.headline, header_image_url: article.header_image_url,
