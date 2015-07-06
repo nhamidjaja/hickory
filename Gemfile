@@ -45,6 +45,9 @@ gem 'omniauth-facebook'
 # View templating engine
 gem 'slim'
 
+# Background worker
+gem 'sidekiq'
+
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
