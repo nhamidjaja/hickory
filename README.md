@@ -45,8 +45,8 @@ $ bundle install  // this will install the gems
 Next, copy config/create database.yml and other configurations. Don't worry we have a template
 
 ```
-$ cp config/database.template.yml config/database.yml
-$ cp config/cequel.template.yml config/cequel.yml  // ORM for Cassandra
+$ cp config/database.example.yml config/database.yml
+$ cp config/cequel.example.yml config/cequel.yml  // ORM for Cassandra
 ```
 And adjust the config if needed.
 
@@ -55,21 +55,31 @@ And adjust the config if needed.
 Install and run **mysql**, with brew:
 
 ```
-$ brew install mysql
-$ mysql.server start
+$ brew install postgres
 ```
 #### Cassandra
 
 Install and run **cassandra** with brew by following this guide <http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html>
 
+#### Run test suite
+To verify that everything works run the test suite:
+
+```
+$ rake db:create
+$ rake db:migrate
+$ rake db:test:prepare   // sync test database with development database
+$ rspec
+
+Finished in 0.70621 seconds (files took 2.23 seconds to load)
+47 examples, 0 failures, 9 pending
+```
+Verify that you have **0 failures**.
 
 #### Run rails server
 
 Then you're finally ready to see the working app :)
 
 ```
-$ rake db:setup
-$ rake db:migrate
 $ rails s
 ```
 
