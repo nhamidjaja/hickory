@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe OmniauthCallbacksController, type: :controller do
   describe '#facebook' do
     context 'returning user' do
-      let(:user) { FactoryGirl.create(:user, provider: 'facebook', uid: 'x123') }
+      let(:user) do
+        FactoryGirl
+          .create(:user, provider: 'facebook', uid: 'x123')
+      end
+
       before { allow(User).to receive(:from_omniauth) { user } }
 
       it 'signs in user' do

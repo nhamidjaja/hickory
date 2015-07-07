@@ -31,17 +31,31 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Cassandra ORM
+gem 'cequel'
+
+# ID generator
 gem 'activeuuid'
 
+# User authentication
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
 
+# View templating engine
+gem 'slim'
+
+# Background worker
+gem 'sidekiq'
+
+# Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
+gem 'guard-sidekiq', group: :development, require: false
 gem 'factory_girl_rails', group: [:development, :test]
 gem 'faker', group: [:development, :test]
 
+# Ruby style checker
 gem 'rubocop', group: :development, require: false
 
 group :development, :test do

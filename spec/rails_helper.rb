@@ -18,18 +18,48 @@ require 'rspec/rails'
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-# Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
+  # Custom config goes first
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
+  config.extend ControllerMacros, type: :controller
+
+  # Cequel database cleaner for spec
+  records = []
+
+  config.before :suite do
+    Cequel::Record.descendants.each do |klass|
+      klass.after_create { |r| records << r }
+    end
+  end
+
+  config.after :each do
+    records.each(&:destroy)
+    records.clear
+  end
+
+  def clean_cequel!
+    Cequel::Record.descendants.each do |klass|
+      Cequel::Record.connection.schema.truncate_table(klass.table_name)
+    end
+  end
+
+  config.before :suite do
+    clean_cequel!
+  end
+
+  config.after :suite do
+    clean_cequel!
+  end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

@@ -7,7 +7,8 @@ RSpec.describe RegistrationsController, type: :controller do
     context 'has omniauth session' do
       let(:callback) do
         { 'provider' => 'facebook', 'uid' => '123',
-          'info' => { 'email' => 'a@b.com' }, 'credentials' => { 'token' => 'abc098' } }
+          'info' => { 'email' => 'a@b.com' },
+          'credentials' => { 'token' => 'abc098' } }
       end
 
       before do
