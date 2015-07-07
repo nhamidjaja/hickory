@@ -50,13 +50,24 @@ $ cp config/cequel.example.yml config/cequel.yml  // ORM for Cassandra
 ```
 And adjust the config if needed.
 
-#### MySQL
+#### PostgreSQL
 
 Install and run **mysql**, with brew:
 
 ```
 $ brew install postgres
 ```
+Follow the instructions to start postgres.
+
+#### Redis
+
+Install and run **redis**, with brew:
+
+```
+$ brew install redis
+```
+Follow the instructions to start postgres.
+
 #### Cassandra
 
 Install and run **cassandra** with brew by following this guide <http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html>
