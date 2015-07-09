@@ -2,16 +2,17 @@ module Api
   module V1
     class ApplicationController < ActionController::Base
       protect_from_forgery with: :null_session
-
+      rescue_from Errors::NotFound, with: :render_not_found
+      rescue_from Errors::NotAuthorized, with: :render_unauthorized
 
       # Tested with profile_requests_spec.rb
       def authenticate_user!
         email = request.headers['X-Email']
         token = request.headers['X-Auth-Token']
-        render_unauthorized && return unless email && token
+        fail Errors::NotAuthorized unless email && token
 
         user = User.find_by_email(email)
-        render_not_found && return unless user
+        fail Errors::NotFound unless user
       end
 
       private
