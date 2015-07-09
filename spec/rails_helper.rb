@@ -29,6 +29,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
   config.extend ControllerMacros, type: :controller
+  config.include Requests::JsonHelpers, type: :request
 
   # Cequel database cleaner for spec
   records = []
