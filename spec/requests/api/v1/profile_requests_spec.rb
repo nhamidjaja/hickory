@@ -18,7 +18,7 @@ RSpec.describe 'Profile API', type: :request do
             nil,
             'X-Email' => 'no@email.com', 'X-Auth-Token' => 'atoken'
       end
-      it { expect(response.status).to eq(404) }
+      it { expect(response.status).to eq(401) }
     end
   end
 end

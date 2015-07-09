@@ -12,7 +12,7 @@ module Api
         fail Errors::NotAuthorized unless email && token
 
         user = User.find_by_email(email)
-        fail Errors::NotFound unless user
+        fail Errors::NotAuthorized unless user
       end
 
       private
