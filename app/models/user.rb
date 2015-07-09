@@ -28,8 +28,8 @@ class User < ActiveRecord::Base
   end
 
   def valid_token?(token)
-    return true if self.omniauth_token.eql?(token)
-    
+    return true if omniauth_token.eql?(token)
+
     false
   end
 

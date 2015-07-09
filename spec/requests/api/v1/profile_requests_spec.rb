@@ -3,7 +3,12 @@ require 'rails_helper'
 RSpec.describe 'Profile API', type: :request do
   describe 'authentication' do
     describe 'unauthorized' do
-      before { FactoryGirl.create(:user, email: 'a@user.com', omniauth_token: 'validtoken') }
+      before do
+        FactoryGirl.create(:user,
+                           email: 'a@user.com',
+                           omniauth_token: 'validtoken')
+      end
+
       context 'no email' do
         before do
           get '/api/v1/profile.json',
@@ -61,7 +66,11 @@ RSpec.describe 'Profile API', type: :request do
     end
 
     describe 'authorized' do
-      let(:user) { FactoryGirl.create(:user, email: 'a@user.com', omniauth_token: 'validtoken') }
+      let(:user) do
+        FactoryGirl.create(:user,
+                           email: 'a@user.com',
+                           omniauth_token: 'validtoken')
+      end
       before { user }
 
       context 'token already saved' do
