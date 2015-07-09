@@ -9,7 +9,8 @@ module Api
       def authenticate_user!
         email = request.headers['X-Email']
         token = request.headers['X-Auth-Token']
-        fail Errors::NotAuthorized unless email && token
+        uid = request.headers['X-Auth-User-Id']
+        fail Errors::NotAuthorized unless email && token && uid
 
         user = User.find_by_email(email)
         fail Errors::NotAuthorized unless user
