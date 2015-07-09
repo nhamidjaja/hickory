@@ -1,2 +1,6 @@
-module Api::V1::ApplicationHelper
+module Api
+  module V1
+    module ApplicationHelper
+    end
+  end
 end
