@@ -121,4 +121,20 @@ RSpec.describe User, type: :model do
       it { is_expected.to eq(true) }
     end
   end
+
+  describe '#valid_token?' do
+    let(:user) { FactoryGirl.build(:user, omniauth_token: 'validtoken') }
+
+    context 'token already saved' do
+      subject { user.valid_token?('validtoken') }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'different but valid token' do
+      subject { user.valid_token?('facebook-token') }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 end

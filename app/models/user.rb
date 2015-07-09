@@ -27,6 +27,12 @@ class User < ActiveRecord::Base
     self.omniauth_token = auth['credentials']['token']
   end
 
+  def valid_token?(token)
+    return true if self.omniauth_token.eql?(token)
+    
+    false
+  end
+
   protected
 
   def password_required?

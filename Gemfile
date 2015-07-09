@@ -49,6 +49,9 @@ gem 'slim'
 # Background worker
 gem 'sidekiq'
 
+# Facebook Graph API wrapper
+gem 'fb_graph2'
+
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
