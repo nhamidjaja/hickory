@@ -13,6 +13,10 @@ module Api
 
         user = User.find_by_email(email)
         fail Errors::NotAuthorized unless user
+
+        return @current_user = user if user.omniauth_token.eql?(token)
+
+        fail Errors::NotAuthorized
       end
 
       private
