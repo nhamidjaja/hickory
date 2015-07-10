@@ -61,6 +61,7 @@ RSpec.describe 'Profile API', type: :request do
       let(:user) do
         FactoryGirl.create(:user,
                            email: 'a@user.com',
+                           username: 'my_user',
                            omniauth_token: 'validtoken')
       end
       before { user }
@@ -74,6 +75,10 @@ RSpec.describe 'Profile API', type: :request do
         end
 
         it { expect(response.status).to eq(200) }
+
+        it { expect(json['user']['id']).to_not be_blank }
+        it { expect(json['user']['email']).to eq('a@user.com') }
+        it { expect(json['user']['username']).to eq('my_user') }
       end
 
       context 'different but valid third-party token' do

@@ -24,6 +24,10 @@ module Api
         fail Errors::NotAuthorized
       end
 
+      def current_user
+        @current_user
+      end
+
       private
 
       def render_unauthorized
