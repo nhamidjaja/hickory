@@ -5,12 +5,13 @@ module Api
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
 
+      @current_user = nil
+
       # Tested with profile_requests_spec.rb
       def authenticate_user!
         email = request.headers['X-Email']
         token = request.headers['X-Auth-Token']
-        uid = request.headers['X-Auth-User-Id']
-        fail Errors::NotAuthorized unless email && token && uid
+        fail Errors::NotAuthorized unless email && token
 
         user = User.find_by_email(email)
         fail Errors::NotAuthorized unless user

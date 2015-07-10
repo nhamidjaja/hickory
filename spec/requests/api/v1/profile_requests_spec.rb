@@ -13,18 +13,6 @@ RSpec.describe 'Profile API', type: :request do
         before do
           get '/api/v1/profile.json',
               nil,
-              'X-Auth-User-Id' => '123',
-              'X-Auth-Token' => 'validtoken'
-        end
-
-        it { expect(response.status).to eq(401) }
-      end
-
-      context 'no user id' do
-        before do
-          get '/api/v1/profile.json',
-              nil,
-              'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
         end
 
@@ -35,8 +23,7 @@ RSpec.describe 'Profile API', type: :request do
         before do
           get '/api/v1/profile.json',
               nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-User-Id' => '123'
+              'X-Email' => 'a@user.com'
         end
 
         it { expect(response.status).to eq(401) }
@@ -47,7 +34,6 @@ RSpec.describe 'Profile API', type: :request do
           get '/api/v1/profile.json',
               nil,
               'X-Email' => 'no@email.com',
-              'X-Auth-User-Id' => '123',
               'X-Auth-Token' => 'atoken'
         end
 
@@ -78,7 +64,6 @@ RSpec.describe 'Profile API', type: :request do
           get '/api/v1/profile.json',
               nil,
               'X-Email' => 'a@user.com',
-              'X-Auth-User-Id' => '123',
               'X-Auth-Token' => 'validtoken'
         end
 
