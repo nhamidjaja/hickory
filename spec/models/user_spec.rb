@@ -133,8 +133,10 @@ RSpec.describe User, type: :model do
 
     context 'different but valid token' do
       before do
-        fb_user = instance_double('FbGraph2::User', access_token: 'remote-token')
-        expect_any_instance_of(FbGraph2::User).to receive(:fetch).and_return(fb_user)
+        fb_user = instance_double('FbGraph2::User',
+                                  access_token: 'remote-token')
+        expect_any_instance_of(FbGraph2::User).to receive(:fetch)
+          .and_return(fb_user)
       end
 
       subject { user.valid_token?('client-token') }
@@ -145,7 +147,8 @@ RSpec.describe User, type: :model do
     context 'different but invalid third-party token' do
       before do
         double = instance_double('FbGraph2::User', access_token: 'alsovalid')
-        allow(double).to receive(:fetch).and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
+        allow(double).to receive(:fetch)
+          .and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
 
         allow(FbGraph2::User).to receive(:me).and_return(double)
       end

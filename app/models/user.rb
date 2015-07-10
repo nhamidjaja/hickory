@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
       return false
     end
 
-    omniauth_token = fb_user.access_token
+    self.omniauth_token = fb_user.access_token
     true
   end
 

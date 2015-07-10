@@ -20,9 +20,7 @@ module Api
 
         @current_user.save!
 
-        return true
-
-        fail Errors::NotAuthorized
+        true
       end
 
       private
