@@ -16,11 +16,12 @@ module Api
         user = User.find_by_email(email)
         fail Errors::NotAuthorized unless user
 
-        @current_user = user if user.valid_token?(token)
+        if user.valid_token?(token)
+          user.save! if user.changed? # Save user if token updated
+          return @current_user = user
+        end
 
-        @current_user.save!
-
-        true
+        fail Errors::NotAuthorized
       end
 
       private
