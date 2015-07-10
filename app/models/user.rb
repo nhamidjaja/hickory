@@ -30,7 +30,15 @@ class User < ActiveRecord::Base
   def valid_token?(token)
     return true if omniauth_token.eql?(token)
 
-    false
+    me = FbGraph2::User.me(omniauth_token)
+    begin
+      fb_user = me.fetch
+    rescue FbGraph2::Exception::InvalidToken
+      return false
+    end
+
+    omniauth_token = fb_user.access_token
+    true
   end
 
   protected

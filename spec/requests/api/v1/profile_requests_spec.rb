@@ -42,6 +42,11 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'token different from saved' do
         before do
+          double = instance_double('FbGraph2::User', access_token: 'alsovalid')
+          allow(double).to receive(:fetch).and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
+
+          allow(FbGraph2::User).to receive(:me).and_return(double)
+
           get '/api/v1/profile.json',
               nil,
               'X-Email' => 'a@user.com', 'X-Auth-Token' => 'atoken'
@@ -68,6 +73,23 @@ RSpec.describe 'Profile API', type: :request do
         end
 
         it { expect(response.status).to eq(200) }
+      end
+
+      context 'different but valid third-party token' do
+        before do
+          fb_user = instance_double('FbGraph2::User', access_token: 'alsovalid')
+          expect_any_instance_of(FbGraph2::User).to receive(:fetch).and_return(fb_user)
+
+          get '/api/v1/profile.json',
+              nil,
+              'X-Email' => 'a@user.com', 'X-Auth-Token' => 'alsovalid'
+        end
+
+        it { expect(response.status).to eq(200) }
+        it do
+          user.reload
+          expect(user.omniauth_token).to eq('alsovalid')
+        end
       end
     end
   end

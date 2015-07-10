@@ -123,18 +123,36 @@ RSpec.describe User, type: :model do
   end
 
   describe '#valid_token?' do
-    let(:user) { FactoryGirl.build(:user, omniauth_token: 'validtoken') }
+    let(:user) { FactoryGirl.build(:user, omniauth_token: 'saved-token') }
 
-    context 'token already saved' do
-      subject { user.valid_token?('validtoken') }
+    context 'same token already saved' do
+      subject { user.valid_token?('saved-token') }
 
       it { is_expected.to eq(true) }
     end
 
     context 'different but valid token' do
-      subject { user.valid_token?('facebook-token') }
+      before do
+        fb_user = instance_double('FbGraph2::User', access_token: 'remote-token')
+        expect_any_instance_of(FbGraph2::User).to receive(:fetch).and_return(fb_user)
+      end
+
+      subject { user.valid_token?('client-token') }
 
       it { is_expected.to eq(true) }
+    end
+
+    context 'different but invalid third-party token' do
+      before do
+        double = instance_double('FbGraph2::User', access_token: 'alsovalid')
+        allow(double).to receive(:fetch).and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
+
+        allow(FbGraph2::User).to receive(:me).and_return(double)
+      end
+
+      subject { user.valid_token?('sometoken') }
+
+      it { is_expected.to eq(false) }
     end
   end
 end
