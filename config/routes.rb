@@ -6,6 +6,13 @@ Rails.application.routes.draw do
 
   resources :fave, only: [ :index ]
 
+  namespace :api, constraints: { format: 'json' } do
+    namespace :v1 do
+      resources :users, only: [ :show ]
+      resources :profile, only: [ :index ]
+    end
+  end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
