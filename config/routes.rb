@@ -6,10 +6,15 @@ Rails.application.routes.draw do
 
   resources :fave, only: [ :index ]
 
-  namespace :api, constraints: { format: 'json' } do
+  namespace :api, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: [ :show ]
       resources :profile, only: [ :index ]
+      resources :sessions, only: [] do
+        collection do
+          get 'facebook'
+        end
+      end
     end
   end
 

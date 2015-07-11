@@ -67,7 +67,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#apply_omniauth' do
+  describe '.apply_omniauth' do
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => '123',
         'info' => { 'email' => 'a@b.com' },
@@ -122,44 +122,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#valid_token?' do
-    let(:user) { FactoryGirl.build(:user, omniauth_token: 'saved-token') }
-
-    context 'same token already saved' do
-      subject { user.valid_token?('saved-token') }
-
-      it { is_expected.to eq(true) }
-    end
-
-    context 'different but valid token' do
-      before do
-        fb_user = instance_double('FbGraph2::User',
-                                  access_token: 'remote-token')
-        expect_any_instance_of(FbGraph2::User).to receive(:fetch)
-          .and_return(fb_user)
-      end
-
-      subject { user.valid_token?('client-token') }
-
-      it { is_expected.to eq(true) }
-    end
-
-    context 'different but invalid third-party token' do
-      before do
-        double = instance_double('FbGraph2::User', access_token: 'alsovalid')
-        allow(double).to receive(:fetch)
-          .and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
-
-        allow(FbGraph2::User).to receive(:me).and_return(double)
-      end
-
-      subject { user.valid_token?('sometoken') }
-
-      it { is_expected.to eq(false) }
-    end
-  end
-
-  describe '#ensure_authentication_token' do
+  describe '.ensure_authentication_token' do
     it do
       expect(FactoryGirl.build(:user, authentication_token: '')
       .ensure_authentication_token).to_not be_blank
