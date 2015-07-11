@@ -8,7 +8,7 @@ module Api
         token = request.headers['X-Facebook-Token']
         fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
 
-        FbGraph2::User.me(token).fetch
+        fb_user = FbGraph2::User.me(token).fetch
       end
     end
   end
