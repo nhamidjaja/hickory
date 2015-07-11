@@ -32,7 +32,10 @@ RSpec.describe Fave::Auth do
 
   describe '#from_facebook' do
     let(:fb_user) do
-      instance_double('FbGraph2::User', email: 'a@b.com', id: 'x123', access_token: 'abc098' )
+      instance_double('FbGraph2::User',
+                      email: 'a@b.com',
+                      id: 'x123',
+                      access_token: 'abc098')
     end
 
     subject { Fave::Auth.from_facebook(fb_user) }

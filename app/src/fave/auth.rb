@@ -1,4 +1,5 @@
 module Fave
+  # Adapter class for third party authentications
   class Auth
     # read-only attributes
     attr_reader :email, :uid, :provider, :token
@@ -11,7 +12,10 @@ module Fave
     end
 
     def self.from_omniauth(auth)
-      Auth.new(auth['info']['email'], auth['provider'], auth['uid'], auth['credentials']['token'])
+      Auth.new(auth['info']['email'],
+               auth['provider'],
+               auth['uid'],
+               auth['credentials']['token'])
     end
 
     def self.from_facebook(fb_user)

@@ -1,2 +1,6 @@
-module Api::V1::SessionsHelper
+module Api
+  module V1
+    module SessionsHelper
+    end
+  end
 end
