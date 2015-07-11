@@ -12,14 +12,14 @@ module Api
         user = User.new(username: params[:username])
         user.apply_third_party_auth(Fave::Auth.from_facebook(fb_user))
 
-        return render_and_sign_in(user) if user.save
+        return sign_in_and_render(user) if user.save
 
         invalid_user_creation(user)
       end
 
       private
 
-      def render_and_sign_in(user)
+      def sign_in_and_render(user)
         sign_in user, store: false
         render 'facebook', status: 201
       end
