@@ -28,8 +28,9 @@ module Api
 
       private
 
-      def render_unauthorized
-        render(json: {}, status: :unauthorized)
+      def render_unauthorized(error)
+        @error = error
+        render('api/v1/errors/401.json', status: :unauthorized)
       end
 
       def render_not_found
