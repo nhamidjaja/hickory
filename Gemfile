@@ -49,6 +49,9 @@ gem 'slim'
 # Background worker
 gem 'sidekiq'
 
+# Server monitoring
+gem 'newrelic_rpm'
+
 # Facebook Graph API wrapper
 gem 'fb_graph2'
 
