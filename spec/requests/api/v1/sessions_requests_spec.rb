@@ -69,6 +69,7 @@ RSpec.describe 'sessions', type: :request do
 
         it { expect(response.status).to eq(200) }
         it { expect(json['user']['email']).to match('existing@email.com') }
+        it { expect(json['user']['authentication_token']).to_not be_blank }
       end
 
       context 'fail to save' do
