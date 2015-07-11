@@ -77,7 +77,8 @@ CREATE TABLE users (
     unconfirmed_email character varying,
     provider character varying,
     uid character varying,
-    omniauth_token character varying
+    omniauth_token character varying,
+    authentication_token character varying
 );
 
 
@@ -148,4 +149,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150619110057');
 INSERT INTO schema_migrations (version) VALUES ('20150707082554');
 
 INSERT INTO schema_migrations (version) VALUES ('20150707083008');
+
+INSERT INTO schema_migrations (version) VALUES ('20150711044916');
 

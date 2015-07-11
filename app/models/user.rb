@@ -11,6 +11,15 @@ class User < ActiveRecord::Base
             uniqueness: true,
             format: { with: /\A[a-z0-9_.]{1,15}\z/ }
 
+  before_save :ensure_authentication_token
+
+
+  def ensure_authentication_token
+    if authentication_token.blank?
+      self.authentication_token = Devise.friendly_token
+    end
+  end
+
   def self.from_omniauth(auth)
     user = find_by_email(auth['info']['email']) ||
            find_by(provider: auth['provider'], uid: auth['uid']) ||
