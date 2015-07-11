@@ -3,6 +3,7 @@ module Api
     class ApplicationController < ActionController::Base
       protect_from_forgery with: :null_session
 
+      rescue_from StandardError, with: :render_internal_server_error
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
 
@@ -30,11 +31,17 @@ module Api
 
       def render_unauthorized(error)
         @error = error
-        render('api/v1/errors/401.json', status: :unauthorized)
+        render('api/v1/errors/errors.json', status: :unauthorized)
       end
 
-      def render_not_found
-        render(json: {}, status: :not_found)
+      def render_not_found(error)
+        @error = error
+        render('api/v1/errors/errors.json', status: :not_found)
+      end
+
+      def render_internal_server_error(error)
+        @error = error
+        render('api/v1/errors/errors.json', status: :internal_server_error)
       end
     end
   end
