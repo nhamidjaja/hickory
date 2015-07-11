@@ -55,13 +55,13 @@ RSpec.describe 'Profile API', type: :request do
       let(:user) do
         FactoryGirl.create(:user,
                            email: 'a@user.com',
-                           username: 'my_user')
+                           username: 'my_user',
+                           authentication_token: 'validtoken')
       end
       before { user }
 
       context 'token already saved' do
         before do
-          allow(Devise).to receive(:secure_compare).and_return(true)
           get '/api/v1/profile.json',
               nil,
               'X-Email' => 'a@user.com',
