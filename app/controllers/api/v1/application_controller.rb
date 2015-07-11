@@ -10,7 +10,7 @@ module Api
         token = request.headers['X-Auth-Token']
         user_email = request.headers['X-Email']
         user       = user_email && User.find_by_email(user_email)
-     
+
         # Notice how we use Devise.secure_compare to compare the token
         # in the database with the token given in the params, mitigating
         # timing attacks.

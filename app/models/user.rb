@@ -13,11 +13,9 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token
 
-
   def ensure_authentication_token
-    if authentication_token.blank?
-      self.authentication_token = Devise.friendly_token
-    end
+    return unless authentication_token.blank?
+    self.authentication_token = Devise.friendly_token
   end
 
   def self.from_omniauth(auth)
