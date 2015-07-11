@@ -42,12 +42,6 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'token different from saved' do
         before do
-          double = instance_double('FbGraph2::User', access_token: 'alsovalid')
-          allow(double).to receive(:fetch)
-            .and_raise(FbGraph2::Exception::InvalidToken, 'invalid token')
-
-          allow(FbGraph2::User).to receive(:me).and_return(double)
-
           get '/api/v1/profile.json',
               nil,
               'X-Email' => 'a@user.com', 'X-Auth-Token' => 'atoken'
