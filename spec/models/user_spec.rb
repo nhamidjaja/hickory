@@ -67,30 +67,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.apply_omniauth' do
-    let(:callback) do
-      { 'provider' => 'facebook', 'uid' => '123',
-        'info' => { 'email' => 'a@b.com' },
-        'credentials' => { 'token' => 'abc098' } }
-    end
-    before { user.apply_omniauth(callback) }
-
-    context 'new user' do
-      subject(:user) { FactoryGirl.build(:user) }
-
-      it { expect(user.provider).to eq('facebook') }
-      it { expect(user.uid).to eq('123') }
-      it { expect(user.email).to eq('a@b.com') }
-      it { expect(user.omniauth_token).to eq('abc098') }
-    end
-
-    context 'existing user' do
-      subject(:user) { FactoryGirl.create(:user, email: 'do-not@change.com') }
-
-      it { expect(user.email).to eq('do-not@change.com') }
-    end
-  end
-
   describe '#from_third_party_auth' do
     let(:auth) do
       instance_double('Fave::Auth',

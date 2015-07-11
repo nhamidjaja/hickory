@@ -5,7 +5,9 @@ class RegistrationsController < Devise::RegistrationsController
     super
 
     return unless session[:omniauth]
-    resource.apply_omniauth(session[:omniauth])
+    resource.apply_third_party_auth(
+      Fave::Auth.from_omniauth(session[:omniauth])
+    )
     resource.valid?
   end
 end

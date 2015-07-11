@@ -19,12 +19,7 @@ class User < ActiveRecord::Base
   end
 
   def self.from_omniauth(auth)
-    user = find_by_email(auth['info']['email']) ||
-           find_by_provider_and_uid(auth['provider'], auth['uid']) ||
-           User.new
-    user.apply_omniauth(auth)
-
-    user
+    from_third_party_auth(Fave::Auth.from_omniauth(auth))
   end
 
   def self.from_third_party_auth(auth)
@@ -34,13 +29,6 @@ class User < ActiveRecord::Base
     user.apply_third_party_auth(auth)
 
     user
-  end
-
-  def apply_omniauth(auth)
-    self.provider = auth['provider']
-    self.uid = auth['uid']
-    self.email = auth['info']['email'] if self.new_record?
-    self.omniauth_token = auth['credentials']['token']
   end
 
   def apply_third_party_auth(auth)
