@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/86405ecb00aa118efc5c6504680ffd54.svg)](https://gemnasium.com/527867820b8060dce1015e8c946eb481)
+
 # Hickory
 
 ## Rails
