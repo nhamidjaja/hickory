@@ -67,7 +67,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#apply_omniauth' do
+  describe '.apply_omniauth' do
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => '123',
         'info' => { 'email' => 'a@b.com' },
@@ -122,7 +122,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#ensure_authentication_token' do
+  describe '.ensure_authentication_token' do
     it do
       expect(FactoryGirl.build(:user, authentication_token: '')
       .ensure_authentication_token).to_not be_blank
