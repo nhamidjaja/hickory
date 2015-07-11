@@ -30,7 +30,7 @@ RSpec.describe 'sessions', type: :request do
           email: 'new@email.com',
           id: 'x123',
           access_token: 'fb-token'
-          )
+        )
 
         expect_any_instance_of(FbGraph2::User)
           .to receive(:fetch)
@@ -53,7 +53,7 @@ RSpec.describe 'sessions', type: :request do
           email: 'existing@email.com',
           id: 'x123',
           access_token: 'fb-token'
-          )
+        )
 
         expect_any_instance_of(FbGraph2::User)
           .to receive(:fetch)
@@ -66,7 +66,7 @@ RSpec.describe 'sessions', type: :request do
               nil,
               'X-Facebook-Token' => 'fb-token'
         end
-        
+
         it { expect(response.status).to eq(200) }
         it { expect(json['user']['email']).to match('existing@email.com') }
       end
@@ -81,7 +81,7 @@ RSpec.describe 'sessions', type: :request do
               nil,
               'X-Facebook-Token' => 'fb-token'
         end
-        
+
         it { expect(response.status).to eq(500) }
         it { expect(json['errors']['message']).to_not be_blank }
       end
