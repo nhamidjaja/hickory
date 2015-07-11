@@ -9,17 +9,24 @@ module Api
         fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
 
         fb_user = FbGraph2::User.me(token).fetch
-        user = User.new
+        user = User.new(username: params[:username])
         user.apply_third_party_auth(Fave::Auth.from_facebook(fb_user))
-        user.username = params[:username]
 
-        if user.save
-          sign_in user, store: false
-          render 'facebook', status: 201
-        else
-          warden.custom_failure!
-          render json: { errors: user.errors }, status: 400
-        end
+        return render_and_sign_in(user) if user.save
+
+        invalid_user_creation(user)
+      end
+
+      private
+
+      def render_and_sign_in(user)
+        sign_in user, store: false
+        render 'facebook', status: 201
+      end
+
+      def invalid_user_creation(user)
+        warden.custom_failure!
+        render json: { errors: user.errors }, status: 400
       end
     end
   end

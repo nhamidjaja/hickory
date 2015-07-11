@@ -7,7 +7,10 @@ RSpec.describe 'User Registrations API', type: :request do
     end
 
     it { expect(response.status).to eq(401) }
-    it { expect(json['errors']['message']).to match('No Facebook token provided')}
+    it do
+      expect(json['errors']['message'])
+        .to match('No Facebook token provided')
+    end
   end
 
   context 'with invalid token' do
@@ -21,7 +24,7 @@ RSpec.describe 'User Registrations API', type: :request do
     end
 
     it { expect(response.status).to eq(401) }
-    it { expect(json['errors']['message']).to match('Invalid token')}
+    it { expect(json['errors']['message']).to match('Invalid token') }
   end
 
   context 'valid token' do
