@@ -15,6 +15,11 @@ Rails.application.routes.draw do
           get 'facebook'
         end
       end
+      resources :registrations, only: [] do
+        collection do
+          get 'facebook'
+        end
+      end
     end
   end
 
