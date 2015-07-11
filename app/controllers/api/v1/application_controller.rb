@@ -2,8 +2,11 @@ module Api
   module V1
     class ApplicationController < ActionController::Base
       protect_from_forgery with: :null_session
+
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
+
+      before_action :authenticate_user_from_token!
 
       # Tested with profile_requests_spec.rb
       def authenticate_user_from_token!
