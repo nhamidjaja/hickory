@@ -10,6 +10,11 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [ :show ]
       resources :profile, only: [ :index ]
+      resources :sessions, only: [] do
+        collection do
+          get 'facebook'
+        end
+      end
     end
   end
 
