@@ -158,4 +158,15 @@ RSpec.describe User, type: :model do
       it { is_expected.to eq(false) }
     end
   end
+
+  describe '#ensure_authentication_token' do
+    it do
+      expect(FactoryGirl.build(:user, authentication_token: '')
+      .ensure_authentication_token).to_not be_blank
+    end
+    it do
+      expect(FactoryGirl.create(:user, authentication_token: '')
+      .authentication_token).to_not be_blank
+    end
+  end
 end
