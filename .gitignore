@@ -16,7 +16,7 @@
 !/log/.keep
 /tmp
 
-
+/coverage
 .powenv
 
 Procfile
