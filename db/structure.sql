@@ -44,6 +44,39 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: feeders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE feeders (
+    id integer NOT NULL,
+    feed_url character varying NOT NULL,
+    title character varying,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: feeders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE feeders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feeders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE feeders_id_seq OWNED BY feeders.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -83,11 +116,33 @@ CREATE TABLE users (
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY feeders ALTER COLUMN id SET DEFAULT nextval('feeders_id_seq'::regclass);
+
+
+--
+-- Name: feeders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY feeders
+    ADD CONSTRAINT feeders_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_feeders_on_feed_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
 
 
 --
@@ -151,4 +206,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150707082554');
 INSERT INTO schema_migrations (version) VALUES ('20150707083008');
 
 INSERT INTO schema_migrations (version) VALUES ('20150711044916');
+
+INSERT INTO schema_migrations (version) VALUES ('20150712052148');
 
