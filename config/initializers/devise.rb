@@ -1,7 +1,7 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  config.omniauth :facebook, Rails.application.config.facebook_app_id, Rails.application.config.facebook_app_secret, { scope: 'email,user_friends' }
+  config.omniauth :facebook, Figaro.env.facebook_app_id, Figaro.env.facebook_app_secret, { scope: 'email,user_friends' }
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
