@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   root to: 'home#index'
 
-  devise_for :admins
+  devise_for :admins, skip: :registrations
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+
   devise_for :users, controllers: { registrations: 'registrations',
                                     omniauth_callbacks: 'omniauth_callbacks' }
 
