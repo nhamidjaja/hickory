@@ -61,6 +61,8 @@ gem 'feedjira'
 # Environment-specific configurations
 gem 'figaro'
 
+gem 'rails_admin'
+
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
