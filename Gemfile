@@ -55,6 +55,9 @@ gem 'newrelic_rpm'
 # Facebook Graph API wrapper
 gem 'fb_graph2'
 
+# RSS parser
+gem 'feedjira'
+
 # Environment-specific configurations
 gem 'figaro'
 
