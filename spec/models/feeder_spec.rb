@@ -7,7 +7,8 @@ RSpec.describe Feeder, type: :model do
     it 'is unique' do
       FactoryGirl.create(:feeder, feed_url: 'tryflyer.com/feed.rss')
 
-      expect(FactoryGirl.build(:feeder, feed_url: 'tryflyer.com/feed.rss')).to_not be_valid
+      expect(FactoryGirl.build(:feeder, feed_url: 'tryflyer.com/feed.rss'))
+        .to_not be_valid
     end
   end
 
