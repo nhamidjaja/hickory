@@ -19,8 +19,8 @@ RSpec.describe 'User Registrations API', type: :request do
         .to receive(:fetch)
         .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid token')
       post '/api/v1/registrations/facebook',
-          nil,
-          'X-Facebook-Token' => 'invalid-token'
+           nil,
+           'X-Facebook-Token' => 'invalid-token'
     end
 
     it { expect(response.status).to eq(401) }
@@ -44,9 +44,9 @@ RSpec.describe 'User Registrations API', type: :request do
     context 'create new user' do
       before do
         post '/api/v1/registrations/facebook',
-            '{"user": {"username": "nicholas"}}',
-            'Content-Type' => 'application/json',
-            'X-Facebook-Token' => 'fb-token'
+             '{"user": {"username": "nicholas"}}',
+             'Content-Type' => 'application/json',
+             'X-Facebook-Token' => 'fb-token'
       end
 
       it { expect(response.status).to eq(201) }
@@ -58,9 +58,9 @@ RSpec.describe 'User Registrations API', type: :request do
     context 'invalid user without username' do
       before do
         post '/api/v1/registrations/facebook',
-            '{"user": {"username": ""}}',
-            'Content-Type' => 'application/json',
-            'X-Facebook-Token' => 'fb-token'
+             '{"user": {"username": ""}}',
+             'Content-Type' => 'application/json',
+             'X-Facebook-Token' => 'fb-token'
       end
 
       it { expect(response.status).to eq(400) }
