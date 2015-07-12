@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       end
       resources :registrations, only: [] do
         collection do
-          get 'facebook'
+          post 'facebook'
         end
       end
     end
