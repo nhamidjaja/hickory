@@ -55,6 +55,9 @@ gem 'newrelic_rpm'
 # Facebook Graph API wrapper
 gem 'fb_graph2'
 
+# Environment-specific configurations
+gem 'figaro'
+
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false
