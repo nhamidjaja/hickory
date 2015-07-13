@@ -6,7 +6,7 @@ RSpec.describe MasterFeed, type: :model do
   describe '.content_url' do
     it 'is canonicalized' do
       expect(FactoryGirl.create(:master_feed,
-        content_url: 'http://example.com/abc.html?x=y')
+                                content_url: 'http://example.com/abc.html?x=y')
         .content_url)
         .to eq('example.com/abc.html')
     end

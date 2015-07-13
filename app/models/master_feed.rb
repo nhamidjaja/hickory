@@ -12,7 +12,7 @@ class MasterFeed
   before_save :canonicalize_url
 
   def canonicalize_url
-    url = Fave::Url.new(self.content_url)
+    url = Fave::Url.new(content_url)
     self.content_url = url.canon
   end
 end
