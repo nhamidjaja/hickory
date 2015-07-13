@@ -1,6 +1,6 @@
 class CreateFeeders < ActiveRecord::Migration
   def change
-    create_table :feeders do |t|
+    create_table :feeders, id: :uuid do |t|
       t.string :feed_url, null: false
       t.string :title
       t.string :description

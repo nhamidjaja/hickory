@@ -48,7 +48,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE admins (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
     reset_password_token character varying,
@@ -65,55 +65,17 @@ CREATE TABLE admins (
 
 
 --
--- Name: admins_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE admins_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: admins_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE admins_id_seq OWNED BY admins.id;
-
-
---
 -- Name: feeders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE feeders (
-    id integer NOT NULL,
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
     feed_url character varying NOT NULL,
     title character varying,
     description character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: feeders_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE feeders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: feeders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE feeders_id_seq OWNED BY feeders.id;
 
 
 --
@@ -153,20 +115,6 @@ CREATE TABLE users (
     omniauth_token character varying,
     authentication_token character varying
 );
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY admins ALTER COLUMN id SET DEFAULT nextval('admins_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY feeders ALTER COLUMN id SET DEFAULT nextval('feeders_id_seq'::regclass);
 
 
 --
@@ -279,4 +227,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150711044916');
 INSERT INTO schema_migrations (version) VALUES ('20150712052148');
 
 INSERT INTO schema_migrations (version) VALUES ('20150712054400');
+
+INSERT INTO schema_migrations (version) VALUES ('20150713102900');
 
