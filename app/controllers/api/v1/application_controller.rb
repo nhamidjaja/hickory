@@ -40,6 +40,7 @@ module Api
       end
 
       def render_internal_server_error(error)
+        # TODO: log error
         @error = error
         render('api/v1/errors/errors.json', status: :internal_server_error)
       end
