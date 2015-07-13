@@ -1,5 +1,6 @@
 class PullFeedWorker
   include Sidekiq::Worker
+  sidekiq_options queue: :pull_feed
 
   def perform(feeder_id)
     feeder = Feeder.find(feeder_id)
