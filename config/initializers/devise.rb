@@ -5,6 +5,7 @@ Devise.setup do |config|
     Figaro.env.facebook_app_id,
     Figaro.env.facebook_app_secret,
     { scope: 'email,user_friends' }
+  config.scoped_views = true
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
