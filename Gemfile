@@ -48,6 +48,8 @@ gem 'slim'
 
 # Background worker
 gem 'sidekiq'
+# if you require 'sinatra' you get the DSL extended to Object
+gem 'sinatra', require: false
 
 # Server monitoring
 gem 'newrelic_rpm'

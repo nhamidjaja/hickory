@@ -1,11 +1,19 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   root to: 'home#index'
 
   devise_for :admins, skip: :registrations
+
+  namespace :admin, authenticate: :admin do
+    mount Sidekiq::Web => '/sidekiq'
+  end                                  
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   devise_for :users, controllers: { registrations: 'registrations',
                                     omniauth_callbacks: 'omniauth_callbacks' }
+
 
   resources :fave, only: [ :index ]
 
