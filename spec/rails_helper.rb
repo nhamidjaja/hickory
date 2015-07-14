@@ -3,6 +3,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
+require 'sidekiq/testing'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'simplecov'
 SimpleCov.start 'rails'
@@ -32,6 +33,10 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :view
   config.extend ControllerMacros, type: :controller
   config.include Requests::JsonHelpers, type: :request
+
+  config.before(:each) do
+    Sidekiq::Worker.clear_all
+  end
 
   # Cequel database cleaner for spec
   records = []

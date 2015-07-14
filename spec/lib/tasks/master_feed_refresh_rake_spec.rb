@@ -13,10 +13,17 @@ RSpec.describe 'master_feed namespace task' do
       Rake.application.invoke_task "master_feed:refresh"
     end
 
-    it 'clears queue' # do
-      # expect_any_instance_of('Sidekiq::Queue').to receive(:clear).once
+    context 'one feed' do
+      let(:feeder) { FactoryGirl.create(:feeder) }
+      before { feeder }
 
-      # run_rake_task
-    # end
+      it do
+        expect(PullFeedWorker).to receive(:perform_async)
+          .with(feeder.id.to_s)
+          .once
+
+        run_rake_task
+      end
+    end
   end
 end
