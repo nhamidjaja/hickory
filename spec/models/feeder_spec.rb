@@ -4,6 +4,8 @@ RSpec.describe Feeder, type: :model do
   it { expect(FactoryGirl.create(:feeder)).to be_valid }
 
   describe '.feed_url' do
+    it { expect(FactoryGirl.build(:feeder, feed_url: '')).to_not be_valid }
+
     it 'is unique' do
       FactoryGirl.create(:feeder, feed_url: 'tryflyer.com/feed.rss')
 
