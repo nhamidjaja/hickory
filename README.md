@@ -137,3 +137,45 @@ Again, verify that you have **0 failures**.
 
 #### Submitting
 Once you have completed, create a **merge request** through the git repository website.
+
+***
+
+## Updating dependencies
+[![Dependency Status](https://gemnasium.com/86405ecb00aa118efc5c6504680ffd54.svg)](https://gemnasium.com/527867820b8060dce1015e8c946eb481)
+
+### If dependencies are out-of-date:
+
+Update all gems with bundler:
+
+```
+$ bundle update
+```
+
+Verify that it hasn't caused breaking changes:
+
+```
+$ rspec
+```
+
+### If *rails* is out-of-date:
+
+Go to <http://railsdiff.com> to track the required changes.
+Modify source code with the changes, for example if upgrading to Rails 4.2.3:
+
+```
+# Gemfile
+
+gem 'rails', '4.2.3'
+```
+
+Use bundler to update rails:
+
+```
+$ bundle update rails
+```
+
+Verify that it hasn't caused breaking changes:
+
+```
+$ rspec
+```
