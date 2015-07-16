@@ -1,4 +1,4 @@
-namespace :master_feed do
+namespace :feeder do
   task refresh: :environment do
     Sidekiq::Queue.new('pull_feed').clear
 

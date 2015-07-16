@@ -1,16 +1,16 @@
 require 'rails_helper'
 require 'rake'
 
-RSpec.describe 'master_feed namespace task' do
+RSpec.describe 'feeder namespace task' do
   before :all do
-    Rake.application.rake_require 'tasks/master_feed'
+    Rake.application.rake_require 'tasks/feeder'
     Rake::Task.define_task(:environment)
   end
 
-  describe 'master_feed:refresh' do
+  describe 'feeder:refresh' do
     let :run_rake_task do
-      Rake::Task['master_feed:refresh'].reenable
-      Rake.application.invoke_task 'master_feed:refresh'
+      Rake::Task['feeder:refresh'].reenable
+      Rake.application.invoke_task 'feeder:refresh'
     end
 
     context 'one feed' do

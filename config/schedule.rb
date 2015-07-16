@@ -1,5 +1,5 @@
 every :day, at: '10:00pm' do
-  rake 'master_feed:refresh'
+  rake 'feeder:refresh'
 end
 
 # Use this file to easily define all of your cron jobs.
