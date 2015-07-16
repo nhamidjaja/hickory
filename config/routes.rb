@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [ :show ]
       resources :profile, only: [ :index ]
+      resources :master_feeds, only: [ :index ]
+
       resources :sessions, only: [] do
         collection do
           get 'facebook'
