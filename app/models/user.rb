@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   validates :username,
             uniqueness: true,
-            format: { with: /\A[a-z0-9_.]{1,15}\z/ }
+            format: { with: /\A[a-z0-9_.]{2,15}\z/ }
 
   before_save :ensure_authentication_token
 
