@@ -10,11 +10,12 @@ RSpec.describe User, type: :model do
     it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: '1' * 16)).to_not be_valid }
+    it { expect(FactoryGirl.build(:user, username: '1' * 31)).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'a')).to_not be_valid }
 
     it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
     it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
+    it { expect(FactoryGirl.build(:user, username: '1' * 30)).to be_valid }
 
     it 'is unique' do
       FactoryGirl.create(:user, username: 'nic')
