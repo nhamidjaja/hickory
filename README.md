@@ -49,6 +49,7 @@ Next, copy config/create database.yml and other configurations. Don't worry we h
 ```
 $ cp config/database.example.yml config/database.yml
 $ cp config/cequel.example.yml config/cequel.yml  // ORM for Cassandra
+$ cp config/application.example.yml config/application.yml
 ```
 And adjust the config if needed.
 
