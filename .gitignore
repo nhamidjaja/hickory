@@ -27,3 +27,6 @@ dump.rdb
 # Ignore settings.
 /config/database.yml
 /config/cequel.yml
+
+# Ignore application configuration
+/config/application.yml

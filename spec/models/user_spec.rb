@@ -67,27 +67,52 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.apply_omniauth' do
-    let(:callback) do
-      { 'provider' => 'facebook', 'uid' => '123',
-        'info' => { 'email' => 'a@b.com' },
-        'credentials' => { 'token' => 'abc098' } }
-    end
-    before { user.apply_omniauth(callback) }
-
-    context 'new user' do
-      subject(:user) { FactoryGirl.build(:user) }
-
-      it { expect(user.provider).to eq('facebook') }
-      it { expect(user.uid).to eq('123') }
-      it { expect(user.email).to eq('a@b.com') }
-      it { expect(user.omniauth_token).to eq('abc098') }
+  describe '#from_third_party_auth' do
+    let(:auth) do
+      instance_double('Fave::Auth',
+                      email: 'a@b.com',
+                      provider: 'fb',
+                      uid: 'x123',
+                      token: 'abc098')
     end
 
-    context 'existing user' do
-      subject(:user) { FactoryGirl.create(:user, email: 'do-not@change.com') }
+    subject { User.from_third_party_auth(auth) }
 
-      it { expect(user.email).to eq('do-not@change.com') }
+    context 'when email already exists' do
+      it 'returns same user' do
+        user = FactoryGirl.create(:user,
+                                  email: 'a@b.com',
+                                  provider: 'fb', uid: 'x123')
+
+        is_expected.to eq(user)
+      end
+
+      it 'updates user metadata' do
+        FactoryGirl.create(:user, email: 'a@b.com')
+
+        expect(subject.provider).to eq('fb')
+        expect(subject.uid).to eq('x123')
+        expect(subject.omniauth_token).to eq('abc098')
+      end
+    end
+
+    context 'when provider and uid already exists' do
+      it 'returns same user' do
+        user = FactoryGirl.create(:user, email: 'x@y.com',
+                                         provider: 'fb', uid: 'x123')
+
+        subject.save
+        user.reload
+        expect(user.email).to eq('x@y.com')
+        is_expected.to eq(user)
+      end
+    end
+
+    context 'when new' do
+      it { is_expected.to be_a_new(User) }
+      it { expect(subject.provider).to eq('fb') }
+      it { expect(subject.uid).to eq('x123') }
+      it { expect(subject.email).to eq('a@b.com') }
     end
   end
 

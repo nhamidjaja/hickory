@@ -10,8 +10,9 @@ module Hickory
   class Application < Rails::Application
     # Custom code goes here
     config.autoload_paths << "#{config.root}/app/src"
-    config.active_record.schema_format = :sql
-    
+    config.active_record.schema_format = :sql   # Use sql for uuid id support
+    config.secret_key_base = Figaro.env.secret_key_base
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

@@ -1,7 +1,5 @@
 Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-  config.facebook_app_id = '836727739715222'
-  config.facebook_app_secret = 'c4c169fcc7719ddb31f001802c756a07'
 
   # Settings specified here will take precedence over those in config/application.rb.
 

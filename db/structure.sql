@@ -44,6 +44,41 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: admins; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admins (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip inet,
+    last_sign_in_ip inet,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: feeders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE feeders (
+    id uuid DEFAULT uuid_generate_v4() NOT NULL,
+    feed_url character varying NOT NULL,
+    title character varying,
+    description character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -83,11 +118,48 @@ CREATE TABLE users (
 
 
 --
+-- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admins
+    ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feeders_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY feeders
+    ADD CONSTRAINT feeders_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_admins_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_admins_on_email ON admins USING btree (email);
+
+
+--
+-- Name: index_admins_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (reset_password_token);
+
+
+--
+-- Name: index_feeders_on_feed_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
 
 
 --
@@ -151,4 +223,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150707082554');
 INSERT INTO schema_migrations (version) VALUES ('20150707083008');
 
 INSERT INTO schema_migrations (version) VALUES ('20150711044916');
+
+INSERT INTO schema_migrations (version) VALUES ('20150712052148');
+
+INSERT INTO schema_migrations (version) VALUES ('20150712054400');
+
+INSERT INTO schema_migrations (version) VALUES ('20150713102900');
 
