@@ -81,6 +81,10 @@ To verify that everything works run the test suite:
 $ rake db:create
 $ rake db:migrate
 $ rake db:test:prepare   // sync test database with development database
+$ rake cequel:keyspace:create
+$ rake cequel:keyspace:create RAILS_ENV=test
+$ rake cequel:migrate
+$ rake cequel:migrate RAILS_ENV=test
 $ rspec
 
 Finished in 0.70621 seconds (files took 2.23 seconds to load)
@@ -103,7 +107,7 @@ Open it on <http://localhost:3000>
 ## Contributing
 
 #### Branching
-First, create a feature/release/hotfix branch as according to git flow. For this example, we will be creating a feature branch:
+First, create a feature/release/hotfix branch as according to git flow. For this example, we will be creating a feature branch *user-authentication*:
 
 ```
 $ git flow feature start user-authentication
@@ -126,7 +130,8 @@ Verify that you have **no offenses detected**. Otherwise make the suggested corr
 Run the test suite again to make sure that you are not submitting breaking changes.
 
 ```
-$ rake db:test:prepare   // sync test database with development database
+$ rake db:test:prepare
+$ rake cequel:migrate RAILS_ENV=test
 $ rspec
 
 Finished in 0.70621 seconds (files took 2.23 seconds to load)
@@ -136,7 +141,7 @@ Again, verify that you have **0 failures**.
 
 
 #### Submitting
-Once you have completed, create a **merge request** through the git repository website.
+Once you have completed, create a **merge request** through the git repository dashboard.
 
 ***
 
