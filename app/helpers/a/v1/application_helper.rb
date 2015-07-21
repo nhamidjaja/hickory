@@ -1,0 +1,6 @@
+module A
+  module V1
+    module ApplicationHelper
+    end
+  end
+end

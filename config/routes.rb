@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   resources :fave, only: [ :index ]
 
-  namespace :api, constraints: { format: :json }, defaults: { format: :json } do
+  namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: [ :show ]
       resources :profile, only: [ :index ]
