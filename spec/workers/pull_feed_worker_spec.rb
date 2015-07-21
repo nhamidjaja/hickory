@@ -64,7 +64,7 @@ RSpec.describe PullFeedWorker do
         before { subject }
         let(:article) { feeder.top_articles.first }
 
-        it { expect(article.content_url).to eq('example.com/article') }
+        it { expect(article.content_url).to eq('http://example.com/article') }
         it { expect(article.title).to eq('An article') }
         it { expect(article.image_url).to eq('http://example.com/img.png') }
       end
