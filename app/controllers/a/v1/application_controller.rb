@@ -33,18 +33,18 @@ module A
 
       def render_unauthorized(error)
         @error = error
-        render('a/v1/errors/errors.json', status: :unauthorized)
+        render('errors.json', status: :unauthorized)
       end
 
       def render_not_found(error)
         @error = error
-        render('a/v1/errors/errors.json', status: :not_found)
+        render('errors.json', status: :not_found)
       end
 
       def render_internal_server_error(error)
         # TODO: log error
         @error = error
-        render('a/v1/errors/errors.json', status: :internal_server_error)
+        render('errors.json', status: :internal_server_error)
       end
     end
   end
