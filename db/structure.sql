@@ -88,6 +88,21 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: top_articles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE top_articles (
+    content_url character varying NOT NULL,
+    feeder_id uuid NOT NULL,
+    title character varying,
+    image_url character varying,
+    published_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -134,6 +149,14 @@ ALTER TABLE ONLY feeders
 
 
 --
+-- Name: top_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY top_articles
+    ADD CONSTRAINT top_articles_pkey PRIMARY KEY (content_url);
+
+
+--
 -- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -160,6 +183,13 @@ CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (
 --
 
 CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
+
+
+--
+-- Name: index_top_articles_on_published_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_top_articles_on_published_at ON top_articles USING btree (published_at DESC);
 
 
 --
@@ -205,6 +235,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_1f59cbacad; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY top_articles
+    ADD CONSTRAINT fk_rails_1f59cbacad FOREIGN KEY (feeder_id) REFERENCES feeders(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -229,4 +267,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150712052148');
 INSERT INTO schema_migrations (version) VALUES ('20150712054400');
 
 INSERT INTO schema_migrations (version) VALUES ('20150713102900');
+
+INSERT INTO schema_migrations (version) VALUES ('20150720120110');
 

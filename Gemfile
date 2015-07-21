@@ -65,6 +65,9 @@ gem 'figaro'
 
 gem 'rails_admin'
 
+# cron syntactic sugar
+gem 'whenever', require: false
+
 # Test automation
 gem 'rspec-rails', group: [:development, :test]
 gem 'guard-rspec', group: :development, require: false

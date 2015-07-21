@@ -6,12 +6,21 @@ class PullFeedWorker
     feeder = Feeder.find(feeder_id)
     feed = Feedjira::Feed.fetch_and_parse(feeder.feed_url)
 
+    feeder.top_articles.destroy_all
+
+    articles = Array.new
+
     feed.entries.each do |entry|
-      MasterFeed.create(content_url: entry.url,
-                        headline: entry.title,
-                        image_url: entry.image,
-                        published_at: entry.published)
+      articles.push(
+        TopArticle.new(content_url: Fave::Url.new(entry.url).canon,
+          title: entry.title,
+          image_url: entry.image,
+          published_at: entry.published
+          )
+        )
     end
+
+    feeder.top_articles << articles
 
     PullFeedWorker.perform_in(5.minutes, feeder_id)
   end
