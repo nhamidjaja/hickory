@@ -20,10 +20,12 @@ RSpec.describe PullFeedWorker do
           .and_return(double)
       end
 
-      it do
-        expect(MasterFeed).to receive(:create).exactly(0).times
+      it 'removes existing top articles' do
+        FactoryGirl.create(:top_article, feeder: feeder)
 
         subject
+
+        expect(feeder.top_articles.size).to eq(0)
       end
 
       it do
@@ -52,10 +54,19 @@ RSpec.describe PullFeedWorker do
           .and_return(double)
       end
 
-      it do
-        expect(MasterFeed).to receive(:create).exactly(1).times
-
+      it 'creates top article' do
         subject
+
+        expect(feeder.top_articles.size).to eq(1)
+      end
+
+      describe 'attributes' do
+        before { subject }
+        let(:article) { feeder.top_articles.first }
+
+        it { expect(article.content_url).to eq('example.com/article') }
+        it { expect(article.title).to eq('An article') }
+        it { expect(article.image_url).to eq('http://example.com/img.png') }
       end
     end
   end
