@@ -15,7 +15,7 @@ Rails.application.routes.draw do
                                     omniauth_callbacks: 'omniauth_callbacks' }
 
 
-  resources :fave, only: [ :index ]
+  resources :f, only: [ :index ]
 
   namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do

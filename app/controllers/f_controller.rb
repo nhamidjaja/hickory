@@ -1,4 +1,4 @@
-class FaveController < ApplicationController
+class FController < ApplicationController
   before_action :authenticate_user!
 
   def index
