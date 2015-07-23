@@ -12,7 +12,7 @@ module A
       # Tested with profile_requests_spec.rb
       def authenticate_user_from_token!
         return if user_signed_in?
-        
+
         token = request.headers['X-Auth-Token']
         user_email = request.headers['X-Email']
         user       = user_email && User.find_by_email(user_email)

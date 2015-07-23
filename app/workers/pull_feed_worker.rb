@@ -8,16 +8,16 @@ class PullFeedWorker
 
     feeder.top_articles.destroy_all
 
-    articles = Array.new
+    articles = []
 
     feed.entries.each do |entry|
       articles.push(
         TopArticle.new(content_url: Fave::Url.new(entry.url).canon,
-          title: entry.title,
-          image_url: entry.image,
-          published_at: entry.published
-          )
-        )
+                       title: entry.title,
+                       image_url: entry.image,
+                       published_at: entry.published
+                      )
+      )
     end
 
     feeder.top_articles << articles
