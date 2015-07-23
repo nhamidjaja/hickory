@@ -4,5 +4,4 @@ FactoryGirl.define do
     content_url { 'example.com/abc' }
     id { Cequel.uuid(Time.zone.now) }
   end
-
 end

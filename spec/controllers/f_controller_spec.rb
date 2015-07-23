@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe FaveController, type: :controller do
+RSpec.describe FController, type: :controller do
   context 'unsigned in user' do
     describe 'GET #index' do
       before { get :index }

@@ -8,20 +8,22 @@ class PullFeedWorker
 
     feeder.top_articles.destroy_all
 
-    articles = Array.new
+    feeder.top_articles << populate_articles(feed)
 
+    PullFeedWorker.perform_in(5.minutes, feeder_id)
+  end
+
+  def populate_articles(feed)
+    articles = []
     feed.entries.each do |entry|
       articles.push(
         TopArticle.new(content_url: Fave::Url.new(entry.url).canon,
-          title: entry.title,
-          image_url: entry.image,
-          published_at: entry.published
-          )
-        )
+                       title: entry.title, image_url: entry.image,
+                       published_at: entry.published
+                      )
+      )
     end
 
-    feeder.top_articles << articles
-
-    PullFeedWorker.perform_in(5.minutes, feeder_id)
+    articles
   end
 end
