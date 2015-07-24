@@ -103,6 +103,19 @@ CREATE TABLE top_articles (
 
 
 --
+-- Name: user_friends; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE user_friends (
+    user_id uuid NOT NULL,
+    provider character varying NOT NULL,
+    uid character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -154,6 +167,14 @@ ALTER TABLE ONLY feeders
 
 ALTER TABLE ONLY top_articles
     ADD CONSTRAINT top_articles_pkey PRIMARY KEY (content_url);
+
+
+--
+-- Name: user_friends_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY user_friends
+    ADD CONSTRAINT user_friends_pkey PRIMARY KEY (user_id, provider, uid);
 
 
 --
@@ -235,6 +256,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_1d9d9be880; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY user_friends
+    ADD CONSTRAINT fk_rails_1d9d9be880 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_1f59cbacad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -266,7 +295,7 @@ INSERT INTO schema_migrations (version) VALUES ('20150712052148');
 
 INSERT INTO schema_migrations (version) VALUES ('20150712054400');
 
-INSERT INTO schema_migrations (version) VALUES ('20150713102900');
-
 INSERT INTO schema_migrations (version) VALUES ('20150720120110');
+
+INSERT INTO schema_migrations (version) VALUES ('20150724051113');
 

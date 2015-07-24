@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
+  has_many :user_friends
+
   validates :username,
             uniqueness: true,
             format: { with: /\A[a-z0-9_.]{2,30}\z/ }
@@ -36,6 +38,14 @@ class User < ActiveRecord::Base
     self.uid = auth.uid
     self.email = auth.email if self.new_record?
     self.omniauth_token = auth.token
+  end
+
+  def get_facebook_friends
+    user_fb = FbGraph2::User.me(self.omniauth_token).fetch
+
+    user_fb.friends.each do |f|
+      UserFriend.create(user_id: self.id, provider: 'facebook', uid: f.id)
+    end
   end
 
   protected

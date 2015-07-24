@@ -158,4 +158,67 @@ RSpec.describe User, type: :model do
       .authentication_token).to_not be_blank
     end
   end
+
+  describe '.get_facebook_friends' do
+    let(:user) { FactoryGirl.create(:user, omniauth_token: "token") }
+    subject {user.get_facebook_friends}
+    context 'no friend' do
+      before do
+        fb_user = instance_double('FbGraph2::User')
+        fb_response = instance_double('FbGraph2::User',
+          friends: [])
+
+        expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
+        expect(fb_user).to receive(:fetch).and_return(fb_response)
+      end
+
+      it 'has 0 user_friends' do
+        subject
+
+        expect(user.user_friends.size).to eq(0)
+      end
+    end
+
+    context '1 friend' do
+      before do
+        fb_user = instance_double('FbGraph2::User')
+        fb_response = instance_double('FbGraph2::User',
+          friends: [
+            instance_double('FbGraph2::User',id: 1)
+            ])
+
+        expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
+        expect(fb_user).to receive(:fetch).and_return(fb_response)
+      end
+
+      context 'no existing friends' do
+        it 'has 1 user_friends' do
+          subject
+
+          expect(user.user_friends.size).to eq(1)
+        end
+      end
+    end
+
+    context 'more 1 friend' do
+      before do
+        fb_user = instance_double('FbGraph2::User')
+        fb_response = instance_double('FbGraph2::User',
+          friends: [
+            instance_double('FbGraph2::User',id: 1),
+            instance_double('FbGraph2::User',id: 2),
+            instance_double('FbGraph2::User',id: 3)
+            ])
+
+        expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
+        expect(fb_user).to receive(:fetch).and_return(fb_response)
+      end
+
+      it 'has 1 user_friends' do
+        subject
+
+        expect(user.user_friends.size).to eq(3)
+      end
+    end
+  end
 end
