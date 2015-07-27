@@ -3,6 +3,6 @@ h1
 p
   | Find me in app/views/home/index.html.erb
 - if user_signed_in?
-  - UserFave[current_user.id.to_s].reverse.limit(10).each do |p|
+  - CUserFave[current_user.id.to_s].reverse.limit(10).each do |p|
     = link_to p.content_url, 'http://' + p.content_url
     br

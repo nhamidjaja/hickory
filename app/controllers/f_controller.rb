@@ -18,12 +18,12 @@ class FController < ApplicationController
 
     faved.save!
 
-    UserFave.create(user_id: current_user.id.to_s,
-                    id: faved.id,
-                    content_url: article.url,
-                    headline: article.title,
-                    image_url: article.image_url,
-                    published_at: article.published_at)
+    CUserFave.create(c_user_id: current_user.id.to_s,
+                     id: faved.id,
+                     content_url: article.url,
+                     headline: article.title,
+                     image_url: article.image_url,
+                     published_at: article.published_at)
   end
 
   def get_article(canon_url)
@@ -31,10 +31,10 @@ class FController < ApplicationController
   end
 
   def get_faved(canon_url)
-    UserFaveUrl.where(user_id: current_user.id.to_s,
-                      content_url: canon_url).first ||
-      UserFaveUrl.new(user_id: current_user.id.to_s,
-                      content_url: canon_url,
-                      id: Cequel.uuid(Time.zone.now))
+    CUserFaveUrl.where(c_user_id: current_user.id.to_s,
+                       content_url: canon_url).first ||
+      CUserFaveUrl.new(c_user_id: current_user.id.to_s,
+                       content_url: canon_url,
+                       id: Cequel.uuid(Time.zone.now))
   end
 end
