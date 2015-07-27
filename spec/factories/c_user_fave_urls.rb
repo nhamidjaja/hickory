@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :user_fave_url do
-    user_id { FactoryGirl.create(:user).id.to_s }
+  factory :c_user_fave_url do
+    association :c_user, factory: :c_user, strategy: :build
     content_url { 'example.com/abc' }
     id { Cequel.uuid(Time.zone.now) }
   end
