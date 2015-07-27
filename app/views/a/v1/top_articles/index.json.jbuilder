@@ -1,1 +1,1 @@
-json.top_articles Feeder.top_articles, :feed_title, :title, :content_url, :image_url, :published_at
+json.top_articles @top_articles, :title, :content_url, :image_url, :published_at
