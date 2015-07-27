@@ -1,73 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe 'Top Articles API', type: :request do
-  describe 'authentication' do
-    describe 'unauthorized' do
-      before do
-        FactoryGirl.create(:user,
-                           email: 'a@user.com',
-                           omniauth_token: 'validtoken')
-      end
+    context 'unsigned in user' do
+      before { get '/a/v1/top_articles' }
 
-      context 'no email' do
-        before do
-          get '/a/v1/top_articles',
-              nil,
-              'X-Auth-Token' => 'validtoken'
-        end
-
-        it { expect(response.status).to eq(401) }
-        it { expect(json['errors']).to_not be_blank }
-      end
-
-      context 'no token' do
-        before do
-          get '/a/v1/top_articles',
-              nil,
-              'X-Email' => 'a@user.com'
-        end
-
-        it { expect(response.status).to eq(401) }
-      end
-
-      context 'unregistered email' do
-        before do
-          get '/a/v1/top_articles',
-              nil,
-              'X-Email' => 'no@email.com',
-              'X-Auth-Token' => 'atoken'
-        end
-
-        it { expect(response.status).to eq(401) }
-      end
-
-      context 'token different from saved' do
-        before do
-          get '/a/v1/top_articles',
-              nil,
-              'X-Email' => 'a@user.com', 'X-Auth-Token' => 'atoken'
-        end
-
-        it { expect(response.status).to eq(401) }
-      end
+      it { expect(response.status).to eq(401) }
+      it { expect(json['errors']).to_not be_blank }
     end
 
-    describe 'authorized' do
+    context 'signed in user' do
+      # stub authentication
+      sign_in_as_user
+
       let(:top_article) { FactoryGirl.create(:top_article) }
 
-      before do
-        FactoryGirl.create(:user,
-                           email: 'a@user.com',
-                           username: 'my_user',
-                           authentication_token: 'validtoken')
-      end
-
-      subject do
-        get '/a/v1/top_articles',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
-      end
+      subject { get '/a/v1/top_articles' }
 
       context 'token valid' do
         it 'response code 200 and return []' do
@@ -168,5 +115,4 @@ RSpec.describe 'Top Articles API', type: :request do
         end
       end
     end
-  end
 end
