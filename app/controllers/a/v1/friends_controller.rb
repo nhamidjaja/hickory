@@ -1,7 +1,10 @@
-class A::V1::FriendsController < ApplicationController
-  def index
-    
-  end
+module A
+  module V1
+    class FriendsController < ApplicationController
+      respond_to :json
 
-  
+      def index
+      end
+    end
+  end
 end

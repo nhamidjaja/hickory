@@ -40,12 +40,19 @@ class User < ActiveRecord::Base
     self.omniauth_token = auth.token
   end
 
-  def get_facebook_friends
-    user_fb = FbGraph2::User.me(self.omniauth_token).fetch
+  def request_facebook_friends
+    user_fb = FbGraph2::User.me(omniauth_token).fetch
 
     user_fb.friends.each do |f|
-      UserFriend.create(user_id: self.id, provider: 'facebook', uid: f.id)
+      UserFriend.create(user_id: id, provider: 'facebook', uid: f.id)
     end
+  end
+
+  def friends
+    user_friends.joins('JOIN users
+      ON users.provider = user_friends.provider
+      and users.uid = user_friends.uid')
+      .select('user_friends.*', 'username', 'email').to_a
   end
 
   protected

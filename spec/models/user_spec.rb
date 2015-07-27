@@ -159,14 +159,14 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.get_facebook_friends' do
-    let(:user) { FactoryGirl.create(:user, omniauth_token: "token") }
-    subject {user.get_facebook_friends}
+  describe '.request_facebook_friends' do
+    let(:user) { FactoryGirl.create(:user, omniauth_token: 'token') }
+    subject { user.request_facebook_friends }
     context 'no friend' do
       before do
         fb_user = instance_double('FbGraph2::User')
         fb_response = instance_double('FbGraph2::User',
-          friends: [])
+                                      friends: [])
 
         expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
         expect(fb_user).to receive(:fetch).and_return(fb_response)
@@ -183,9 +183,9 @@ RSpec.describe User, type: :model do
       before do
         fb_user = instance_double('FbGraph2::User')
         fb_response = instance_double('FbGraph2::User',
-          friends: [
-            instance_double('FbGraph2::User',id: 1)
-            ])
+                                      friends: [
+                                        instance_double('FbGraph2::User', id: 1)
+                                      ])
 
         expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
         expect(fb_user).to receive(:fetch).and_return(fb_response)
@@ -204,11 +204,13 @@ RSpec.describe User, type: :model do
       before do
         fb_user = instance_double('FbGraph2::User')
         fb_response = instance_double('FbGraph2::User',
-          friends: [
-            instance_double('FbGraph2::User',id: 1),
-            instance_double('FbGraph2::User',id: 2),
-            instance_double('FbGraph2::User',id: 3)
-            ])
+                                      friends: [
+                                        instance_double('FbGraph2::User',
+                                                        id: 1),
+                                        instance_double('FbGraph2::User',
+                                                        id: 2),
+                                        instance_double('FbGraph2::User', id: 3)
+                                      ])
 
         expect(FbGraph2::User).to receive(:me).with('token').and_return(fb_user)
         expect(fb_user).to receive(:fetch).and_return(fb_response)

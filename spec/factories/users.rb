@@ -4,5 +4,6 @@ FactoryGirl.define do
     username 'abc'
     password 'password01'
     password_confirmation 'password01'
+    uid '123123123123123'
   end
 end
