@@ -13,14 +13,14 @@ RSpec.describe FController, type: :controller do
 
     describe 'GET #index' do
       context 'valid url' do
-        it 'creates a new UserFaveUrl' do
+        it 'creates a new CUserFaveUrl' do
           expect { get :index, url: 'http://example.com/hello?source=xyz' }
-            .to change(UserFaveUrl, :count).by(1)
+            .to change(CUserFaveUrl, :count).by(1)
         end
 
-        it 'creates a new UserFave' do
+        it 'creates a new CUserFave' do
           expect { get :index, url: 'http://example.com/hello?source=xyz' }
-            .to change(UserFave, :count).by(1)
+            .to change(CUserFave, :count).by(1)
         end
       end
     end
