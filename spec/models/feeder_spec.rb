@@ -17,4 +17,19 @@ RSpec.describe Feeder, type: :model do
   describe '.title' do
     it { expect(FactoryGirl.build(:feeder, title: '')).to_not be_valid }
   end
+
+  describe '.request_top_article' do
+    context 'return' do
+      it '0 data' do
+        expect(Feeder.top_articles.size).to eq(0)
+      end
+
+      it '1 data' do
+        top = FactoryGirl.create(:top_article)
+
+        expect(Feeder.top_articles.size).to eq(1)
+        expect(Feeder.top_articles.first.content_url).to eq(top.content_url)
+      end
+    end
+  end
 end
