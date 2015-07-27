@@ -159,6 +159,25 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.friends' do
+    let(:user) { FactoryGirl.create(:user, username: 'user1') }
+    context 'friend' do
+      it 'has 0 friend' do
+        expect(user.friends.size).to eq(0)
+      end
+
+      it 'has 1 friend' do
+        user2 = FactoryGirl.create(:user, username: 'user2',
+                                          uid: '1234564545454')
+        FactoryGirl.create(:user_friend, user: user,
+                                         provider: user2.provider,
+                                         uid: user2.uid)
+
+        expect(user.friends.size).to eq(1)
+      end
+    end
+  end
+
   describe '.request_facebook_friends' do
     let(:user) { FactoryGirl.create(:user, omniauth_token: 'token') }
     subject { user.request_facebook_friends }
@@ -172,7 +191,7 @@ RSpec.describe User, type: :model do
         expect(fb_user).to receive(:fetch).and_return(fb_response)
       end
 
-      it 'has 0 user_friends' do
+      it 'has 0 friends' do
         subject
 
         expect(user.user_friends.size).to eq(0)

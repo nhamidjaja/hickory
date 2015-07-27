@@ -5,5 +5,6 @@ FactoryGirl.define do
     password 'password01'
     password_confirmation 'password01'
     uid '123123123123123'
+    provider 'facebook'
   end
 end
