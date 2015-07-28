@@ -35,24 +35,22 @@ RSpec.describe TopArticle, type: :model do
 
     context 'limit' do
       it '1 data' do
-        expect(TopArticle.latest_top(1, nil).size).to eq(1)
+        expect(TopArticle.latest_top(Time.zone.now.to_i, 1).size).to eq(1)
       end
 
       it '2 data' do
-        expect(TopArticle.latest_top(2, nil).size).to eq(2)
+        expect(TopArticle.latest_top(Time.zone.now.to_i, 2).size).to eq(2)
       end
     end
 
     context 'last_published_at' do
       it '0 data' do
-        expect(TopArticle.latest_top(nil,
-                                     '2015-07-15 19:01:10'.in_time_zone.to_i
+        expect(TopArticle.latest_top('2015-07-15 19:01:10'.in_time_zone.to_i
                                     ).size).to eq(0)
       end
 
       it '2 data' do
-        expect(TopArticle.latest_top(nil,
-                                     top_article1.published_at.in_time_zone.to_i
+        expect(TopArticle.latest_top(Time.zone.now.to_i
                                     ).size).to eq(2)
       end
     end

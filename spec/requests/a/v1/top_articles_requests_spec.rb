@@ -89,13 +89,12 @@ RSpec.describe 'Top Articles API', type: :request do
                 ).to eq(top_article.content_url)
         end
 
-        it 'return all data sort desc' do
+        it 'make sure first data is last inserted data' do
           top_article
 
           feed = FactoryGirl.create(:feeder, feed_url: 'http://detik.com/feed.rss')
           top_article2 = FactoryGirl.create(:top_article,
-                                            feeder: feed, title: 'articledetik',
-                                            published_at: Time.zone.now)
+                                            feeder: feed, title: 'articledetik')
 
           subject
 
