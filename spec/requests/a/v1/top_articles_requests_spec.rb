@@ -39,9 +39,9 @@ RSpec.describe 'Top Articles API', type: :request do
         before do
           feeder = FactoryGirl.create(:feeder)
           FactoryGirl.create(:top_article,
-            feeder: feeder,
-            published_at: '2015-07-20 19:01:10 +03:00'
-            )
+                             feeder: feeder,
+                             published_at: '2015-07-20 19:01:10 +03:00'
+                            )
         end
 
         it 'has article' do
@@ -54,7 +54,7 @@ RSpec.describe 'Top Articles API', type: :request do
           expect(article['title']).to_not be_blank
           expect(article['content_url']).to_not be_blank
           expect(article['image_url']).to_not be_blank
-          expect(article['published_at']).to eq(1437408070)
+          expect(article['published_at']).to eq(1_437_408_070)
         end
       end
 
@@ -62,7 +62,7 @@ RSpec.describe 'Top Articles API', type: :request do
         it 'is limited to 50' do
           feeder = FactoryGirl.create(:feeder)
           51.times do
-            FactoryGirl.create(:top_article,feeder: feeder)
+            FactoryGirl.create(:top_article, feeder: feeder)
           end
 
           subject
@@ -76,7 +76,6 @@ RSpec.describe 'Top Articles API', type: :request do
     end
 
     context 'with last_published_at' do
-
     end
   end
 end

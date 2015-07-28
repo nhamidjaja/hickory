@@ -24,7 +24,7 @@ RSpec.describe TopArticle, type: :model do
   describe '#since' do
     context 'unspecified last_published_at' do
       subject { TopArticle.since(nil) }
-      
+
       it 'is sorted by descending published_at' do
         relation = instance_double('ActiveRecord::Relation')
 
@@ -38,8 +38,8 @@ RSpec.describe TopArticle, type: :model do
 
     context 'with last_published_at' do
       # 1437408070 => 2015-07-20 19:01:10 +03:00
-      subject { TopArticle.since(1437408070) }
-      
+      subject { TopArticle.since(1_437_408_070) }
+
       it 'is sorted by descending published_at' do
         relation = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
