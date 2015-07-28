@@ -23,7 +23,7 @@ RSpec.describe TopArticle, type: :model do
 
   describe '.latest_top' do
     context 'default parameters' do
-      it do
+      it 'uses default take value' do
         relation = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
 
@@ -37,7 +37,7 @@ RSpec.describe TopArticle, type: :model do
     end
 
     context 'with last_published_at' do
-      it do
+      it 'filters published_at' do
         relation = instance_double('ActiveRecord::Relation')
         where = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
@@ -56,7 +56,7 @@ RSpec.describe TopArticle, type: :model do
     end
 
     context 'with limit' do
-      it 'takes limit' do
+      it 'takes value of limit' do
         relation = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
 
@@ -70,7 +70,7 @@ RSpec.describe TopArticle, type: :model do
     end
 
     context 'with last_published_at and limit' do
-      it 'takes limit' do
+      it 'filters published at and takes value of limit' do
         relation = instance_double('ActiveRecord::Relation')
         where = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
