@@ -10,9 +10,7 @@ RSpec.describe 'Top Articles API', type: :request do
     end
   end
 
-  describe 'authorized' do
-    let(:top_article) { FactoryGirl.create(:top_article) }
-
+  context 'authorized' do
     before do
       FactoryGirl.create(:user,
                          email: 'a@user.com',
@@ -20,108 +18,65 @@ RSpec.describe 'Top Articles API', type: :request do
                          authentication_token: 'validtoken')
     end
 
-    subject do
-      get '/a/v1/top_articles',
-          nil,
-          'X-Email' => 'a@user.com',
-          'X-Auth-Token' => 'validtoken'
-    end
-
-    context 'token valid' do
-      it 'response code 200 and return []' do
-        subject
-
-        expect(response.status).to eq(200)
-        expect(json['top_articles']).to eq([])
-      end
-    end
-
-    context 'view response' do
-      it 'return 1 data' do
-        top_article
-        subject
-
-        expect(json['top_articles']).to_not eq([])
-        expect(json['top_articles'][0]['title']).to eq(top_article.title)
-        expect(json['top_articles'][0]['content_url']
-              ).to eq(top_article.content_url)
-      end
-
-      it 'make sure first data is last inserted data' do
-        top_article
-
-        feed = FactoryGirl.create(:feeder, feed_url: 'http://detik.com/feed.rss')
-        top_article2 = FactoryGirl.create(:top_article,
-                                          feeder: feed, title: 'articledetik')
-
-        subject
-
-        expect(json['top_articles']).to_not eq([])
-        expect(json['top_articles'][0]['title']).to eq(top_article2.title)
-        expect(json['top_articles'][0]['content_url']
-              ).to eq(top_article2.content_url)
-        expect(json['top_articles'][1]['title']).to eq(top_article.title)
-        expect(json['top_articles'][1]['content_url']
-              ).to eq(top_article.content_url)
-      end
-    end
-
-    context 'with limit' do
-      before do
-        feed = FactoryGirl.create(:feeder, feed_url: 'http://detik.com/feed.rss')
-        FactoryGirl.create(:top_article,
-                           feeder: feed, title: 'articledetik')
-      end
-
-      it 'return 1 data' do
-        top_article
-
-        get '/a/v1/top_articles?last_published_at=1438393670&limit=1',
+    context 'without parameters' do
+      subject do
+        get '/a/v1/top_articles',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
-
-        expect(json['top_articles'].size).to eq(1)
       end
 
-      it 'return 2 data' do
-        top_article
+      context 'no articles' do
+        it 'is successful and empty' do
+          subject
 
-        get '/a/v1/top_articles?last_published_at=1438393670&limit=2',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
+          expect(response.status).to eq(200)
+          expect(json['top_articles']).to eq([])
+        end
+      end
 
-        expect(json['top_articles'].size).to eq(2)
+      context 'one article' do
+        before do
+          feeder = FactoryGirl.create(:feeder)
+          FactoryGirl.create(:top_article,
+            feeder: feeder,
+            published_at: '2015-07-20 19:01:10 +03:00'
+            )
+        end
+
+        it 'has article' do
+          subject
+
+          expect(response.status).to eq(200)
+          expect(json['top_articles'].size).to eq(1)
+
+          article = json['top_articles'].first
+          expect(article['title']).to_not be_blank
+          expect(article['content_url']).to_not be_blank
+          expect(article['image_url']).to_not be_blank
+          expect(article['published_at']).to eq(1437408070)
+        end
+      end
+
+      context 'many articles' do
+        it 'is limited to 50' do
+          feeder = FactoryGirl.create(:feeder)
+          51.times do
+            FactoryGirl.create(:top_article,feeder: feeder)
+          end
+
+          subject
+
+          expect(response.status).to eq(200)
+          expect(json['top_articles'].size).to eq(50)
+        end
+
+        it 'is sorted by descending published_at' # TODO
       end
     end
 
     context 'with last_published_at' do
-      before do
-        feed = FactoryGirl.create(:feeder, feed_url: 'http://detik.com/feed.rss')
-        FactoryGirl.create(:top_article,
-                           feeder: feed, title: 'articledetik')
-      end
 
-      it 'return 0 data' do
-        get '/a/v1/top_articles?last_published_at=1436418870',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
-
-        expect(json['top_articles'].size).to eq(0)
-      end
-
-      it 'return 2 data' do
-        top_article
-
-        get '/a/v1/top_articles?limit=2&last_published_at=1437418870',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
-
-        expect(json['top_articles'].size).to eq(2)
-      end
     end
   end
 end

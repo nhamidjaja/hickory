@@ -21,70 +21,37 @@ RSpec.describe TopArticle, type: :model do
     end
   end
 
-  describe '.latest_top' do
-    context 'default parameters' do
-      it 'uses default take value' do
+  describe '#since' do
+    context 'unspecified last_published_at' do
+      subject { TopArticle.since(nil) }
+      
+      it 'is sorted by descending published_at' do
         relation = instance_double('ActiveRecord::Relation')
-        order = instance_double('ActiveRecord::Relation')
 
         expect(TopArticle).to receive(:all).and_return(relation)
         expect(relation).to receive(:order).with(
-          published_at: :desc).and_return(order)
-        expect(order).to receive(:take).with(50)
+          published_at: :desc)
 
-        TopArticle.latest_top(nil, nil)
+        subject
       end
     end
 
     context 'with last_published_at' do
-      it 'filters published_at' do
-        relation = instance_double('ActiveRecord::Relation')
-        where = instance_double('ActiveRecord::Relation')
-        order = instance_double('ActiveRecord::Relation')
-
-        expect(TopArticle).to receive(:all).and_return(relation)
-        expect(relation).to receive(:where).with(
-          'published_at <= ?', Time.zone.local(2015, 7, 15, 19, 1, 10, '+00:00')
-        ).and_return(where)
-        expect(where).to receive(:order).with(
-          published_at: :desc).and_return(order)
-        expect(order).to receive(:take).with(50)
-
-        # 1436986870 => 2015-07-15 19:01:10
-        TopArticle.latest_top(1_436_986_870, nil)
-      end
-    end
-
-    context 'with limit' do
-      it 'takes value of limit' do
+      # 1437408070 => 2015-07-20 19:01:10 +03:00
+      subject { TopArticle.since(1437408070) }
+      
+      it 'is sorted by descending published_at' do
         relation = instance_double('ActiveRecord::Relation')
         order = instance_double('ActiveRecord::Relation')
 
         expect(TopArticle).to receive(:all).and_return(relation)
         expect(relation).to receive(:order).with(
           published_at: :desc).and_return(order)
-        expect(order).to receive(:take).with(17)
+        expect(order).to receive(:where).with(
+          'published_at <= ?',
+          Time.zone.parse('2015-07-20 19:01:10 +03:00'))
 
-        TopArticle.latest_top(nil, 17)
-      end
-    end
-
-    context 'with last_published_at and limit' do
-      it 'filters published at and takes value of limit' do
-        relation = instance_double('ActiveRecord::Relation')
-        where = instance_double('ActiveRecord::Relation')
-        order = instance_double('ActiveRecord::Relation')
-
-        expect(TopArticle).to receive(:all).and_return(relation)
-        expect(relation).to receive(:where).with(
-          'published_at <= ?', Time.zone.local(2015, 7, 15, 19, 1, 10, '+00:00')
-        ).and_return(where)
-        expect(where).to receive(:order).with(
-          published_at: :desc).and_return(order)
-        expect(order).to receive(:take).with(3)
-
-        # 1436986870 => 2015-07-15 19:01:10
-        TopArticle.latest_top(1_436_986_870, 3)
+        subject
       end
     end
   end

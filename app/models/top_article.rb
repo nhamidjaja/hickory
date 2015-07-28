@@ -5,16 +5,15 @@ class TopArticle < ActiveRecord::Base
   validates :title, presence: true
   validates :image_url, presence: true
 
-  def self.latest_top(last_published_at, limit)
-    limit ||= 50
+  def self.since(last_published_at)
+    articles = TopArticle.all.order(published_at: :desc)
 
-    articles = TopArticle.all
 
     if last_published_at
       articles = articles.where('published_at <= ?',
                                 Time.zone.at(last_published_at.to_i).utc)
     end
 
-    articles.order(published_at: :desc).take(limit)
+    articles
   end
 end
