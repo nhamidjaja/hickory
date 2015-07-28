@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Top Articles API', type: :request do
-    describe 'unauthenticated' do
-      context 'no email' do
-        it 'is unauthorized' do
-          get '/a/v1/top_articles'
-          
-          expect(response.status).to eq(401)
-          expect(json['errors']).to_not be_blank
-        end
+    context 'unauthenticated' do
+      it 'is unauthorized' do
+        get '/a/v1/top_articles'
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
       end
     end
 
