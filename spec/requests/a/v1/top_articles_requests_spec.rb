@@ -76,7 +76,7 @@ RSpec.describe 'Top Articles API', type: :request do
       it 'return 1 data' do
         top_article
 
-        get '/a/v1/top_articles?limit=1',
+        get '/a/v1/top_articles?last_published_at=1438393670&limit=1',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
@@ -87,7 +87,7 @@ RSpec.describe 'Top Articles API', type: :request do
       it 'return 2 data' do
         top_article
 
-        get '/a/v1/top_articles?limit=2',
+        get '/a/v1/top_articles?last_published_at=1438393670&limit=2',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
