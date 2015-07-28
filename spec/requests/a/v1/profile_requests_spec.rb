@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Profile API', type: :request do
   describe 'authentication' do
-    describe 'unauthorized' do
+    context 'unauthorized' do
       before do
         FactoryGirl.create(:user,
                            email: 'a@user.com',
@@ -52,7 +52,7 @@ RSpec.describe 'Profile API', type: :request do
       end
     end
 
-    describe 'authorized' do
+    context 'authorized' do
       let(:user) do
         FactoryGirl.create(:user,
                            email: 'a@user.com',
