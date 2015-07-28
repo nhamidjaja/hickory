@@ -2,12 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'User Registrations API', type: :request do
   context 'no token' do
-    before do
+    it 'is unauthorized' do
       post '/a/v1/registrations/facebook'
-    end
 
-    it { expect(response.status).to eq(401) }
-    it do
+      expect(response.status).to eq(401)
       expect(json['errors']['message'])
         .to match('No Facebook token provided')
     end
@@ -18,13 +16,16 @@ RSpec.describe 'User Registrations API', type: :request do
       expect_any_instance_of(FbGraph2::User)
         .to receive(:fetch)
         .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid token')
+    end
+
+    it 'is unauthorized' do
       post '/a/v1/registrations/facebook',
            nil,
            'X-Facebook-Token' => 'invalid-token'
-    end
 
-    it { expect(response.status).to eq(401) }
-    it { expect(json['errors']['message']).to match('Invalid token') }
+      expect(response.status).to eq(401)
+      expect(json['errors']['message']).to match('Invalid token')
+    end
   end
 
   context 'valid token' do
@@ -41,30 +42,30 @@ RSpec.describe 'User Registrations API', type: :request do
         .and_return(double)
     end
 
-    context 'create new user' do
-      before do
+    context 'valid user' do
+      it 'creates user' do
         post '/a/v1/registrations/facebook',
              '{"user": {"username": "nicholas"}}',
              'Content-Type' => 'application/json',
              'X-Facebook-Token' => 'fb-token'
-      end
 
-      it { expect(response.status).to eq(201) }
-      it { expect(json['user']['email']).to match('new@email.com') }
-      it { expect(json['user']['username']).to match('nicholas') }
-      it { expect(json['user']['authentication_token']).to_not be_blank }
+        expect(response.status).to eq(201)
+        expect(json['user']['email']).to match('new@email.com')
+        expect(json['user']['username']).to match('nicholas')
+        expect(json['user']['authentication_token']).to_not be_blank
+      end
     end
 
-    context 'invalid user without username' do
-      before do
+    context 'invalid user' do
+      it 'is bad request' do
         post '/a/v1/registrations/facebook',
              '{"user": {"username": ""}}',
              'Content-Type' => 'application/json',
              'X-Facebook-Token' => 'fb-token'
-      end
 
-      it { expect(response.status).to eq(400) }
-      it { expect(json['errors']['username']).to eq(['is invalid']) }
+        expect(response.status).to eq(400)
+        expect(json['errors']['username']).to eq(['is invalid'])
+      end
     end
   end
 end
