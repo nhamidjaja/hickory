@@ -13,11 +13,11 @@ RSpec.describe 'Sessions API', type: :request do
     context 'with invalid token' do
       before do
         expect_any_instance_of(FbGraph2::User)
-        .to receive(:fetch)
-        .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid Token')
+          .to receive(:fetch)
+          .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid Token')
         get '/a/v1/sessions/facebook',
-        nil,
-        'X-Facebook-Token' => 'invalid-token'
+            nil,
+            'X-Facebook-Token' => 'invalid-token'
       end
 
       it { expect(response.status).to eq(401) }
@@ -31,17 +31,17 @@ RSpec.describe 'Sessions API', type: :request do
             email: 'new@email.com',
             id: 'x123',
             access_token: 'fb-token'
-            )
+          )
 
           expect_any_instance_of(FbGraph2::User)
-          .to receive(:fetch)
-          .and_return(double)
+            .to receive(:fetch)
+            .and_return(double)
         end
 
         it 'is not found' do
           get '/a/v1/sessions/facebook',
-          nil,
-          'X-Facebook-Token' => 'fb-token'
+              nil,
+              'X-Facebook-Token' => 'fb-token'
 
           expect(response.status).to eq(404)
           expect(json['errors']['message']).to match(/Unregistered user/)
@@ -56,18 +56,18 @@ RSpec.describe 'Sessions API', type: :request do
             email: 'existing@email.com',
             id: 'x123',
             access_token: 'fb-token'
-            )
+          )
 
           expect_any_instance_of(FbGraph2::User)
-          .to receive(:fetch)
-          .and_return(double)
+            .to receive(:fetch)
+            .and_return(double)
         end
 
         context 'valid facebook token' do
           it 'is successful' do
             get '/a/v1/sessions/facebook',
-            nil,
-            'X-Facebook-Token' => 'fb-token'
+                nil,
+                'X-Facebook-Token' => 'fb-token'
 
             expect(response.status).to eq(200)
             expect(json['user']['email']).to match('existing@email.com')
@@ -78,14 +78,14 @@ RSpec.describe 'Sessions API', type: :request do
         context 'unexpected error on save' do
           before do
             expect_any_instance_of(User)
-            .to receive(:save!)
-            .and_raise(StandardError, 'Failed to save')
+              .to receive(:save!)
+              .and_raise(StandardError, 'Failed to save')
           end
 
           it 'is server error' do
             get '/a/v1/sessions/facebook',
-            nil,
-            'X-Facebook-Token' => 'fb-token'
+                nil,
+                'X-Facebook-Token' => 'fb-token'
 
             expect(response.status).to eq(500)
             expect(json['errors']['message']).to_not be_blank

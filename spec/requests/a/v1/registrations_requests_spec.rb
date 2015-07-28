@@ -8,21 +8,21 @@ RSpec.describe 'User Registrations API', type: :request do
 
         expect(response.status).to eq(401)
         expect(json['errors']['message'])
-        .to match('No Facebook token provided')
+          .to match('No Facebook token provided')
       end
     end
 
     context 'with invalid token' do
       before do
         expect_any_instance_of(FbGraph2::User)
-        .to receive(:fetch)
-        .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid token')
+          .to receive(:fetch)
+          .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid token')
       end
 
       it 'is unauthorized' do
         post '/a/v1/registrations/facebook',
-        nil,
-        'X-Facebook-Token' => 'invalid-token'
+             nil,
+             'X-Facebook-Token' => 'invalid-token'
 
         expect(response.status).to eq(401)
         expect(json['errors']['message']).to match('Invalid token')
@@ -36,19 +36,19 @@ RSpec.describe 'User Registrations API', type: :request do
           email: 'new@email.com',
           id: 'x123',
           access_token: 'fb-token'
-          )
+        )
 
         expect_any_instance_of(FbGraph2::User)
-        .to receive(:fetch)
-        .and_return(double)
+          .to receive(:fetch)
+          .and_return(double)
       end
 
       context 'valid user' do
         it 'creates user' do
           post '/a/v1/registrations/facebook',
-          '{"user": {"username": "nicholas"}}',
-          'Content-Type' => 'application/json',
-          'X-Facebook-Token' => 'fb-token'
+               '{"user": {"username": "nicholas"}}',
+               'Content-Type' => 'application/json',
+               'X-Facebook-Token' => 'fb-token'
 
           expect(response.status).to eq(201)
           expect(json['user']['email']).to match('new@email.com')
@@ -60,9 +60,9 @@ RSpec.describe 'User Registrations API', type: :request do
       context 'invalid user' do
         it 'is bad request' do
           post '/a/v1/registrations/facebook',
-          '{"user": {"username": ""}}',
-          'Content-Type' => 'application/json',
-          'X-Facebook-Token' => 'fb-token'
+               '{"user": {"username": ""}}',
+               'Content-Type' => 'application/json',
+               'X-Facebook-Token' => 'fb-token'
 
           expect(response.status).to eq(400)
           expect(json['errors']['username']).to eq(['is invalid'])
