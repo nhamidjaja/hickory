@@ -17,7 +17,7 @@ RSpec.describe 'Profile API', type: :request do
         end
 
         it { expect(response.status).to eq(401) }
-        it { expect(json['errors']).to_not be_blank }
+        it { expect(json['errors']['message']).to match('Failed to sign in') }
       end
 
       context 'no token' do

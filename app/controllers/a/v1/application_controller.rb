@@ -26,7 +26,7 @@ module A
           return
         end
 
-        fail Errors::NotAuthorized
+        fail Errors::NotAuthorized, 'Failed to sign in'
       end
 
       private
