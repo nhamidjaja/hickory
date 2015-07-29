@@ -157,12 +157,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#pg_search by username' do
-    it do
-      user = FactoryGirl.create(:user, authentication_token: 'token')
-
-      expect(User.search_by_username(user.username
-                                    ).first.username).to eq(user.username)
-    end
+  describe '#search_by_username' do
+    it { expect(User).to respond_to(:search_by_username) }
   end
 end

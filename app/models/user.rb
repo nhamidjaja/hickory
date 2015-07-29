@@ -14,10 +14,11 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token
 
-  pg_search_scope :search_by_username, against: :username,
-                                       using: {
-                                         tsearch: { prefix: true }
-                                       }
+  pg_search_scope :search_by_username,
+                  against: :username,
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   def ensure_authentication_token
     return unless authentication_token.blank?

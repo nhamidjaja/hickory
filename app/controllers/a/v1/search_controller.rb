@@ -4,7 +4,9 @@ module A
       respond_to :json
 
       def index
-        @users = User.search_by_username(params[:query])
+        @users = [] && return unless params[:query]
+
+        @users = User.search_by_username(params[:query]).take(10)
       end
     end
   end
