@@ -85,7 +85,7 @@ RSpec.describe 'Top Articles API', type: :request do
 
           expect(response.status).to eq(200)
           expect(json['top_articles'][0]['published_at']).to eq(1_438_176_600)
-          expect(json['top_articles'][1]['published_at']).to eq(1438158600)
+          expect(json['top_articles'][1]['published_at']).to eq(1_438_158_600)
         end
       end
     end
