@@ -156,4 +156,13 @@ RSpec.describe User, type: :model do
       .authentication_token).to_not be_blank
     end
   end
+
+  describe '#pg_search by username' do
+    it do
+      user = FactoryGirl.create(:user, authentication_token: 'token')
+
+      expect(User.search_by_username(user.username
+                                    ).first.username).to eq(user.username)
+    end
+  end
 end
