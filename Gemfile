@@ -81,6 +81,9 @@ gem 'rubocop', group: :development, require: false
 # Test coverage analyzer
 gem 'simplecov', group: :test, require: false
 
+# PostgreSQL search
+gem 'pg_search'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'

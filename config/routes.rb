@@ -23,6 +23,11 @@ Rails.application.routes.draw do
       resources :profile, only: [ :index ]
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
+      resources :search, only: [ :index, :test ] do
+        collection do
+          get ':username', to: 'search#index'
+        end
+      end
 
       resources :sessions, only: [] do
         collection do
