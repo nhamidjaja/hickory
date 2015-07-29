@@ -9,4 +9,3 @@ module A
     end
   end
 end
-    

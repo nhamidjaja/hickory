@@ -19,7 +19,7 @@ RSpec.describe 'Search API', type: :request do
     end
     context 'search user' do
       it 'not found' do
-        get '/a/v1/search/qwer',
+        get '/a/v1/search?query=qwer',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
@@ -28,7 +28,7 @@ RSpec.describe 'Search API', type: :request do
       end
 
       it 'found 1 user' do
-        get '/a/v1/search/my_user',
+        get '/a/v1/search?query=my_user',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
@@ -38,11 +38,11 @@ RSpec.describe 'Search API', type: :request do
 
       it 'found 2 data' do
         FactoryGirl.create(:user,
-                         email: 'ab@userb.com',
-                         username: 'user',
-                         authentication_token: 'validtokenb')
+                           email: 'ab@userb.com',
+                           username: 'user',
+                           authentication_token: 'validtokenb')
 
-        get '/a/v1/search/user',
+        get '/a/v1/search?query=user',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
