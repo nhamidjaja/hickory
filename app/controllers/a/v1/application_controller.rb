@@ -7,6 +7,8 @@ module A
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
 
+      prepend_before_action :disable_devise_trackable
+
       before_action :authenticate_user_from_token!
 
       # Tested with profile_requests_spec.rb
@@ -26,7 +28,14 @@ module A
           return
         end
 
-        fail Errors::NotAuthorized
+        fail Errors::NotAuthorized, 'Failed to sign in'
+      end
+
+      protected
+
+      # http://icebergist.com/posts/how-to-skip-devise-trackable-updates/
+      def disable_devise_trackable
+        request.env['devise.skip_trackable'] = true
       end
 
       private
