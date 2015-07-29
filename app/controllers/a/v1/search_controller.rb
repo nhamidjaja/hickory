@@ -4,7 +4,7 @@ module A
       respond_to :json
 
       def index
-        @users = User.search_by_username(params[:username])
+        @users = User.search_by_username(params[:query])
       end
     end
   end
