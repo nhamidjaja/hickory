@@ -71,11 +71,44 @@ RSpec.describe 'Top Articles API', type: :request do
           expect(json['top_articles'].size).to eq(50)
         end
 
-      #   it 'is sorted by descending published_at' # TODO
+        it 'is sorted by descending published_at' do
+          feeder = FactoryGirl.create(:feeder)
+
+          FactoryGirl.create(:top_article,
+                             feeder: feeder,
+                             published_at: '2015-07-29 15:30:00 +07:00')
+          FactoryGirl.create(:top_article,
+                             feeder: feeder,
+                             published_at: '2015-07-29 20:30:00 +07:00')
+
+          subject
+
+          expect(json['top_articles'][0]['published_at']).to eq(1_438_176_600)
+        end
       end
     end
 
     context 'with last_published_at' do
+      it 'filter older than last published data' do
+        feeder = FactoryGirl.create(:feeder)
+
+        FactoryGirl.create(:top_article,
+                           feeder: feeder,
+                           published_at: '2015-07-29 15:30:00 +07:00')
+        # 1438158600
+        FactoryGirl.create(:top_article,
+                           feeder: feeder,
+                           published_at: '2015-07-29 20:30:00 +07:00')
+        # 1438176600
+
+        get '/a/v1/top_articles?last_published_at=1438176600',
+            nil,
+            'X-Email' => 'a@user.com',
+            'X-Auth-Token' => 'validtoken'
+
+        expect(json['top_articles'].size).to eq(1)
+        expect(json['top_articles'][0]['published_at']).to eq(1_438_158_600)
+      end
     end
   end
 end
