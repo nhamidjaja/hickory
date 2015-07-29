@@ -83,7 +83,9 @@ RSpec.describe 'Top Articles API', type: :request do
 
           subject
 
+          expect(response.status).to eq(200)
           expect(json['top_articles'][0]['published_at']).to eq(1_438_176_600)
+          expect(json['top_articles'][1]['published_at']).to eq(1438158600)
         end
       end
     end
@@ -95,16 +97,18 @@ RSpec.describe 'Top Articles API', type: :request do
         FactoryGirl.create(:top_article,
                            feeder: feeder,
                            published_at: '2015-07-29 15:30:00 +07:00')
-        # 1438158600
+        # 1438158600 => '2015-07-29 15:30:00 +07:00'
         FactoryGirl.create(:top_article,
                            feeder: feeder,
                            published_at: '2015-07-29 20:30:00 +07:00')
-        # 1438176600
+        # 1438176600 => '2015-07-29 20:30:00 +07:00'
 
         get '/a/v1/top_articles?last_published_at=1438176600',
             nil,
             'X-Email' => 'a@user.com',
             'X-Auth-Token' => 'validtoken'
+
+        expect(response.status).to eq(200)
 
         expect(json['top_articles'].size).to eq(1)
         expect(json['top_articles'][0]['published_at']).to eq(1_438_158_600)
