@@ -80,6 +80,7 @@ RSpec.describe 'Profile API', type: :request do
         end
 
         it 'returns current user' do
+          expect(request.env['devise.skip_trackable']).to eq(true)
           expect(response.status).to eq(200)
 
           expect(json['user']['id']).to_not be_blank
