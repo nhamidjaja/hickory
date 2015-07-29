@@ -71,7 +71,7 @@ RSpec.describe 'Top Articles API', type: :request do
           expect(json['top_articles'].size).to eq(50)
         end
 
-        it 'is sorted by descending published_at' # TODO
+      #   it 'is sorted by descending published_at' # TODO
       end
     end
 
