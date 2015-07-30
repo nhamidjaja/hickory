@@ -1,5 +1,1 @@
-json.users(@users) do |user|
-  json.id user.id
-  json.email user.email
-  json.username user.username
-end
+json.users(@users, :id, :email, :username)
