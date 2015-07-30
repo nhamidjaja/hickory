@@ -21,13 +21,13 @@ RSpec.describe 'Users API', type: :request do
 
     context 'view user' do
       context 'with not exists user id' do
-        it 'is 500 user not found' do
+        it 'is 404 user not found' do
           get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f',
               nil,
               'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
 
-          expect(response.status).to eq(500)
+          expect(response.status).to eq(404)
           expect(json['errors']).to_not be_blank
         end
       end
