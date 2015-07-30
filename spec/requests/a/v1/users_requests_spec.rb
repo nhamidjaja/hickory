@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Users API', type: :request do
   context 'unauthenticated' do
     it 'is unauthorized' do
-      get '/a/v1/top_articles'
+      get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f'
 
       expect(response.status).to eq(401)
       expect(json['errors']).to_not be_blank
