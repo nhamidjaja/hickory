@@ -1,25 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  it 'has a valid factory' do
-    expect(FactoryGirl.create(:user)).to be_valid
-  end
+  it { expect(FactoryGirl.build(:user)).to be_valid }
 
   describe '.username' do
     it { expect(FactoryGirl.build(:user, username: '')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: '1' * 16)).to_not be_valid }
+    it { expect(FactoryGirl.build(:user, username: '1' * 31)).to_not be_valid }
+    it { expect(FactoryGirl.build(:user, username: 'a')).to_not be_valid }
 
     it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
     it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
-    it { expect(FactoryGirl.build(:user, username: '0')).to be_valid }
+    it { expect(FactoryGirl.build(:user, username: '1' * 30)).to be_valid }
 
     it 'is unique' do
-      FactoryGirl.create(:user, username: 'a')
+      FactoryGirl.create(:user, username: 'nic')
 
-      expect(FactoryGirl.build(:user, username: 'a')).to_not be_valid
+      expect(FactoryGirl.build(:user, username: 'nic')).to_not be_valid
     end
   end
 
@@ -156,5 +155,9 @@ RSpec.describe User, type: :model do
       expect(FactoryGirl.create(:user, authentication_token: '')
       .authentication_token).to_not be_blank
     end
+  end
+
+  describe '#search_by_username' do
+    it { expect(User).to respond_to(:search_by_username) }
   end
 end

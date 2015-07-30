@@ -15,12 +15,16 @@ Rails.application.routes.draw do
                                     omniauth_callbacks: 'omniauth_callbacks' }
 
 
-  resources :fave, only: [ :index ]
+  resources :f, only: [ :index ]
 
-  namespace :api, constraints: { format: :json }, defaults: { format: :json } do
+  namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: [ :show ]
       resources :profile, only: [ :index ]
+      resources :top_articles, only: [ :index ]
+      resources :master_feeds, only: [ :index ]
+      resources :search, only: [ :index]
+
       resources :sessions, only: [] do
         collection do
           get 'facebook'

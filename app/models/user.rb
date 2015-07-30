@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include PgSearch
   # include ActiveUUID::UUID
 
   # Include default devise modules. Others available are:
@@ -9,9 +10,15 @@ class User < ActiveRecord::Base
 
   validates :username,
             uniqueness: true,
-            format: { with: /\A[a-z0-9_.]{1,15}\z/ }
+            format: { with: /\A[a-z0-9_.]{2,30}\z/ }
 
   before_save :ensure_authentication_token
+
+  pg_search_scope :search_by_username,
+                  against: :username,
+                  using: {
+                    tsearch: { prefix: true }
+                  }
 
   def ensure_authentication_token
     return unless authentication_token.blank?
