@@ -56,8 +56,6 @@ module A
         @error = error
         render('errors.json', status: :internal_server_error)
       end
-
-
     end
   end
 end
