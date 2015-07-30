@@ -156,4 +156,8 @@ RSpec.describe User, type: :model do
       .authentication_token).to_not be_blank
     end
   end
+
+  describe '#search_by_username' do
+    it { expect(User).to respond_to(:search_by_username) }
+  end
 end
