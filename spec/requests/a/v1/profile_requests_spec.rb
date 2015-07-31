@@ -110,9 +110,9 @@ RSpec.describe 'Profile API', type: :request do
 
         it 'update username with exist username' do
           FactoryGirl.create(:user,
-                           email: 'ab@user.com',
-                           username: 'user',
-                           authentication_token: 'validtokenbcd')
+                             email: 'ab@user.com',
+                             username: 'user',
+                             authentication_token: 'validtokenbcd')
 
           get '/a/v1/profile/update?username=user',
               nil,
