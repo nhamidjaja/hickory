@@ -7,7 +7,11 @@ module A
       end
 
       def update
-        render 'index'
+        @user = User.find(current_user.id)
+
+        @user.username = params[:username]
+
+        @user.save!
       end
     end
   end
