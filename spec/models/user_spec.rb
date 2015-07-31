@@ -3,6 +3,15 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it { expect(FactoryGirl.build(:user)).to be_valid }
 
+  describe 'after_save' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it do
+      expect(user).to receive(:ensure_authentication_token)
+      user.save
+    end
+  end
+
   describe '.username' do
     it { expect(FactoryGirl.build(:user, username: '')).to_not be_valid }
     it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
@@ -147,13 +156,22 @@ RSpec.describe User, type: :model do
   end
 
   describe '.ensure_authentication_token' do
-    it do
-      expect(FactoryGirl.build(:user, authentication_token: '')
-      .ensure_authentication_token).to_not be_blank
+    context 'blank token' do
+      let(:user) { FactoryGirl.build(:user, authentication_token: '') }
+      before { user.ensure_authentication_token }
+
+      it 'sets token' do
+        expect(user.authentication_token).to_not be_blank
+      end
     end
-    it do
-      expect(FactoryGirl.create(:user, authentication_token: '')
-      .authentication_token).to_not be_blank
+
+    context 'token exists' do
+      let(:user) { FactoryGirl.build(:user, authentication_token: 'abcdef') }
+      before { user.ensure_authentication_token }
+
+      it 'does nothing' do
+        expect(user.authentication_token).to eq('abcdef')
+      end
     end
   end
 
