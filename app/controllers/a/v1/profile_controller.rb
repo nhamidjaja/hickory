@@ -5,6 +5,10 @@ module A
 
       def index
       end
+
+      def update
+        render 'index'
+      end
     end
   end
 end

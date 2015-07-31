@@ -20,7 +20,11 @@ Rails.application.routes.draw do
   namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
       resources :users, only: [ :show ]
-      resources :profile, only: [ :index ]
+      resources :profile, only: [ :index, :update ] do
+        collection do
+          get 'update', to: 'profile#update'
+        end
+      end
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
       resources :search, only: [ :index]
