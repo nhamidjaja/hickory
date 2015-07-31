@@ -8,7 +8,15 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           .create(:user, provider: 'facebook', uid: 'x123')
       end
 
-      before { allow(User).to receive(:from_omniauth) { user } }
+      before do
+        controller.request.env['omniauth.auth'] = {
+          'provider' => 'facebook',
+          'uid' => '123',
+          'info' => { 'email' => 'a@b.com' },
+          'credentials' => { 'token' => 'abc098' } }
+
+        expect(User).to receive(:from_third_party_auth) { user }
+      end
 
       it 'signs in user' do
         expect(subject.current_user).to be_nil
@@ -21,9 +29,15 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
 
     context 'new user' do
       let(:user) { FactoryGirl.build(:user, provider: 'facebook', uid: 'x123') }
+
       before do
-        allow(User).to receive(:from_omniauth) { user }
-        controller.request.env['omniauth.auth'] = {}
+        controller.request.env['omniauth.auth'] = {
+          'provider' => 'facebook',
+          'uid' => '123',
+          'info' => { 'email' => 'a@b.com' },
+          'credentials' => { 'token' => 'abc098' } }
+
+        expect(User).to receive(:from_third_party_auth) { user }
       end
 
       it 'stores omniauth in session' do

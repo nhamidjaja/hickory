@@ -25,10 +25,6 @@ class User < ActiveRecord::Base
     self.authentication_token = Devise.friendly_token
   end
 
-  def self.from_omniauth(auth)
-    from_third_party_auth(Fave::Auth.from_omniauth(auth))
-  end
-
   def self.from_third_party_auth(auth)
     user = find_by_email(auth.email) ||
            find_by_provider_and_uid(auth.provider, auth.uid) ||

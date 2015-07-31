@@ -46,63 +46,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#from_omniauth' do
-    let(:user) do
-      FactoryGirl.build(:user,
-                        email: 'a@b.com',
-                        provider: 'facebook', uid: '123')
-    end
-
-    let(:callback) do
-      { 'provider' => 'facebook', 'uid' => '123',
-        'info' => { 'email' => 'a@b.com' },
-        'credentials' => { 'token' => 'abc098' } }
-    end
-
-    subject { User.from_omniauth(callback) }
-
-    context 'when email already exists' do
-      it 'returns same user' do
-        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
-
-        is_expected.to eq(user)
-      end
-
-      it 'updates user metadata' do
-        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
-
-        expect(subject.provider).to eq('facebook')
-        expect(subject.uid).to eq('123')
-        expect(subject.omniauth_token).to eq('abc098')
-      end
-    end
-
-    context 'when provider and uid already exists' do
-      it 'returns same user' do
-        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
-        expect(User).to receive(:find_by_provider_and_uid)
-          .with('facebook', '123')
-          .and_return(user)
-
-        is_expected.to eq(user)
-      end
-    end
-
-    context 'when new' do
-      before do
-        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
-        expect(User).to receive(:find_by_provider_and_uid)
-          .with('facebook', '123')
-          .and_return(nil)
-      end
-
-      it { is_expected.to be_a_new(User) }
-      it { expect(subject.provider).to eq('facebook') }
-      it { expect(subject.uid).to eq('123') }
-      it { expect(subject.email).to eq('a@b.com') }
-    end
-  end
-
   describe '#from_third_party_auth' do
     let(:user) do
       FactoryGirl.build(:user,
