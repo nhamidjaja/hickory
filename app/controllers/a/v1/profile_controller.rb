@@ -16,14 +16,6 @@ module A
         end
       end
 
-      # def update
-      #   @user = User.find(current_user.id)
-
-      #   @user.username = params[:username]
-
-      #   @user.save!
-      # end
-
       private
 
       def user_params
