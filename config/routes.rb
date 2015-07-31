@@ -1,6 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  root to: 'home#index'
+  
   devise_for :admins, skip: :registrations
 
   namespace :admin, authenticate: :admin do
