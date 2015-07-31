@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include PgSearch
-  # include ActiveUUID::UUID
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
