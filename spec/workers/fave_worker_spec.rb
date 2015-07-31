@@ -10,19 +10,19 @@ RSpec.describe FaveWorker do
         user)
     end
 
-    context 'test Fave::Url' do  
-      it {
+    context 'test Fave::Url' do
+      it do
         double = instance_double('Fave::Url')
 
         expect(Fave::Url).to receive(:new).with('http://example.com/hello?source=xyz').and_return(double)
         expect(double).to receive(:canon).and_return('http://example.com/hello')
 
         subject
-      }
+      end
     end
-      
+
     context 'test CUserFave' do
-      it {
+      it do
         expect(CUserFave)
           .to receive(:create).with(
             c_user_id: user.id.to_s,
@@ -31,9 +31,9 @@ RSpec.describe FaveWorker do
             headline: anything,
             image_url: anything,
             published_at: anything)
-      
+
         subject
-      }
+      end
     end
 
     context 'test Content' do
@@ -50,7 +50,7 @@ RSpec.describe FaveWorker do
 
       it 'content not exist' do
         expect(Content).to receive(:new).with(
-        url: 'http://example.com/hello')
+          url: 'http://example.com/hello')
 
         subject
       end
@@ -59,8 +59,8 @@ RSpec.describe FaveWorker do
     context 'test CUserFaveUrl' do
       it 'CUserFaveUrl exist' do
         FactoryGirl.create(:c_user_fave_url,
-          c_user_id: user.id.to_s,
-          content_url: 'http://example.com/hello')
+                           c_user_id: user.id.to_s,
+                           content_url: 'http://example.com/hello')
 
         double = class_double('CUserFaveUrl')
 
@@ -72,6 +72,5 @@ RSpec.describe FaveWorker do
         subject
       end
     end
-
   end
 end
