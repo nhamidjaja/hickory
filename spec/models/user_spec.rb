@@ -13,16 +13,31 @@ RSpec.describe User, type: :model do
   end
 
   describe '.username' do
-    it { expect(FactoryGirl.build(:user, username: '')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: '1' * 31)).to_not be_valid }
-    it { expect(FactoryGirl.build(:user, username: 'a')).to_not be_valid }
+    describe 'presence' do
+      it { expect(FactoryGirl.build(:user, username: '')).to_not be_valid }
+    end
 
-    it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
-    it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
-    it { expect(FactoryGirl.build(:user, username: '1' * 30)).to be_valid }
+    describe 'characters' do
+      it { expect(FactoryGirl.build(:user, username: '!a')).to_not be_valid }
+      it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
+
+      it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
+      it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
+      it { expect(FactoryGirl.build(:user, username: '12')).to be_valid }
+    end
+
+    describe 'capitalization' do
+      it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
+    end
+
+    describe 'length' do
+      it { expect(FactoryGirl.build(:user, username: '1' * 30)).to be_valid }
+      it { expect(FactoryGirl.build(:user, username: '1')).to_not be_valid }
+      it do
+        expect(FactoryGirl.build(:user, username: '1' * 31))
+          .to_not be_valid
+      end
+    end
 
     it 'is unique' do
       FactoryGirl.create(:user, username: 'nic')
@@ -32,6 +47,12 @@ RSpec.describe User, type: :model do
   end
 
   describe '#from_omniauth' do
+    let(:user) do
+      FactoryGirl.build(:user,
+                        email: 'a@b.com',
+                        provider: 'facebook', uid: '123')
+    end
+
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => '123',
         'info' => { 'email' => 'a@b.com' },
@@ -42,15 +63,13 @@ RSpec.describe User, type: :model do
 
     context 'when email already exists' do
       it 'returns same user' do
-        user = FactoryGirl.create(:user,
-                                  email: 'a@b.com',
-                                  provider: 'facebook', uid: '123')
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
 
         is_expected.to eq(user)
       end
 
       it 'updates user metadata' do
-        FactoryGirl.create(:user, email: 'a@b.com')
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
 
         expect(subject.provider).to eq('facebook')
         expect(subject.uid).to eq('123')
@@ -60,14 +79,23 @@ RSpec.describe User, type: :model do
 
     context 'when provider and uid already exists' do
       it 'returns same user' do
-        user = FactoryGirl.create(:user, email: 'x@y.com',
-                                         provider: 'facebook', uid: '123')
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
+        expect(User).to receive(:find_by_provider_and_uid)
+          .with('facebook', '123')
+          .and_return(user)
 
         is_expected.to eq(user)
       end
     end
 
     context 'when new' do
+      before do
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
+        expect(User).to receive(:find_by_provider_and_uid)
+          .with('facebook', '123')
+          .and_return(nil)
+      end
+
       it { is_expected.to be_a_new(User) }
       it { expect(subject.provider).to eq('facebook') }
       it { expect(subject.uid).to eq('123') }
@@ -76,6 +104,12 @@ RSpec.describe User, type: :model do
   end
 
   describe '#from_third_party_auth' do
+    let(:user) do
+      FactoryGirl.build(:user,
+                        email: 'a@b.com'
+                       )
+    end
+
     let(:auth) do
       instance_double('Fave::Auth',
                       email: 'a@b.com',
@@ -88,15 +122,13 @@ RSpec.describe User, type: :model do
 
     context 'when email already exists' do
       it 'returns same user' do
-        user = FactoryGirl.create(:user,
-                                  email: 'a@b.com',
-                                  provider: 'fb', uid: 'x123')
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
 
         is_expected.to eq(user)
       end
 
       it 'updates user metadata' do
-        FactoryGirl.create(:user, email: 'a@b.com')
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(user)
 
         expect(subject.provider).to eq('fb')
         expect(subject.uid).to eq('x123')
@@ -105,18 +137,28 @@ RSpec.describe User, type: :model do
     end
 
     context 'when provider and uid already exists' do
-      it 'returns same user' do
+      it 'leaves email alone' do
         user = FactoryGirl.create(:user, email: 'x@y.com',
                                          provider: 'fb', uid: 'x123')
 
-        subject.save
-        user.reload
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
+        expect(User).to receive(:find_by_provider_and_uid)
+          .with('fb', 'x123')
+          .and_return(user)
+
         expect(user.email).to eq('x@y.com')
         is_expected.to eq(user)
       end
     end
 
     context 'when new' do
+      before do
+        expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
+        expect(User).to receive(:find_by_provider_and_uid)
+          .with('fb', 'x123')
+          .and_return(nil)
+      end
+
       it { is_expected.to be_a_new(User) }
       it { expect(subject.provider).to eq('fb') }
       it { expect(subject.uid).to eq('x123') }
@@ -124,7 +166,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#password_required?' do
+  describe '.password_required?' do
     subject { user.send(:password_required?) }
 
     context 'no provider' do
