@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include PgSearch
-  # include ActiveUUID::UUID
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -23,10 +22,6 @@ class User < ActiveRecord::Base
   def ensure_authentication_token
     return unless authentication_token.blank?
     self.authentication_token = Devise.friendly_token
-  end
-
-  def self.from_omniauth(auth)
-    from_third_party_auth(Fave::Auth.from_omniauth(auth))
   end
 
   def self.from_third_party_auth(auth)
