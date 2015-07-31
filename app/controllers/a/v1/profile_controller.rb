@@ -9,11 +9,13 @@ module A
       def create
         @user = current_user
 
-        unless @user.update_attributes(user_params)
+        if @user.update_attributes(user_params)
+          render
+        else
           render json: { errors: @user.errors }, status: 400
         end
       end
-      
+
       # def update
       #   @user = User.find(current_user.id)
 

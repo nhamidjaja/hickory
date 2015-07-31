@@ -121,14 +121,14 @@ RSpec.describe 'Profile API', type: :request do
 
   describe 'edit self profile' do
     context 'unauthenticated' do
-        it 'is unauthorized' do
-          post '/a/v1/profile',
+      it 'is unauthorized' do
+        post '/a/v1/profile',
              '{"user": {"username": "nicholas"}}',
              'Content-Type' => 'application/json'
-  
-          expect(response.status).to eq(401)
-          expect(json['errors']).to_not be_blank
-        end
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
+      end
     end
 
     context 'authenticated' do
@@ -137,8 +137,8 @@ RSpec.describe 'Profile API', type: :request do
           post '/a/v1/profile',
                '{"user": {"username": "nicholas"}}',
                'Content-Type' => 'application/json',
-                'X-Email' => 'a@user.com',
-                'X-Auth-Token' => 'validtoken'
+               'X-Email' => 'a@user.com',
+               'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(200)
           expect(json['user']['username']).to match('nicholas')
@@ -150,8 +150,8 @@ RSpec.describe 'Profile API', type: :request do
           post '/a/v1/profile',
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
-                'X-Email' => 'a@user.com',
-                'X-Auth-Token' => 'validtoken'
+               'X-Email' => 'a@user.com',
+               'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(400)
           expect(json['errors']['username']).to match(['is invalid'])
