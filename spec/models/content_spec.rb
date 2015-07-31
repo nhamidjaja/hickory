@@ -1,5 +1,5 @@
 require 'rails_helper'
 
 RSpec.describe Content, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { expect(FactoryGirl.build(:content)).to be_valid }
 end

@@ -1,5 +1,5 @@
 require 'rails_helper'
 
 RSpec.describe CUserFave, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { expect(FactoryGirl.build(:c_user_fave)).to be_valid }
 end
