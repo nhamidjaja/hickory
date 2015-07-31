@@ -28,9 +28,14 @@ RSpec.describe FaveWorker do
 
       subject { FaveWorker.new.perform('asdasds', user) }
 
-      it 'raise error' do
+      it 'CUserFaveUrl count 0' do
         expect { subject  }
-          .to raise_error
+          .to change(CUserFaveUrl, :count).by(0)
+      end
+
+      it 'CUserFave count 0' do
+        expect { subject }
+          .to change(CUserFave, :count).by(0)
       end
     end
   end
