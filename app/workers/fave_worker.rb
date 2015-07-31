@@ -5,7 +5,7 @@ class FaveWorker
   def perform(url, user)
     canon_url = Fave::Url.new(url).canon
 
-    fave_url(canon_url, user) if canon_url
+    fave_url(canon_url, user)
   end
 
   def fave_url(canon_url, user)

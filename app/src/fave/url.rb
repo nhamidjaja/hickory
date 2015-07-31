@@ -7,7 +7,7 @@ module Fave
     end
 
     def canon
-      ('http://' + @parsed.host + @parsed.path).chomp('/') if @parsed.host
+      ('http://' + @parsed.host + @parsed.path).chomp('/')
     end
   end
 end

@@ -22,21 +22,5 @@ RSpec.describe FaveWorker do
           .to change(CUserFave, :count).by(1)
       end
     end
-
-    context 'invalid url' do
-      let(:user) { FactoryGirl.create(:user) }
-
-      subject { FaveWorker.new.perform('invalid-url', user) }
-
-      it 'CUserFaveUrl count 0' do
-        expect { subject  }
-          .to change(CUserFaveUrl, :count).by(0)
-      end
-
-      it 'CUserFave count 0' do
-        expect { subject }
-          .to change(CUserFave, :count).by(0)
-      end
-    end
   end
 end
