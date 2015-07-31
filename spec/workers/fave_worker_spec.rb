@@ -26,7 +26,7 @@ RSpec.describe FaveWorker do
     context 'invalid url' do
       let(:user) { FactoryGirl.create(:user) }
 
-      subject { FaveWorker.new.perform('asdasds', user) }
+      subject { FaveWorker.new.perform('invalid-url', user) }
 
       it 'CUserFaveUrl count 0' do
         expect { subject  }
