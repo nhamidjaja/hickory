@@ -6,12 +6,26 @@ module A
       def index
       end
 
-      def update
-        @user = User.find(current_user.id)
+      def create
+        @user = current_user
 
-        @user.username = params[:username]
+        unless @user.update_attributes(user_params)
+          render json: { errors: @user.errors }, status: 400
+        end
+      end
+      
+      # def update
+      #   @user = User.find(current_user.id)
 
-        @user.save!
+      #   @user.username = params[:username]
+
+      #   @user.save!
+      # end
+
+      private
+
+      def user_params
+        params.require(:user).permit(:username)
       end
     end
   end

@@ -1,17 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Profile API', type: :request do
+  before do
+    FactoryGirl.create(:user,
+                       email: 'a@user.com',
+                       username: 'my_user',
+                       authentication_token: 'validtoken')
+  end
+
   describe 'authentication' do
     context 'unauthorized' do
-      before do
-        FactoryGirl.create(:user,
-                           email: 'a@user.com',
-                           omniauth_token: 'validtoken')
-      end
-
       context 'no email' do
         before do
-          get '/a/v1/profile.json',
+          get '/a/v1/profile',
               nil,
               'X-Auth-Token' => 'validtoken'
         end
@@ -24,7 +25,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'no token' do
         before do
-          get '/a/v1/profile.json',
+          get '/a/v1/profile',
               nil,
               'X-Email' => 'a@user.com'
         end
@@ -37,7 +38,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'unregistered email' do
         before do
-          get '/a/v1/profile.json',
+          get '/a/v1/profile',
               nil,
               'X-Email' => 'no@email.com',
               'X-Auth-Token' => 'atoken'
@@ -51,7 +52,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'token different from saved' do
         before do
-          get '/a/v1/profile.json',
+          get '/a/v1/profile',
               nil,
               'X-Email' => 'a@user.com', 'X-Auth-Token' => 'atoken'
         end
@@ -64,16 +65,9 @@ RSpec.describe 'Profile API', type: :request do
     end
 
     context 'authorized' do
-      before do
-        FactoryGirl.create(:user,
-                           email: 'a@user.com',
-                           username: 'my_user',
-                           authentication_token: 'validtoken')
-      end
-
       context 'token already saved' do
         before do
-          get '/a/v1/profile.json',
+          get '/a/v1/profile',
               nil,
               'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
@@ -89,37 +83,78 @@ RSpec.describe 'Profile API', type: :request do
         end
       end
 
-      context 'edit my profile' do
-        it 'update username without parameter' do
-          get '/a/v1/profile/update',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+      # context 'edit my profile' do
+      #   it 'update username without parameter' do
+      #     get '/a/v1/profile/update',
+      #         nil,
+      #         'X-Email' => 'a@user.com',
+      #         'X-Auth-Token' => 'validtoken'
 
-          expect(response.status).to eq(404)
+      #     expect(response.status).to eq(404)
+      #   end
+
+      #   it 'update username with not exist username' do
+      #     get '/a/v1/profile/update?username=bebek',
+      #         nil,
+      #         'X-Email' => 'a@user.com',
+      #         'X-Auth-Token' => 'validtoken'
+
+      #     expect(json['user']['username']).to eq('bebek')
+      #   end
+
+      #   it 'update username with exist username' do
+      #     FactoryGirl.create(:user,
+      #                        email: 'ab@user.com',
+      #                        username: 'user',
+      #                        authentication_token: 'validtokenbcd')
+
+      #     get '/a/v1/profile/update?username=user',
+      #         nil,
+      #         'X-Email' => 'a@user.com',
+      #         'X-Auth-Token' => 'validtoken'
+
+      #     expect(response.status).to eq(404)
+      #   end
+      # end
+    end
+  end
+
+  describe 'edit self profile' do
+    context 'unauthenticated' do
+        it 'is unauthorized' do
+          post '/a/v1/profile',
+             '{"user": {"username": "nicholas"}}',
+             'Content-Type' => 'application/json'
+  
+          expect(response.status).to eq(401)
+          expect(json['errors']).to_not be_blank
         end
+    end
 
-        it 'update username with not exist username' do
-          get '/a/v1/profile/update?username=bebek',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+    context 'authenticated' do
+      context 'valid' do
+        it 'is successful' do
+          post '/a/v1/profile',
+               '{"user": {"username": "nicholas"}}',
+               'Content-Type' => 'application/json',
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
-          expect(json['user']['username']).to eq('bebek')
+          expect(response.status).to eq(200)
+          expect(json['user']['username']).to match('nicholas')
         end
+      end
 
-        it 'update username with exist username' do
-          FactoryGirl.create(:user,
-                             email: 'ab@user.com',
-                             username: 'user',
-                             authentication_token: 'validtokenbcd')
+      context 'invalid' do
+        it 'is bad request' do
+          post '/a/v1/profile',
+               '{"user": {"username": ""}}',
+               'Content-Type' => 'application/json',
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
-          get '/a/v1/profile/update?username=user',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
-
-          expect(response.status).to eq(404)
+          expect(response.status).to eq(400)
+          expect(json['errors']['username']).to match(['is invalid'])
         end
       end
     end
