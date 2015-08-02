@@ -21,7 +21,7 @@ class FController < ApplicationController
     CUserFave.create(c_user_id: current_user.id.to_s,
                      id: faved.id,
                      content_url: article.url,
-                     headline: article.title,
+                     title: article.title,
                      image_url: article.image_url,
                      published_at: article.published_at)
   end

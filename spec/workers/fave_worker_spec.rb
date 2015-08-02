@@ -3,73 +3,58 @@ require 'sidekiq/testing'
 
 RSpec.describe FaveWorker do
   describe '.perform' do
-    let(:user) { FactoryGirl.create(:user) }
-    subject do
-      FaveWorker.new.perform(
-        'http://example.com/hello?source=xyz',
-        user)
-    end
-
-    context 'test Fave::Url' do
-      it do
-        double = instance_double('Fave::Url')
-
-        expect(Fave::Url).to receive(:new).with('http://example.com/hello?source=xyz').and_return(double)
-        expect(double).to receive(:canon).and_return('http://example.com/hello')
-
-        subject
+    context 'valid' do
+      let(:worker) { FaveWorker.new }
+      let(:content) do
+        FactoryGirl.build(
+          :content,
+          url: 'http://example.com/hello',
+          title: 'A headline',
+          image_url: 'http://a.com/b.jpg',
+          published_at: Time.zone.local('2014-03-11 11:00:00 +03:00')
+        )
       end
-    end
-
-    context 'test CUserFave' do
-      it do
-        expect(CUserFave)
-          .to receive(:create).with(
-            c_user_id: user.id.to_s,
-            id: anything,
-            content_url: 'http://example.com/hello',
-            headline: anything,
-            image_url: anything,
-            published_at: anything)
-
-        subject
+      let(:fave_url) do
+        FactoryGirl.build(
+          :c_user_fave_url,
+          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          content_url: 'http://example.com/hello',
+          id: '123e4567-e89b-12d3-a456-426655440000'
+        )
       end
-    end
-
-    context 'test Content' do
-      it 'content exist' do
-        FactoryGirl.create(:content, url: 'http://example.com/hello')
-
-        double = class_double('Content')
-        expect(Content).to receive(:where).with(
-          url: 'http://example.com/hello').and_return(double)
-        expect(double).to receive(:first)
-
-        subject
+      let(:fave) do
+        FactoryGirl.build(
+          :c_user_fave,
+          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          content_url: 'http://example.com/hello',
+          id: '123e4567-e89b-12d3-a456-426655440000'
+        )
       end
 
-      it 'content not exist' do
-        expect(Content).to receive(:new).with(
-          url: 'http://example.com/hello')
-
-        subject
+      before do
+        expect(Content).to receive(:find_or_initialize_by)
+          .with(url: 'http://example.com/hello')
+          .and_return(content)
+        expect(CUserFaveUrl).to receive(:find_or_initialize_by)
+          .and_return(fave_url)
       end
-    end
 
-    context 'test CUserFaveUrl' do
-      it 'CUserFaveUrl exist' do
-        FactoryGirl.create(:c_user_fave_url,
-                           c_user_id: user.id.to_s,
-                           content_url: 'http://example.com/hello')
+      it 'saves' do
+        expect(fave_url).to receive(:save!).with(consistency: :any).once
+        expect(CUserFave).to receive(:new).with(
+          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'),
+          content_url: 'http://example.com/hello',
+          title: 'A headline',
+          image_url: 'http://a.com/b.jpg',
+          published_at: Time.zone.local('2014-03-11 11:00:00 +03:00')
+        ).and_return(fave)
+        expect(fave).to receive(:save!).with(consistency: :any)
 
-        double = class_double('CUserFaveUrl')
-
-        expect(CUserFaveUrl).to receive(:where).with(
-          c_user_id: user.id.to_s,
-          content_url: 'http://example.com/hello').and_return(double)
-        expect(double).to receive(:first)
-
-        subject
+        worker.perform(
+          'de305d54-75b4-431b-adb2-eb6b9e546014',
+          'http://example.com/hello?source=xyz'
+        )
       end
     end
   end
