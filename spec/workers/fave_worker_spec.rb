@@ -17,7 +17,7 @@ RSpec.describe FaveWorker do
       let(:fave_url) do
         FactoryGirl.build(
           :c_user_fave_url,
-          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
           content_url: 'http://example.com/hello',
           id: '123e4567-e89b-12d3-a456-426655440000'
         )
@@ -25,7 +25,7 @@ RSpec.describe FaveWorker do
       let(:fave) do
         FactoryGirl.build(
           :c_user_fave,
-          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
           content_url: 'http://example.com/hello',
           id: '123e4567-e89b-12d3-a456-426655440000'
         )
@@ -42,7 +42,7 @@ RSpec.describe FaveWorker do
       it 'saves' do
         expect(fave_url).to receive(:save!).with(consistency: :any).once
         expect(CUserFave).to receive(:new).with(
-          c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
           id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'),
           content_url: 'http://example.com/hello',
           title: 'A headline',
