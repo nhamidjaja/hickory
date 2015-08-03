@@ -9,29 +9,22 @@ class CUser
 
   validates :id, presence: true
 
-  def fave!(content, opts = {})
-    options = opts.present? ? opts : { consistency: :any }
+  def fave!(content)  # rubocop:disable Metrics/MethodLength
+    fave_id = Cequel.uuid(Time.zone.now)
 
-    fave_url = CUserFaveUrl.find_or_initialize_by(
+    CUserFave.new(
       c_user_id: id,
-      content_url: content.url
-    ) do |f|
-      f.id = Cequel.uuid(Time.zone.now)
-      f
-    end
+      id: fave_id,
+      content_url: content.url,
+      title: content.title,
+      image_url: content.image_url,
+      published_at: content.published_at
+    ).save!(consistency: :any)
 
-    if fave_url.new_record?
-      fave_url.save!(options)
-
-      CUserFave.new(c_user_id: id,
-                    id: fave_url.id,
-                    content_url: content.url,
-                    title: content.title,
-                    image_url: content.image_url,
-                    published_at: content.published_at)
-        .save!(options)
-    end
-
-    fave_url
+    CUserFaveUrl.new(
+      c_user_id: id,
+      content_url: content.url,
+      id: fave_id
+    ).save!(consistency: :any)
   end
 end
