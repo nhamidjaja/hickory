@@ -7,6 +7,8 @@ module A
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
       rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+      rescue_from Cequel::Record::RecordNotFound, with: :render_not_found
+      rescue_from ArgumentError, with: :render_not_found
 
       prepend_before_action :disable_devise_trackable
 

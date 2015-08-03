@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
   namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
-      resources :users, only: [ :show, :faves ] do
+      resources :users, only: [ :show ] do
         collection do
           get ':id/faves', to: 'users#faves'
         end

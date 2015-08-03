@@ -50,6 +50,28 @@ RSpec.describe 'Users API', type: :request do
     end
 
     context 'list of faves' do
+      context 'user not exists' do
+        it 'user id not uuid format' do
+          get '/a/v1/users/id-not-uuid-format/faves',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+
+        it 'user id uuid format but not exists' do
+          get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
       context 'user exits' do
         before do
           FactoryGirl.create(
