@@ -1,8 +1,7 @@
 require 'rails_helper'
 require 'sidekiq/testing'
-Sidekiq::Testing.fake!
 
-RSpec.describe 'Search API', type: :request do
+RSpec.describe 'Fave API', type: :request do
   context 'unauthenticated' do
     it 'is unauthorized' do
       get '/a/v1/fave'
@@ -13,33 +12,26 @@ RSpec.describe 'Search API', type: :request do
   end
 
   context 'authorized' do
-    let(:user) do
-      FactoryGirl.create(:user,
-                         email: 'a@user.com',
-                         username: 'user',
-                         authentication_token: 'validtoken')
-    end
     before do
-      user
+      FactoryGirl.create(
+        :user,
+        id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+        email: 'a@user.com',
+        username: 'user',
+        authentication_token: 'validtoken'
+      )
     end
 
-    context 'fave article' do
-      it 'make sure fave API call FaveWorker' do
-        expect(FaveWorker).to receive(:perform_async).with(
-          'http://example.com/hello?source=xyz', user).once
-
-        get '/a/v1/fave?url=http://example.com/hello?source=xyz',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
+    it 'saves CUserFave' do
+      Sidekiq::Testing.inline! do
+        expect do
+          get '/a/v1/fave?url=http://example.com/hello?source=xyz',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+        end.to change(CUserFave, :count).by(1)
 
         expect(response.status).to eq(200)
-      end
-
-      it 'make sure FaveWorker run in queueing' do
-        expect do
-          FaveWorker.perform_async('http://example.com/hello?source=xyz', user)
-        end.to change(FaveWorker.jobs, :size).by(1)
       end
     end
   end
