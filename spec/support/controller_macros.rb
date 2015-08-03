@@ -7,13 +7,10 @@ module ControllerMacros
   # end
 
   def login_user
+    let(:current_user) { FactoryGirl.create(:user) }
     before(:each) do
-      @request.env['devise.mapping'] = Devise.mappings[:user]
-      @current_user = FactoryGirl.create(:user)
-      # or set a confirmed_at inside the factory.
-      # Only necessary if you are using the "confirmable" module
-      # user.confirm!
-      sign_in @current_user
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      sign_in current_user
     end
   end
 end
