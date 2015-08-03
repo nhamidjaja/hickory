@@ -1,0 +1,1 @@
+json.faves(@faves, :content_url, :following_fave_count, :headline, :image_url, :published_at)

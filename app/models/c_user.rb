@@ -4,6 +4,6 @@ class CUser
 
   key :id, :uuid
 
-  has_many :c_user_faves
+  has_many :c_user_faves, class_name: 'CUserFave'
   has_many :c_user_fave_urls
 end

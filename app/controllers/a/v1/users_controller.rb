@@ -6,6 +6,10 @@ module A
       def show
         @user = User.find(params[:id])
       end
+
+      def faves
+        @faves = CUser.find(params[:id]).c_user_faves
+      end
     end
   end
 end
