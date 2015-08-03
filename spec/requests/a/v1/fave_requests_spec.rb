@@ -25,8 +25,8 @@ RSpec.describe 'Search API', type: :request do
 
     context 'fave article' do
       it 'make sure fave API call FaveWorker' do
-        expect(FaveWorker).to receive(:perform_async).with(
-          'http://example.com/hello?source=xyz', user).once
+        expect(FaveWorker).to receive(:perform_async).with(user.id,
+                                                           'http://example.com/hello?source=xyz').once
 
         get '/a/v1/fave?url=http://example.com/hello?source=xyz',
             nil,

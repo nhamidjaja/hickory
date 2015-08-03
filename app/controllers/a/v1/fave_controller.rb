@@ -4,7 +4,7 @@ module A
       respond_to :json
 
       def index
-        FaveWorker.perform_async(params['url'], current_user)
+        FaveWorker.perform_async(current_user.id, params['url'])
       end
     end
   end
