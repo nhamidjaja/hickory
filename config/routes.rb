@@ -2,7 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   root to: 'home#index'
-
+  
   devise_for :admins, skip: :registrations
 
   namespace :admin, authenticate: :admin do
@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
       resources :search, only: [ :index ]
+      resources :fave, only: [ :index ]
 
       resources :sessions, only: [] do
         collection do
