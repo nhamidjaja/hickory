@@ -13,14 +13,27 @@ RSpec.describe FController, type: :controller do
 
     describe 'GET #index' do
       context 'valid url' do
-        it 'creates a new CUserFaveUrl' do
-          expect { get :index, url: 'http://example.com/hello?source=xyz' }
-            .to change(CUserFaveUrl, :count).by(1)
+        # it 'creates a new CUserFaveUrl' do
+        #   expect { get :index, url: 'http://example.com/hello?source=xyz' }
+        #     .to change(CUserFaveUrl, :count).by(1)
+        # end
+
+        it 'make sure call FaveWorker' do
+          expect(FaveWorker).to receive(:perform_async).with(@current_user.id,
+                                                             'http://example.com/hello?source=xyz').once
+
+          get :index, url: 'http://example.com/hello?source=xyz'
         end
 
-        it 'creates a new CUserFave' do
-          expect { get :index, url: 'http://example.com/hello?source=xyz' }
-            .to change(CUserFave, :count).by(1)
+        # it 'creates a new CUserFave' do
+        #   expect { get :index, url: 'http://example.com/hello?source=xyz' }
+        #     .to change(CUserFave, :count).by(1)
+        # end
+
+        it 'make sure FaveWorker run in queueing' do
+          expect do
+            FaveWorker.perform_async(@current_user.id, 'http://example.com/hello?source=xyz')
+          end.to change(FaveWorker.jobs, :size).by(1)
         end
       end
     end

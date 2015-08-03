@@ -38,7 +38,7 @@ RSpec.describe 'Search API', type: :request do
 
       it 'make sure FaveWorker run in queueing' do
         expect do
-          FaveWorker.perform_async('http://example.com/hello?source=xyz', user)
+          FaveWorker.perform_async(user.id, 'http://example.com/hello?source=xyz')
         end.to change(FaveWorker.jobs, :size).by(1)
       end
     end
