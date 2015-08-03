@@ -73,28 +73,127 @@ RSpec.describe 'Users API', type: :request do
       end
 
       context 'user exits' do
-        before do
+        let(:c_user) do
           FactoryGirl.create(
             :c_user,
             id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014')
           )
+        end
 
+        let(:c_user_fave) do
           FactoryGirl.create(
             :c_user_fave,
             c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
             content_url: 'http://example.com/hello',
-            id: '123e4567-e89b-12d3-a456-426655440000'
+            id: '03fc8cb0-39c0-11e5-98fe-5f1e283a6e35'
           )
         end
 
-        it 'get list' do
-          get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+        before(:each) do
+          CUserFave.destroy_all
+        end
 
-          expect(response.status).to eq(200)
-          expect(json['faves'][0]['content_url']).to eq('http://example.com/hello')
+        context 'without parameter last_created_at' do
+          subject do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+          end
+
+          context 'no fave data' do
+            it 'successful and empty array' do
+              c_user
+              subject
+
+              expect(response.status).to eq(200)
+              expect(json['faves']).to eq([])
+            end
+          end
+
+          context 'has 1 fave' do
+            it 'get list' do
+              c_user
+              c_user_fave
+              subject
+
+              expect(response.status).to eq(200)
+              expect(json['faves'][0]['content_url']).to eq('http://example.com/hello')
+            end
+          end
+
+          context 'has many fave' do
+            it 'is limit 10' do
+              c_user
+              c_user_fave
+
+              11.times do
+                FactoryGirl.create(
+                  :c_user_fave,
+                  c_user_id: Cequel.uuid(
+                    'de305d54-75b4-431b-adb2-eb6b9e546014'),
+                  content_url: 'http://example.com/hello',
+                  id: Cequel.uuid(Time.zone.now)
+                )
+              end
+
+              subject
+
+              expect(response.status).to eq(200)
+              expect(json['faves'].size).to eq(10)
+            end
+
+            it 'sort desc by id' do
+              c_user
+              c_user_fave
+
+              FactoryGirl.create(
+                :c_user_fave,
+                c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
+                content_url: 'http://example.com/helloflyer',
+                id: 'ce300438-39c2-11e5-98fe-5f1e283a6e35'
+              )
+
+              subject
+
+              expect(response.status).to eq(200)
+              expect(json['faves'][0]['content_url']).to eq('http://example.com/helloflyer')
+              expect(json['faves'][1]['content_url']).to eq('http://example.com/hello')
+            end
+          end
+        end
+
+        context 'with parameter last_id' do
+          it 'get older than last_id' do
+            expect(CUserFave.count).to eq(0)
+
+            c_user
+            c_user_fave
+
+            FactoryGirl.create(
+              :c_user_fave,
+              c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
+              content_url: 'http://example.com/helloflyer',
+              id: 'ce300438-39c2-11e5-98fe-5f1e283a6e35'
+            )
+
+            FactoryGirl.create(
+              :c_user_fave,
+              c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
+              content_url: 'http://example.com/helloflyer2',
+              id: 'a0dfcb74-39c4-11e5-98fe-5f1e283a6e35'
+            )
+
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
+                { last_id: 'a0dfcb74-39c4-11e5-98fe-5f1e283a6e35' },
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['faves'].size).to eq(2)
+            expect(json['faves'][0]['content_url']).to eq('http://example.com/helloflyer')
+            expect(json['faves'][1]['content_url']).to eq('http://example.com/hello')
+          end
         end
       end
     end
