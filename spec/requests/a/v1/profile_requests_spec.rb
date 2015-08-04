@@ -105,7 +105,9 @@ RSpec.describe 'Profile API', type: :request do
       context 'valid' do
         it 'is successful' do
           post '/a/v1/profile',
-               '{"user": {"username": "nicholas", "full_name": "Read Flyer", "description": "Description Flyer"}}',
+               '{"user": {"username": "nicholas",
+               "full_name": "Read Flyer",
+               "description": "Description Flyer"}}',
                'Content-Type' => 'application/json',
                'X-Email' => 'a@user.com',
                'X-Auth-Token' => 'validtoken'
