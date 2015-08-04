@@ -8,12 +8,10 @@ module A
       end
 
       def faves
-        if params[:last_id]
-          @faves = CUser.find(params[:id]).c_user_faves.before(
-            Cequel.uuid(params[:last_id])).limit(10)
-        else
-          @faves = CUser.find(params[:id]).c_user_faves.limit(10)
-        end
+        user = User.find(params[:id])
+        @faves = CUser.new(id: user.id.to_s).c_user_faves
+        @faves = @faves.before(Cequel.uuid(params[:last_id])) if params[:last_id]
+        @faves = @faves.limit(10)
       end
     end
   end
