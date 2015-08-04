@@ -33,7 +33,8 @@ RSpec.describe 'Users API', type: :request do
         it 'is successful' do
           FactoryGirl.create(:user,
                              id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-                             username: 'xyz')
+                             username: 'xyz',
+                             full_name: 'Xyz Xyz')
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',
               nil,
@@ -44,6 +45,7 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['id']).to eq(
             '4f16d362-a336-4b12-a133-4b8e39be7f8e')
           expect(json['user']['username']).to eq('xyz')
+          expect(json['user']['full_name']).to eq('Xyz Xyz')
         end
       end
     end
