@@ -19,11 +19,6 @@ class User < ActiveRecord::Base
                     tsearch: { prefix: true }
                   }
 
-  def ensure_authentication_token
-    return unless authentication_token.blank?
-    self.authentication_token = Devise.friendly_token
-  end
-
   def self.from_third_party_auth(auth)
     user = find_by_email(auth.email) ||
            find_by_provider_and_uid(auth.provider, auth.uid) ||
@@ -38,6 +33,19 @@ class User < ActiveRecord::Base
     self.uid = auth.uid
     self.email = auth.email if self.new_record?
     self.omniauth_token = auth.token
+  end
+
+  def ensure_authentication_token
+    return unless authentication_token.blank?
+    self.authentication_token = Devise.friendly_token
+  end
+
+  def faves(last_id = nil, limit = nil)
+    records = CUser.new(id: id.to_s).c_user_faves
+    records = records.before(Cequel.uuid(last_id)) if last_id
+    records = records.limit(limit) if limit
+
+    records
   end
 
   protected

@@ -46,6 +46,10 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#search_by_username' do
+    it { expect(User).to respond_to(:search_by_username) }
+  end
+
   describe '#from_third_party_auth' do
     let(:user) do
       FactoryGirl.build(:user,
@@ -109,6 +113,69 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.ensure_authentication_token' do
+    context 'blank token' do
+      let(:user) { FactoryGirl.build(:user, authentication_token: '') }
+      before { user.ensure_authentication_token }
+
+      it 'sets token' do
+        expect(user.authentication_token).to_not be_blank
+      end
+    end
+
+    context 'token exists' do
+      let(:user) { FactoryGirl.build(:user, authentication_token: 'abcdef') }
+      before { user.ensure_authentication_token }
+
+      it 'does nothing' do
+        expect(user.authentication_token).to eq('abcdef')
+      end
+    end
+  end
+
+  describe '.faves' do
+    let(:user) do
+      FactoryGirl.build(
+        :user,
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+    end
+    let(:c_user) { CUser.new(id: '4f16d362-a336-4b12-a133-4b8e39be7f8e') }
+    let(:expectation) do
+      instance_double('Cequel::Record::AssociationCollection')
+    end
+
+    before do
+      expect(CUser).to receive(:new)
+        .with(id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+        .and_return(c_user)
+    end
+
+    it 'calls CUserFave' do
+      expect(c_user).to receive(:c_user_faves).and_return(expectation)
+
+      expect(user.faves).to eq(expectation)
+    end
+
+    it 'is after last id' do
+      set = instance_double('Cequel::Record::RecordSet')
+      expect(c_user).to receive(:c_user_faves).and_return(set)
+      expect(set).to receive(:before)
+        .with(Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'))
+        .and_return(expectation)
+
+      expect(user.faves('9d6831a4-39d1-11e5-9128-17e501c711a8'))
+        .to eq(expectation)
+    end
+
+    it 'is limited' do
+      set = instance_double('Cequel::Record::RecordSet')
+      expect(c_user).to receive(:c_user_faves).and_return(set)
+      expect(set).to receive(:limit).with(5).and_return(expectation)
+
+      expect(user.faves(nil, 5)).to eq(expectation)
+    end
+  end
+
   describe '.password_required?' do
     subject { user.send(:password_required?) }
 
@@ -138,29 +205,5 @@ RSpec.describe User, type: :model do
 
       it { is_expected.to eq(true) }
     end
-  end
-
-  describe '.ensure_authentication_token' do
-    context 'blank token' do
-      let(:user) { FactoryGirl.build(:user, authentication_token: '') }
-      before { user.ensure_authentication_token }
-
-      it 'sets token' do
-        expect(user.authentication_token).to_not be_blank
-      end
-    end
-
-    context 'token exists' do
-      let(:user) { FactoryGirl.build(:user, authentication_token: 'abcdef') }
-      before { user.ensure_authentication_token }
-
-      it 'does nothing' do
-        expect(user.authentication_token).to eq('abcdef')
-      end
-    end
-  end
-
-  describe '#search_by_username' do
-    it { expect(User).to respond_to(:search_by_username) }
   end
 end

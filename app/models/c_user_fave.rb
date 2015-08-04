@@ -7,8 +7,8 @@ class CUserFave
   column :content_url, :text
   column :title, :text
   column :image_url, :text
-  column :following_fave_count, :int
   column :published_at, :timestamp
-
   timestamps
+
+  validates :content_url, presence: true
 end
