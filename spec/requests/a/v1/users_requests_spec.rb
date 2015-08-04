@@ -14,15 +14,15 @@ RSpec.describe 'Users API', type: :request do
     context 'authorized' do
       before do
         FactoryGirl.create(:user,
-         email: 'a@user.com',
-         authentication_token: 'validtoken')
+                           email: 'a@user.com',
+                           authentication_token: 'validtoken')
       end
       context 'user does not exist' do
         it 'is not found' do
           get '/a/v1/users/id-not-in-system',
-          nil,
-          'X-Email' => 'a@user.com',
-          'X-Auth-Token' => 'validtoken'
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(404)
           expect(json['errors']).to_not be_blank
@@ -32,13 +32,13 @@ RSpec.describe 'Users API', type: :request do
       context 'user exists' do
         it 'is successful' do
           FactoryGirl.create(:user,
-           id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-           username: 'xyz')
+                             id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+                             username: 'xyz')
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',
-          nil,
-          'X-Email' => 'a@user.com',
-          'X-Auth-Token' => 'validtoken'
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(200)
           expect(json['user']['id']).to eq(
@@ -46,9 +46,8 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['username']).to eq('xyz')
         end
       end
-    end  
+    end
   end
-
 
   describe 'get user list of faves' do
     context 'unauthenticated' do
@@ -63,17 +62,17 @@ RSpec.describe 'Users API', type: :request do
     context 'authorized' do
       before do
         FactoryGirl.create(:user,
-          id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
-         email: 'a@user.com',
-         authentication_token: 'validtoken')
+                           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                           email: 'a@user.com',
+                           authentication_token: 'validtoken')
       end
 
       context 'user not exists' do
         it 'is not found' do
           get '/a/v1/users/id-not-found/faves',
-          nil,
-          'X-Email' => 'a@user.com',
-          'X-Auth-Token' => 'validtoken'
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(404)
           expect(json['errors']).to_not be_blank
@@ -84,9 +83,9 @@ RSpec.describe 'Users API', type: :request do
         context 'no faves yet' do
           it 'is empty' do
             get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
             expect(response.status).to eq(200)
             expect(json['faves']).to be_empty
@@ -101,14 +100,14 @@ RSpec.describe 'Users API', type: :request do
               :c_user_fave,
               c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
               id: '123e4567-e89b-12d3-a456-426655440000'
-              )
+            )
           end
 
           it 'is successful' do
             get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
             expect(response.status).to eq(200)
             expect(json['faves'].size).to eq(1)
@@ -134,15 +133,15 @@ RSpec.describe 'Users API', type: :request do
                 :c_user_fave,
                 c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
                 id: i
-                )
+              )
             end
           end
 
           it 'is ordered' do
             get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
             expect(response.status).to eq(200)
             expect(json['faves'].size).to eq(3)
@@ -151,10 +150,11 @@ RSpec.describe 'Users API', type: :request do
           end
 
           it 'is paginated by last id' do
-            get "/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves?last_id=#{middle_id.to_s}",
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014' \
+             "/faves?last_id=#{middle_id}",
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
             expect(response.status).to eq(200)
             expect(json['faves'].size).to eq(1)
@@ -162,18 +162,18 @@ RSpec.describe 'Users API', type: :request do
           end
 
           it 'is limited to 10' do
-            11.times do |j|
+            11.times do
               FactoryGirl.create(
                 :c_user_fave,
                 c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
                 id: Cequel.uuid(Time.zone.now)
-                )
+              )
             end
 
             get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/faves',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
 
             expect(response.status).to eq(200)
             expect(json['faves'].size).to eq(10)
