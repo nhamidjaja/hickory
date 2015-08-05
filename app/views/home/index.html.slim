@@ -1,13 +1,20 @@
 h1
   | Home#index
 
+- if user_signed_in?
+  li
+    = link_to t('devise.sign_out'), destroy_user_session_path, data: { method: 'delete' }
+- else
+  li
+    = link_to t('devise.sign_in'), new_user_session_path, {}
+br
 
-a> href='http://localhost:3000/f?url=http://example.com/hello?source=abc' target='_blank' Fave
+= link_to 'Fave!', f_index_path(url: request.original_url), { target: '_blank' }
 
 p
   | Find me in app/views/home/index.html.erb
 - if user_signed_in?
-  - CUserFave[current_user.id.to_s].reverse.limit(10).each do |p|
+  - current_user.faves.limit(10).each do |p|
     = link_to p.content_url, p.content_url
     br
 

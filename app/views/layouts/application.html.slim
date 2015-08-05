@@ -10,3 +10,6 @@ html
 
   body
     == yield
+    javascript:
+      ga('set', 'location', location.href.split('#')[0]);
+      ga('send', 'pageview', { "title": document.title });

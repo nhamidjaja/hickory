@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe 'layouts/application.html.slim', type: :view do
+RSpec.describe 'layouts/_google_analytics.html.slim', type: :view do
   context 'unauthenticated' do
     it 'GA not have userId' do
-      render template: 'layouts/application.html.slim'
+      render
 
-      expect(rendered).to include('user = auto')
+      expect(rendered).to include("ga('create', 'UA-62541080-2', 'auto');")
     end
   end
 
@@ -20,10 +20,11 @@ RSpec.describe 'layouts/application.html.slim', type: :view do
     it 'GA have userId' do
       allow(view).to receive(:current_user) { user }
 
-      render template: 'layouts/application.html.slim'
+      render
 
       expect(rendered).to include(
-        'user = {"userId":"4f16d362-a336-4b12-a133-4b8e39be7f8e"}')
+        "ga('create', 'UA-62541080-2', " \
+          "{ 'userId': '4f16d362-a336-4b12-a133-4b8e39be7f8e' });")
     end
   end
 end
