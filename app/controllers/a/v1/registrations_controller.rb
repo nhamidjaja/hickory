@@ -12,7 +12,10 @@ module A
         user = User.new(user_params)
         user.apply_third_party_auth(Fave::Auth.from_facebook(fb_user))
 
-        return sign_in_and_render(user) if user.save
+        if user.save
+          UserMailer.welcome_email(user).deliver_later
+          return sign_in_and_render(user)
+        end
 
         invalid_user_creation(user)
       end
