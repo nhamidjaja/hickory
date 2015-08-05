@@ -11,14 +11,14 @@ RSpec.describe 'layouts/application.html.slim', type: :view do
 
   context 'authorized' do
     let(:user) do
-      FactoryGirl.create(:user,
+      FactoryGirl.build(:user,
                          email: 'a@user.com',
                          authentication_token: 'validtoken',
                          id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
     end
 
     it 'GA have userId' do
-      view.stub(:current_user) { user }
+      allow(view).to receive(:current_user){ user }
 
       render template: 'layouts/application.html.slim'
 
