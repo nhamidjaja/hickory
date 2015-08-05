@@ -3,8 +3,6 @@ html
   head
     title Hickory
 
-    = javascript_include_tag 'jquery', 'data-turbolinks-track' => true
-
     javascript: 
       var user = #{ current_user ? raw({userId: current_user.id}.to_json) : 'auto'};
 
@@ -13,10 +11,9 @@ html
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        
       ga('create', 'UA-65946540-2', user);
       ga('send', 'pageview');
 
-      jQuery(window).load(function () { window.close() });
+  body onload='window.close();'
 
 
