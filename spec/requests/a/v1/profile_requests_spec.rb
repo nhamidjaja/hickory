@@ -5,6 +5,8 @@ RSpec.describe 'Profile API', type: :request do
     FactoryGirl.create(:user,
                        email: 'a@user.com',
                        username: 'my_user',
+                       full_name: 'My User',
+                       description: 'My Description',
                        authentication_token: 'validtoken')
   end
 
@@ -80,6 +82,8 @@ RSpec.describe 'Profile API', type: :request do
           expect(json['user']['id']).to_not be_blank
           expect(json['user']['email']).to eq('a@user.com')
           expect(json['user']['username']).to eq('my_user')
+          expect(json['user']['full_name']).to eq('My User')
+          expect(json['user']['description']).to eq('My Description')
         end
       end
     end
@@ -101,13 +105,17 @@ RSpec.describe 'Profile API', type: :request do
       context 'valid' do
         it 'is successful' do
           post '/a/v1/profile',
-               '{"user": {"username": "nicholas"}}',
+               '{"user": {"username": "nicholas",
+               "full_name": "Read Flyer",
+               "description": "Description Flyer"}}',
                'Content-Type' => 'application/json',
                'X-Email' => 'a@user.com',
                'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(200)
           expect(json['user']['username']).to match('nicholas')
+          expect(json['user']['full_name']).to match('Read Flyer')
+          expect(json['user']['description']).to match('Description Flyer')
         end
       end
 
