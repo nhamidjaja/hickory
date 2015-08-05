@@ -141,7 +141,9 @@ CREATE TABLE users (
     provider character varying,
     uid character varying,
     omniauth_token character varying,
-    authentication_token character varying
+    authentication_token character varying,
+    description text,
+    full_name character varying
 );
 
 
@@ -298,4 +300,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150712054400');
 INSERT INTO schema_migrations (version) VALUES ('20150720120110');
 
 INSERT INTO schema_migrations (version) VALUES ('20150724051113');
+
+INSERT INTO schema_migrations (version) VALUES ('20150804064421');
+
+INSERT INTO schema_migrations (version) VALUES ('20150804064601');
 
