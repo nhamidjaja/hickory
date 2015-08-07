@@ -120,15 +120,15 @@ RSpec.describe 'Profile API', type: :request do
       end
 
       context 'invalid' do
-        it 'is bad request' do
+        it 'is unprocessable entity' do
           post '/a/v1/profile',
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
                'X-Email' => 'a@user.com',
                'X-Auth-Token' => 'validtoken'
 
-          expect(response.status).to eq(400)
-          expect(json['errors']['username']).to match(['is invalid'])
+          expect(response.status).to eq(422)
+          expect(json['user']['errors']['username']).to match(['is invalid'])
         end
       end
     end
