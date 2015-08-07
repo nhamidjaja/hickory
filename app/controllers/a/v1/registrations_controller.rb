@@ -13,7 +13,7 @@ module A
         user.apply_third_party_auth(Fave::Auth.from_facebook(fb_user))
 
         if user.save
-          UserMailer.welcome_email(user).deliver_later
+          UserMailer.welcome(user).deliver_later
           return sign_in_and_render(user)
         end
 
