@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController, type: :controller do
   before { request.env['devise.mapping'] = Devise.mappings[:user] }
 
-  describe '#new' do
+  describe 'GET #new' do
     context 'has omniauth session' do
       let(:callback) do
         { 'provider' => 'facebook', 'uid' => '123',
@@ -25,6 +25,14 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it { expect(assigns(:user).omniauth_token).to eq(nil) }
+    end
+  end
+
+  describe 'POST #create' do
+    it 'sends email' do
+      expect do
+        post :create, user: FactoryGirl.attributes_for(:user)
+      end.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
   end
 end
