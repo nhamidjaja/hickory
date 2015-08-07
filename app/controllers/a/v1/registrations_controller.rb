@@ -33,7 +33,7 @@ module A
 
       def invalid_user_creation(user)
         warden.custom_failure!
-        render json: { errors: user.errors }, status: 400
+        render json: { user: { errors: user.errors } }, status: 422
       end
     end
   end

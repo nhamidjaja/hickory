@@ -58,14 +58,14 @@ RSpec.describe 'User Registrations API', type: :request do
       end
 
       context 'invalid user' do
-        it 'is bad request' do
+        it 'is unprocessable entity' do
           post '/a/v1/registrations/facebook',
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
                'X-Facebook-Token' => 'fb-token'
 
-          expect(response.status).to eq(400)
-          expect(json['errors']['username']).to eq(['is invalid'])
+          expect(response.status).to eq(422)
+          expect(json['user']['errors']['username']).to eq(['is invalid'])
         end
       end
     end

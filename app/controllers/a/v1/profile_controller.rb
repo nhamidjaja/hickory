@@ -12,7 +12,7 @@ module A
         if @user.update_attributes(user_params)
           render
         else
-          render json: { errors: @user.errors }, status: 400
+          render json: { user: { errors: @user.errors } }, status: 422
         end
       end
 
