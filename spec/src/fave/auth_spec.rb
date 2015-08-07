@@ -18,13 +18,14 @@ RSpec.describe Fave::Auth do
   describe '#from_omniauth' do
     let(:callback) do
       { 'provider' => 'facebook', 'uid' => 'x123',
-        'info' => { 'email' => 'a@b.com' },
+        'info' => { 'email' => 'a@b.com', 'name' => 'John Doe' },
         'credentials' => { 'token' => 'abc098' } }
     end
 
     subject { Fave::Auth.from_omniauth(callback) }
 
     it { expect(subject.email).to eq('a@b.com') }
+    it { expect(subject.full_name).to eq('John Doe') }
     it { expect(subject.provider).to eq('facebook') }
     it { expect(subject.uid).to eq('x123') }
     it { expect(subject.token).to eq('abc098') }
@@ -35,7 +36,9 @@ RSpec.describe Fave::Auth do
       instance_double('FbGraph2::User',
                       email: 'a@b.com',
                       id: 'x123',
-                      access_token: 'abc098')
+                      access_token: 'abc098',
+                      name: 'Jane Doe'
+                     )
     end
 
     subject { Fave::Auth.from_facebook(fb_user) }
@@ -44,5 +47,6 @@ RSpec.describe Fave::Auth do
     it { expect(subject.provider).to eq('facebook') }
     it { expect(subject.uid).to eq('x123') }
     it { expect(subject.token).to eq('abc098') }
+    it { expect(subject.full_name).to eq('Jane Doe') }
   end
 end

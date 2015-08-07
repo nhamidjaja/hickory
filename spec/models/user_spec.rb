@@ -62,7 +62,9 @@ RSpec.describe User, type: :model do
                       email: 'a@b.com',
                       provider: 'fb',
                       uid: 'x123',
-                      token: 'abc098')
+                      token: 'abc098',
+                      full_name: 'John Doe'
+                     )
     end
 
     subject { User.from_third_party_auth(auth) }
@@ -84,9 +86,13 @@ RSpec.describe User, type: :model do
     end
 
     context 'when provider and uid already exists' do
-      it 'leaves email alone' do
-        user = FactoryGirl.create(:user, email: 'x@y.com',
-                                         provider: 'fb', uid: 'x123')
+      it 'leaves email and full name alone' do
+        user = FactoryGirl.build(:user,
+                                 email: 'x@y.com',
+                                 provider: 'fb',
+                                 uid: 'x123',
+                                 full_name: 'Do not change'
+                                )
 
         expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
         expect(User).to receive(:find_by_provider_and_uid)
@@ -94,6 +100,7 @@ RSpec.describe User, type: :model do
           .and_return(user)
 
         expect(user.email).to eq('x@y.com')
+        expect(user.full_name).to eq('Do not change')
         is_expected.to eq(user)
       end
     end
@@ -110,6 +117,7 @@ RSpec.describe User, type: :model do
       it { expect(subject.provider).to eq('fb') }
       it { expect(subject.uid).to eq('x123') }
       it { expect(subject.email).to eq('a@b.com') }
+      it { expect(subject.full_name).to eq('John Doe') }
     end
   end
 

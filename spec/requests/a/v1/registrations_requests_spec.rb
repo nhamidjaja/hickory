@@ -35,7 +35,8 @@ RSpec.describe 'User Registrations API', type: :request do
           'FbGraph2::User',
           email: 'new@email.com',
           id: 'x123',
-          access_token: 'fb-token'
+          access_token: 'fb-token',
+          name: 'John Doe'
         )
 
         expect_any_instance_of(FbGraph2::User)

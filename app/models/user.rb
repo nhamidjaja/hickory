@@ -31,8 +31,9 @@ class User < ActiveRecord::Base
   def apply_third_party_auth(auth)
     self.provider = auth.provider
     self.uid = auth.uid
-    self.email = auth.email if self.new_record?
     self.omniauth_token = auth.token
+    self.email = auth.email if self.new_record?
+    self.full_name = auth.full_name if self.new_record?
   end
 
   def ensure_authentication_token
