@@ -35,7 +35,8 @@ RSpec.describe 'User Registrations API', type: :request do
           'FbGraph2::User',
           email: 'new@email.com',
           id: 'x123',
-          access_token: 'fb-token'
+          access_token: 'fb-token',
+          name: 'John Doe'
         )
 
         expect_any_instance_of(FbGraph2::User)
@@ -45,11 +46,16 @@ RSpec.describe 'User Registrations API', type: :request do
 
       context 'valid user' do
         it 'creates user' do
-          post '/a/v1/registrations/facebook',
-               '{"user": {"username": "nicholas"}}',
-               'Content-Type' => 'application/json',
-               'X-Facebook-Token' => 'fb-token'
+          Sidekiq::Testing.inline! do
+            expect do
+              post '/a/v1/registrations/facebook',
+                   '{"user": {"username": "nicholas"}}',
+                   'Content-Type' => 'application/json',
+                   'X-Facebook-Token' => 'fb-token'
+            end.to change(User, :count).by(1)
 
+            expect(ActionMailer::Base.deliveries.count).to eq(1)
+          end
           expect(response.status).to eq(201)
           expect(json['user']['email']).to match('new@email.com')
           expect(json['user']['username']).to match('nicholas')
