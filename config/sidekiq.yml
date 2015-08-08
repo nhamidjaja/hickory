@@ -5,4 +5,5 @@ production:
   :concurrency: 20
 :queues:
   - default
+  - mailers
   - [pull_feed, 2]
