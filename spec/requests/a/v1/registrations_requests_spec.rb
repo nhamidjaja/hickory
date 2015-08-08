@@ -46,15 +46,16 @@ RSpec.describe 'User Registrations API', type: :request do
 
       context 'valid user' do
         it 'creates user' do
-          expect do
-            post '/a/v1/registrations/facebook',
-                 '{"user": {"username": "nicholas"}}',
-                 'Content-Type' => 'application/json',
-                 'X-Facebook-Token' => 'fb-token'
-          end.to change(User, :count).by(1)
+          Sidekiq::Testing.inline! do
+            expect do
+              post '/a/v1/registrations/facebook',
+                   '{"user": {"username": "nicholas"}}',
+                   'Content-Type' => 'application/json',
+                   'X-Facebook-Token' => 'fb-token'
+            end.to change(User, :count).by(1)
 
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
-
+            expect(ActionMailer::Base.deliveries.count).to eq(1)
+          end
           expect(response.status).to eq(201)
           expect(json['user']['email']).to match('new@email.com')
           expect(json['user']['username']).to match('nicholas')

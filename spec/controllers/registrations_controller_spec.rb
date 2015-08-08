@@ -30,9 +30,11 @@ RSpec.describe RegistrationsController, type: :controller do
 
   describe 'POST #create' do
     it 'sends email' do
-      expect do
-        post :create, user: FactoryGirl.attributes_for(:user)
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      Sidekiq::Testing.inline! do
+        expect do
+          post :create, user: FactoryGirl.attributes_for(:user)
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
     end
   end
 end
