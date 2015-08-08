@@ -4,10 +4,22 @@ require 'sidekiq/testing'
 RSpec.describe PullFeedWorker do
   describe '.perform' do
     let(:feeder) do
-      FactoryGirl.create(:feeder,
-                         feed_url: 'http://tryflyer.com/feed.rss')
+      FactoryGirl.build(
+        :feeder,
+        id: '55a27bc8-3db3-11e5-b5a1-13c85fe6896f',
+        feed_url: 'http://tryflyer.com/feed.rss')
     end
-    subject { PullFeedWorker.new.perform(feeder.id.to_s) }
+
+    before do
+      allow(Feeder).to receive(:find)
+        .with('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
+        .and_return(feeder)
+    end
+
+    subject do
+      PullFeedWorker.new
+        .perform('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
+    end
 
     context 'no entries' do
       before do
@@ -21,7 +33,7 @@ RSpec.describe PullFeedWorker do
       end
 
       it 'removes existing top articles' do
-        FactoryGirl.create(:top_article, feeder: feeder)
+        feeder.top_articles = [FactoryGirl.build(:top_article)]
 
         subject
 
@@ -39,12 +51,13 @@ RSpec.describe PullFeedWorker do
 
     context 'one entry' do
       before do
-        entry = instance_double('Feedjira::Feed::Entry',
-                                url: 'http://example.com/article',
-                                title: 'An article',
-                                image: 'http://example.com/img.png',
-                                published: Time.zone.now
-                               )
+        entry = instance_double(
+          'Feedjira::Feed::Entry',
+          url: 'http://example.com/article',
+          title: 'An article',
+          image: 'http://example.com/img.png',
+          published: Time.zone.local('2015-01-10 11:11:11 +01:00')
+        )
         double = instance_double(
           'Feedjira::Parser::Atom',
           entries: [entry]
@@ -58,6 +71,20 @@ RSpec.describe PullFeedWorker do
         subject
 
         expect(feeder.top_articles.size).to eq(1)
+      end
+
+      it 'pushes Content' do
+        double = instance_double('Content')
+        expect(Content).to receive(:new).with(
+          url: 'http://example.com/article',
+          title: 'An article',
+          image_url: 'http://example.com/img.png',
+          published_at: Time.zone.local('2015-01-10 11:11:11 +01:00')
+        ).and_return(double)
+
+        expect(double).to receive(:save!).with(consistency: :any)
+
+        subject
       end
 
       describe 'attributes' do
