@@ -51,6 +51,11 @@ module A
         render('errors.json', status: :not_found)
       end
 
+      def render_unprocessable_entity(error)
+        @error = error
+        render('errors.json', status: 422)
+      end
+
       def render_internal_server_error(error)
         # TODO: log error
         @error = error

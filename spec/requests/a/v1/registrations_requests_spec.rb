@@ -69,9 +69,8 @@ RSpec.describe 'User Registrations API', type: :request do
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
                'X-Facebook-Token' => 'fb-token'
-
           expect(response.status).to eq(422)
-          expect(json['user']['errors']['username']).to eq(['is invalid'])
+          expect(json['errors']['message']).to include('Username is invalid')
         end
       end
     end

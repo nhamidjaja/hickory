@@ -5,17 +5,16 @@ module A
       rescue_from FbGraph2::Exception::InvalidToken, with: :render_unauthorized
 
       def facebook
-        token = request.headers['X-Facebook-Token']
-        fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
-
+        token = grab_facebook_token!
         user = fetch_user_from_facebook(token)
 
-        if user.save
+        begin
+          user.save!
           UserMailer.welcome(user).deliver_later
-          return sign_in_and_render(user)
-        else
+          sign_in_and_render(user)
+        rescue ActiveRecord::RecordInvalid => e
           warden.custom_failure!
-          render json: { user: { errors: user.errors } }, status: 422
+          render_unprocessable_entity(e)
         end
       end
 
@@ -23,6 +22,11 @@ module A
 
       def user_params
         params.require(:user).permit(:username)
+      end
+
+      def grab_facebook_token!
+        token = request.headers['X-Facebook-Token']
+        fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
       end
 
       def fetch_user_from_facebook(token)

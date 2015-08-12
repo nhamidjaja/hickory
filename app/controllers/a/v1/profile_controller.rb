@@ -9,10 +9,10 @@ module A
       def create
         @user = current_user
 
-        if @user.update_attributes(user_params)
-          render
-        else
-          render json: { user: { errors: @user.errors } }, status: 422
+        begin @user.update_attributes!(user_params)
+              render
+        rescue ActiveRecord::RecordInvalid => e
+          render_unprocessable_entity(e)
         end
       end
 
