@@ -10,12 +10,12 @@ module A
 
         user = fetch_user_from_facebook(token)
 
-        if user.save
+        begin
+          user.save!
           UserMailer.welcome(user).deliver_later
-          return sign_in_and_render(user)
-        else
-          warden.custom_failure!
-          render json: { user: { errors: user.errors } }, status: 422
+          sign_in_and_render(user)
+        rescue ActiveRecord::RecordInvalid => e
+          render_unprocessable_entity(e)
         end
       end
 
@@ -36,6 +36,12 @@ module A
       def sign_in_and_render(user)
         sign_in user, store: false
         render 'facebook', status: 201
+      end
+
+      def render_unprocessable_entity(error)
+        warden.custom_failure!
+        @error = error
+        render('errors.json', status: 422)
       end
     end
   end
