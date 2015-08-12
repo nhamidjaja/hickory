@@ -128,7 +128,7 @@ RSpec.describe 'Profile API', type: :request do
                'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(422)
-          expect(json['user']['errors']['username']).to match(['is invalid'])
+          expect(json['errors']['message']).to include('Username is invalid')
         end
       end
     end
