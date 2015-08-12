@@ -12,8 +12,7 @@ module A
         begin @user.update_attributes!(user_params)
               render
         rescue ActiveRecord::RecordInvalid => e
-          @error = e
-          render('errors.json', status: 422)
+          render_unprocessable_entity(e)
         end
       end
 
