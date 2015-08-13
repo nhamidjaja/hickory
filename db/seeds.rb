@@ -1,11 +1,6 @@
 # top articles
-3.times do
-  feeder = FactoryGirl.create(:feeder)
-
-  rand(9).times do
-    FactoryGirl.create(:top_article, feeder: feeder)
-  end
-end
+f = Feeder.create(feed_url: 'http://liputan6.com/feed/rss2/', title: 'Liputan6 - General')
+PullFeedWorker.new.perform(f.id.to_s)
 
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
