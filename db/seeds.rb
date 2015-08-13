@@ -1,3 +1,7 @@
+10.times do
+  FactoryGirl.create(:user)
+end
+
 # top articles
 f = Feeder.create(feed_url: 'http://liputan6.com/feed/rss2/', title: 'Liputan6 - General')
 PullFeedWorker.new.perform(f.id.to_s)
