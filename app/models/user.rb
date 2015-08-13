@@ -49,6 +49,13 @@ class User < ActiveRecord::Base
     records
   end
 
+  def follow(target)
+    Following.new(c_user_id: id.to_s, id: target.id.to_s)
+      .save!(consistency: :any)
+    Follower.new(c_user_id: target.id.to_s, id: id.to_s)
+      .save!(consistency: :any)
+  end
+
   protected
 
   def password_required?
