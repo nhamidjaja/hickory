@@ -1,3 +1,6 @@
+# Admin
+Admin.create(email: 'admin@example.com', password: 'readflyer', password_confirmation: 'readflyer')
+
 # User
 10.times do
   FactoryGirl.create(:user)
