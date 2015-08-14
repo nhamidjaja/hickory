@@ -27,6 +27,8 @@ module A
       def grab_facebook_token!
         token = request.headers['X-Facebook-Token']
         fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
+
+        token
       end
 
       def fetch_user_from_facebook(token)
