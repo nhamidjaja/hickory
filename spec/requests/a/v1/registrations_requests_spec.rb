@@ -39,7 +39,10 @@ RSpec.describe 'User Registrations API', type: :request do
           name: 'John Doe'
         )
 
-        expect_any_instance_of(FbGraph2::User)
+        expect(FbGraph2::User).to receive(:me)
+          .with('fb-token')
+          .and_return(double)
+        expect(double)
           .to receive(:fetch)
           .and_return(double)
       end
