@@ -11,6 +11,14 @@ module A
         user = User.find(params[:id])
         @faves = user.faves(params[:last_id], 10)
       end
+
+      def follow
+        target = User.find(params[:id])
+
+        current_user.follow(target)
+
+        render json: {}
+      end
     end
   end
 end
