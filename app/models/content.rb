@@ -8,4 +8,8 @@ class Content
   column :published_at, :timestamp
 
   validates :url, presence: true
+
+  def url=(value)
+    self[:url] = Fave::Url.new(value).canon if value.present?
+  end
 end
