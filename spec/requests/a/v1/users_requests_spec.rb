@@ -221,15 +221,17 @@ RSpec.describe 'Users API', type: :request do
         end
 
         it 'is successful' do
-          expect do
-            get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
-                nil,
-                'X-Email' => 'a@user.com',
-                'X-Auth-Token' => 'validtoken'
-          end.to change { [Follower.count, Following.count] }.to([1, 1])
+          Sidekiq::Testing.inline! do
+            expect do
+              get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
+                  nil,
+                  'X-Email' => 'a@user.com',
+                  'X-Auth-Token' => 'validtoken'
+            end.to change { [Follower.count, Following.count] }.to([1, 1])
 
-          expect(response.status).to eq(200)
-          expect(json).to be_blank
+            expect(response.status).to eq(200)
+            expect(json).to be_blank
+          end
         end
       end
     end

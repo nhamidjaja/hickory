@@ -15,7 +15,7 @@ module A
       def follow
         target = User.find(params[:id])
 
-        current_user.follow(target)
+        FollowUserWorker.perform_async(current_user.id, target.id)
 
         render json: {}
       end
