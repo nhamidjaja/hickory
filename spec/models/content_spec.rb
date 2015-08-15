@@ -5,6 +5,11 @@ RSpec.describe Content, type: :model do
 
   it { expect(FactoryGirl.build(:content, url: '')).to_not be_valid }
 
+  describe '.url=' do
+    it { expect(FactoryGirl.build(:content, url: 'https://abc.com').url).to eq('http://abc.com') }
+    it { expect(FactoryGirl.build(:content, url: 'http://abc.com/a?x=y').url).to eq('http://abc.com/a') }
+  end
+
   describe '#find_or_initialize_by' do
     let(:content) { FactoryGirl.build(:content, url: 'http://example.com') }
     subject { Content.find_or_initialize_by(url: 'http://example.com') }
