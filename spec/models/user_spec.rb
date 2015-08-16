@@ -194,9 +194,14 @@ RSpec.describe User, type: :model do
                         id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
     end
 
+    let(:data_set) { instance_double('Cequel::Metal::DataSet') }
+
     before do
       allow_any_instance_of(Following).to receive(:save!)
       allow_any_instance_of(Follower).to receive(:save!)
+      allow(user).to receive(:following?).with(friend)
+        .and_return(false)
+      allow(user).to receive(:increment_follow_counters).with(friend)
     end
 
     it 'saves into Following' do
@@ -205,7 +210,7 @@ RSpec.describe User, type: :model do
         .with(c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
               id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
         .and_return(double)
-      expect(double).to receive(:save!).with(consistency: :any)
+      expect(double).to receive(:save!) # .with(consistency: :any)
 
       user.follow(friend)
     end
@@ -216,7 +221,13 @@ RSpec.describe User, type: :model do
         .with(c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
               id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
         .and_return(double)
-      expect(double).to receive(:save!).with(consistency: :any)
+      expect(double).to receive(:save!) # .with(consistency: :any)
+
+      user.follow(friend)
+    end
+
+    it 'increments following counter' do
+      expect(user).to receive(:increment_follow_counters).with(friend)
 
       user.follow(friend)
     end
@@ -238,7 +249,7 @@ RSpec.describe User, type: :model do
           .with(
             c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
             id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-            )
+          )
           .and_return([])
       end
 
@@ -251,7 +262,7 @@ RSpec.describe User, type: :model do
           .with(
             c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
             id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-            )
+          )
           .and_return([Following.new])
       end
 

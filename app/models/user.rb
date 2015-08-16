@@ -50,14 +50,30 @@ class User < ActiveRecord::Base
   end
 
   def follow(target)
+    already_following = following?(target)
+
     Following.new(c_user_id: id.to_s, id: target.id.to_s)
-      .save!(consistency: :any)
+      .save!
     Follower.new(c_user_id: target.id.to_s, id: id.to_s)
-      .save!(consistency: :any)
+      .save!
+
+    increment_follow_counters(target) unless already_following
   end
 
   def following?(target)
     Following.where(c_user_id: id.to_s, id: target.id.to_s).any?
+  end
+
+  private
+
+  def increment_follow_counters(target)
+    counter = Cequel::Metal::DataSet
+              .new(:c_user_counters, CUserCounter.connection)
+              .consistency(:one)
+
+    counter.where(c_user_id: Cequel.uuid(id.to_s)).increment(followings: 1)
+    counter.where(c_user_id: Cequel.uuid(target.id.to_s))
+      .increment(followers: 1)
   end
 
   protected
