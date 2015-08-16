@@ -6,6 +6,8 @@ class CUser
 
   has_many :c_user_faves, class_name: 'CUserFave'
   has_many :c_user_fave_urls
+  has_many :followings
+  has_many :followers
 
   validates :id, presence: true
 

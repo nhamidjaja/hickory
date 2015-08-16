@@ -56,6 +56,10 @@ class User < ActiveRecord::Base
       .save!(consistency: :any)
   end
 
+  def following?(target)
+    Following.where(c_user_id: id.to_s, id: target.id.to_s).any?
+  end
+
   protected
 
   def password_required?

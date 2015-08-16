@@ -198,15 +198,21 @@ RSpec.describe 'Users API', type: :request do
     end
 
     context 'authorized' do
-      before do
+      let(:user) do
         FactoryGirl.create(
           :user,
           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
           email: 'a@user.com',
           authentication_token: 'validtoken')
+      end
+      let(:friend) do
         FactoryGirl.create(
           :user,
           id: '123e4567-e89b-12d3-a456-426655440000')
+      end
+
+      before do
+        user
       end
 
       context 'user not exists' do
@@ -222,12 +228,16 @@ RSpec.describe 'Users API', type: :request do
 
         it 'is successful' do
           Sidekiq::Testing.inline! do
+            expect(user.following?(friend)).to eq(false)
+
             expect do
               get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
                   nil,
                   'X-Email' => 'a@user.com',
                   'X-Auth-Token' => 'validtoken'
             end.to change { [Follower.count, Following.count] }.to([1, 1])
+
+            expect(user.following?(friend)).to eq(true)
 
             expect(response.status).to eq(200)
             expect(json).to be_blank

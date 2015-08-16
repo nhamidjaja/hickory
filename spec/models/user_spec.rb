@@ -222,6 +222,43 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.following?' do
+    let(:user) do
+      FactoryGirl.build(:user,
+                        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
+    end
+    let(:friend) do
+      FactoryGirl.build(:user,
+                        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+    end
+
+    context 'not following' do
+      before do
+        allow(Following).to receive(:where)
+          .with(
+            c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
+            id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+            )
+          .and_return([])
+      end
+
+      it { expect(user.following?(friend)).to eq(false) }
+    end
+
+    context 'following' do
+      before do
+        allow(Following).to receive(:where)
+          .with(
+            c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
+            id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+            )
+          .and_return([Following.new])
+      end
+
+      it { expect(user.following?(friend)).to eq(true) }
+    end
+  end
+
   describe '.password_required?' do
     subject { user.send(:password_required?) }
 
