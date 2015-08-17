@@ -6,6 +6,6 @@ class FaveWorker
 
     content = Content.find_or_initialize_by(url: canon_url)
 
-    CUser.new(id: user_id).fave!(content)
+    CUser.new(id: user_id).fave(content)
   end
 end

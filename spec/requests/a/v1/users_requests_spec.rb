@@ -238,7 +238,7 @@ RSpec.describe 'Users API', type: :request do
             end.to change { [Follower.count, Following.count] }.to([1, 1])
 
             expect(user.following?(friend)).to eq(true)
-            
+
             expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
               .followings).to eq(1)
             expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']

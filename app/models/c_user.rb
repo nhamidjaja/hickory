@@ -11,7 +11,17 @@ class CUser
 
   validates :id, presence: true
 
-  def fave!(content)  # rubocop:disable Metrics/MethodLength
+  def fave(content)
+    save_faves(content)
+
+    increment_faves_counter
+
+    true
+  end
+
+  private
+
+  def save_faves(content)  # rubocop:disable Metrics/MethodLength
     fave_id = Cequel.uuid(Time.zone.now)
 
     CUserFave.new(
@@ -28,5 +38,12 @@ class CUser
       content_url: content.url,
       id: fave_id
     ).save!(consistency: :any)
+  end
+
+  def increment_faves_counter
+    counter = Cequel::Metal::DataSet
+              .new(:c_user_counters, CUserCounter.connection)
+              .consistency(:one)
+    counter.where(c_user_id: Cequel.uuid(id.to_s)).increment(faves: 1)
   end
 end

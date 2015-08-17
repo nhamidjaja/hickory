@@ -4,7 +4,7 @@ RSpec.describe CUser, type: :model do
   it { expect(FactoryGirl.build(:c_user)).to be_valid }
   it { expect(FactoryGirl.build(:c_user, id: nil)).to_not be_valid }
 
-  describe '.fave!' do
+  describe '.fave' do
     let(:c_user) do
       FactoryGirl.build(
         :c_user,
@@ -55,9 +55,10 @@ RSpec.describe CUser, type: :model do
           id: an_instance_of(Cassandra::TimeUuid)
         )
         .and_return(fave_url)
+      allow_any_instance_of(CUser).to receive(:increment_faves_counter)
     end
 
-    subject { c_user.fave!(content) }
+    subject { c_user.fave(content) }
 
     it 'saves CUserFave and CUserFaveUrl' do
       expect(fave).to receive(:save!).with(consistency: :any).and_return(fave)
@@ -65,7 +66,13 @@ RSpec.describe CUser, type: :model do
         .with(consistency: :any)
         .and_return(fave_url)
 
-      is_expected.to eq(fave_url)
+      is_expected.to eq(true)
+    end
+
+    it 'increments faves counter' do
+      expect(c_user).to receive(:increment_faves_counter)
+
+      subject
     end
   end
 end

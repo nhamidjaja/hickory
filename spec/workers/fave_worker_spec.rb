@@ -31,7 +31,7 @@ RSpec.describe FaveWorker do
       end
 
       it 'faves' do
-        expect(c_user).to receive(:fave!).with(content)
+        expect(c_user).to receive(:fave).with(content)
 
         worker.perform(
           'de305d54-75b4-431b-adb2-eb6b9e546014',
