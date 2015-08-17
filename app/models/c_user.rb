@@ -19,6 +19,21 @@ class CUser
     true
   end
 
+  def follow(target)
+    already_following = following?(target)
+
+    Following.new(c_user_id: id, id: target.id)
+      .save!
+    Follower.new(c_user_id: target.id, id: id)
+      .save!
+
+    increment_follow_counters(target) unless already_following
+  end
+
+  def following?(target)
+    Following.where(c_user_id: id, id: target.id).any?
+  end
+
   private
 
   def save_faves(content)  # rubocop:disable Metrics/MethodLength
@@ -44,6 +59,16 @@ class CUser
     counter = Cequel::Metal::DataSet
               .new(:c_user_counters, CUserCounter.connection)
               .consistency(:one)
-    counter.where(c_user_id: Cequel.uuid(id.to_s)).increment(faves: 1)
+    counter.where(c_user_id: Cequel.uuid(id)).increment(faves: 1)
+  end
+
+  def increment_follow_counters(target)
+    counter = Cequel::Metal::DataSet
+              .new(:c_user_counters, CUserCounter.connection)
+              .consistency(:one)
+
+    counter.where(c_user_id: id).increment(followings: 1)
+    counter.where(c_user_id: target.id)
+      .increment(followers: 1)
   end
 end

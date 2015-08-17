@@ -141,6 +141,18 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.in_cassandra' do
+    it do
+      user = FactoryGirl.build(
+        :user,
+        id: '99a89669-557c-4c7a-a533-d1163caad65f')
+      expect(CUser).to receive(:new)
+        .with(id: '99a89669-557c-4c7a-a533-d1163caad65f')
+
+      user.in_cassandra
+    end
+  end
+
   describe '.faves' do
     let(:user) do
       FactoryGirl.build(
@@ -184,89 +196,28 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.follow' do
-    let(:user) do
-      FactoryGirl.build(:user,
-                        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
-    end
-    let(:friend) do
-      FactoryGirl.build(:user,
-                        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
-    end
-
-    let(:data_set) { instance_double('Cequel::Metal::DataSet') }
-
-    before do
-      allow_any_instance_of(Following).to receive(:save!)
-      allow_any_instance_of(Follower).to receive(:save!)
-      allow(user).to receive(:following?).with(friend)
-        .and_return(false)
-      allow(user).to receive(:increment_follow_counters).with(friend)
-    end
-
-    it 'saves into Following' do
-      double = instance_double('Following')
-      expect(Following).to receive(:new)
-        .with(c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
-              id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
-        .and_return(double)
-      expect(double).to receive(:save!) # .with(consistency: :any)
-
-      user.follow(friend)
-    end
-
-    it 'saves into Follower' do
-      double = instance_double('Follower')
-      expect(Follower).to receive(:new)
-        .with(c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-              id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
-        .and_return(double)
-      expect(double).to receive(:save!) # .with(consistency: :any)
-
-      user.follow(friend)
-    end
-
-    it 'increments following counter' do
-      expect(user).to receive(:increment_follow_counters).with(friend)
-
-      user.follow(friend)
-    end
-  end
-
   describe '.following?' do
     let(:user) do
-      FactoryGirl.build(:user,
-                        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
+      FactoryGirl.build(
+        :user,
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
     end
-    let(:friend) do
-      FactoryGirl.build(:user,
-                        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+    let(:target) do
+      FactoryGirl.build(
+        :user,
+        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
     end
+    let(:user_double) { instance_double('CUser') }
+    let(:target_double) { instance_double('CUser') }
 
-    context 'not following' do
-      before do
-        allow(Following).to receive(:where)
-          .with(
-            c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
-            id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-          )
-          .and_return([])
-      end
-
-      it { expect(user.following?(friend)).to eq(false) }
+    before do
+      allow(user).to receive(:in_cassandra).and_return(user_double)
+      allow(target).to receive(:in_cassandra).and_return(target_double)
     end
 
-    context 'following' do
-      before do
-        allow(Following).to receive(:where)
-          .with(
-            c_user_id: '9d6831a4-39d1-11e5-9128-17e501c711a8',
-            id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-          )
-          .and_return([Following.new])
-      end
-
-      it { expect(user.following?(friend)).to eq(true) }
+    it do
+      expect(user_double).to receive(:following?).with(target_double)
+      user.following?(target)
     end
   end
 
