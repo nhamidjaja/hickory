@@ -22,16 +22,14 @@ class CUser
   def follow(target)
     already_following = following?(target)
 
-    Following.new(c_user_id: id, id: target.id)
-      .save!
-    Follower.new(c_user_id: target.id, id: id)
-      .save!
+    followings.new(id: target.id).save!
+    target.followers.new(id: id).save!
 
     increment_follow_counters(target) unless already_following
   end
 
   def following?(target)
-    Following.where(c_user_id: id, id: target.id).any?
+    followings.where(id: target.id).any?
   end
 
   private

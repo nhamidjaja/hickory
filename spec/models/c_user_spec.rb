@@ -98,9 +98,8 @@ RSpec.describe CUser, type: :model do
 
     it 'saves into Following' do
       double = instance_double('Following')
-      expect(Following).to receive(:new)
-        .with(c_user_id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'),
-              id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'))
+      expect(user.followings).to receive(:new)
+        .with(id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'))
         .and_return(double)
       expect(double).to receive(:save!) # .with(consistency: :any)
 
@@ -109,9 +108,8 @@ RSpec.describe CUser, type: :model do
 
     it 'saves into Follower' do
       double = instance_double('Follower')
-      expect(Follower).to receive(:new)
-        .with(c_user_id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'),
-              id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'))
+      expect(friend.followers).to receive(:new)
+        .with(id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'))
         .and_return(double)
       expect(double).to receive(:save!) # .with(consistency: :any)
 
@@ -150,11 +148,8 @@ RSpec.describe CUser, type: :model do
 
     context 'following' do
       before do
-        allow(Following).to receive(:where)
-          .with(
-            c_user_id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'),
-            id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e')
-          )
+        allow(user.followings).to receive(:where)
+          .with(id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'))
           .and_return([Following.new])
       end
 
