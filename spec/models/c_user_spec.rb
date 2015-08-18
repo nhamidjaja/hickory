@@ -38,9 +38,8 @@ RSpec.describe CUser, type: :model do
     end
 
     before do
-      expect(CUserFave).to receive(:new)
+      expect(c_user.c_user_faves).to receive(:new)
         .with(
-          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
           id: an_instance_of(Cassandra::TimeUuid),
           content_url: 'http://example.com/hello',
           title: 'A headline',
@@ -48,9 +47,8 @@ RSpec.describe CUser, type: :model do
           published_at: Time.zone.local('2014-03-11 11:00:00 +03:00')
         )
         .and_return(fave)
-      expect(CUserFaveUrl).to receive(:new)
+      expect(c_user.c_user_fave_urls).to receive(:new)
         .with(
-          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
           content_url: 'http://example.com/hello',
           id: an_instance_of(Cassandra::TimeUuid)
         )

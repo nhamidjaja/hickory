@@ -37,8 +37,7 @@ class CUser
   def save_faves(content)  # rubocop:disable Metrics/MethodLength
     fave_id = Cequel.uuid(Time.zone.now)
 
-    CUserFave.new(
-      c_user_id: id,
+    c_user_faves.new(
       id: fave_id,
       content_url: content.url,
       title: content.title,
@@ -46,8 +45,7 @@ class CUser
       published_at: content.published_at
     ).save!(consistency: :any)
 
-    CUserFaveUrl.new(
-      c_user_id: id,
+    c_user_fave_urls.new(
       content_url: content.url,
       id: fave_id
     ).save!(consistency: :any)
