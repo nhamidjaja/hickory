@@ -124,6 +124,52 @@ RSpec.describe CUser, type: :model do
     end
   end
 
+  describe '.unfollow' do
+    let(:user) do
+      FactoryGirl.build(:c_user,
+                        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
+    end
+    let(:friend) do
+      FactoryGirl.build(:c_user,
+                        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+    end
+
+    let(:data_set) { instance_double('Cequel::Metal::DataSet') }
+
+    before do
+      allow_any_instance_of(Cequel::Record::RecordSet).to receive(:delete_all)
+      allow(user).to receive(:following?).with(friend)
+        .and_return(true)
+      allow(user).to receive(:increment_follow_counters).with(friend)
+    end
+
+    it 'deletes Following' do
+      double = instance_double('Cequel::Record::RecordSet')
+      expect(user.followings).to receive(:where)
+        .with(id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'))
+        .and_return(double)
+      expect(double).to receive(:delete_all) # .with(consistency: :any)
+
+      user.unfollow(friend)
+    end
+
+    it 'deletes Follower' do
+      double = instance_double('Cequel::Record::RecordSet')
+      expect(friend.followers).to receive(:where)
+        .with(id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'))
+        .and_return(double)
+      expect(double).to receive(:delete_all) # .with(consistency: :any)
+
+      user.unfollow(friend)
+    end
+
+    it 'increments following counter' do
+      expect(user).to receive(:decrement_follow_counters).with(friend)
+
+      user.unfollow(friend)
+    end
+  end
+
   describe '.following?' do
     let(:user) do
       FactoryGirl.build(:c_user,

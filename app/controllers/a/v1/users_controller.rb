@@ -19,6 +19,14 @@ module A
 
         render json: {}
       end
+
+      def unfollow
+        target = User.find(params[:id])
+
+        current_user.in_cassandra.unfollow(target.in_cassandra)
+
+        render json: {}
+      end
     end
   end
 end

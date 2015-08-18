@@ -24,4 +24,12 @@ RSpec.describe 'users routes', type: :routing do
                    id: 'some-id',
                    format: :json)
   end
+
+  it 'GET unfollow' do
+    expect(get('/a/v1/users/some-id/unfollow'))
+      .to route_to(controller: 'a/v1/users',
+                   action: 'unfollow',
+                   id: 'some-id',
+                   format: :json)
+  end
 end

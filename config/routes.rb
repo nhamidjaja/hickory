@@ -23,6 +23,7 @@ Rails.application.routes.draw do
         member do
           get 'faves'
           get 'follow'
+          get 'unfollow'
         end
       end
       resources :profile, only: [ :index, :create ]

@@ -8,6 +8,7 @@ class CUser
   has_many :c_user_fave_urls
   has_many :followings
   has_many :followers
+  has_many :c_user_counters
 
   validates :id, presence: true
 
@@ -26,6 +27,15 @@ class CUser
     target.followers.new(id: id).save!
 
     increment_follow_counters(target) unless already_following
+  end
+
+  def unfollow(target)
+    already_following = following?(target)
+
+    followings.where(id: target.id).delete_all
+    target.followers.where(id: id).delete_all
+
+    decrement_follow_counters(target) if already_following
   end
 
   def following?(target)
@@ -68,5 +78,15 @@ class CUser
     counter.where(c_user_id: id).increment(followings: 1)
     counter.where(c_user_id: target.id)
       .increment(followers: 1)
+  end
+
+  def decrement_follow_counters(target)
+    counter = Cequel::Metal::DataSet
+              .new(:c_user_counters, CUserCounter.connection)
+              .consistency(:one)
+
+    counter.where(c_user_id: id).decrement(followings: 1)
+    counter.where(c_user_id: target.id)
+      .decrement(followers: 1)
   end
 end
