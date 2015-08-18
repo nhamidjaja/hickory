@@ -31,11 +31,13 @@ RSpec.describe FaveWorker do
       end
 
       it 'faves' do
-        expect(c_user).to receive(:fave).with(content)
+        expect(c_user).to receive(:fave)
+          .with(content, Time.zone.parse('2015-08-18 05:31:28 UTC').utc)
 
         worker.perform(
           'de305d54-75b4-431b-adb2-eb6b9e546014',
-          'http://example.com/hello?source=xyz'
+          'http://example.com/hello?source=xyz',
+          '2015-08-18 05:31:28 UTC'
         )
       end
     end
