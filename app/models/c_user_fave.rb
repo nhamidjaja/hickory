@@ -13,4 +13,5 @@ class CUserFave
   timestamps
 
   validates :content_url, presence: true
+  validates :faved_at, presence: true
 end
