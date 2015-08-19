@@ -7,3 +7,6 @@ production:
   - default
   - mailers
   - [pull_feed, 2]
+  - [low, 2]
+  - [medium, 4]
+  - [high, 8]

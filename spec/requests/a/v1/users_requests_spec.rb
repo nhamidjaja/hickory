@@ -155,7 +155,7 @@ RSpec.describe 'Users API', type: :request do
 
           it 'is paginated by last id' do
             get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014' \
-             "/faves?last_id=#{middle_id}",
+            "/faves?last_id=#{middle_id}",
                 nil,
                 'X-Email' => 'a@user.com',
                 'X-Auth-Token' => 'validtoken'
@@ -181,6 +181,150 @@ RSpec.describe 'Users API', type: :request do
 
             expect(response.status).to eq(200)
             expect(json['faves'].size).to eq(10)
+          end
+        end
+      end
+    end
+  end
+
+  describe 'follow another user' do
+    context 'unauthenticated' do
+      it 'is unauthorized' do
+        get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/follow'
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
+      end
+    end
+
+    context 'authorized' do
+      let(:user) do
+        FactoryGirl.create(
+          :user,
+          id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          email: 'a@user.com',
+          authentication_token: 'validtoken')
+      end
+      let(:friend) do
+        FactoryGirl.create(
+          :user,
+          id: '123e4567-e89b-12d3-a456-426655440000')
+      end
+
+      before do
+        user
+      end
+
+      context 'user not exists' do
+        it 'is not found' do
+          get '/a/v1/users/id-not-found/follow',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
+      context 'user exists' do
+        it 'is successful' do
+          Sidekiq::Testing.inline! do
+            expect(user.following?(friend)).to eq(false)
+
+            expect do
+              get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
+                  nil,
+                  'X-Email' => 'a@user.com',
+                  'X-Auth-Token' => 'validtoken'
+            end.to change { [Follower.count, Following.count] }.to([1, 1])
+
+            expect(user.following?(friend)).to eq(true)
+            expect(friend.in_cassandra.followers.where(
+              id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to_not be_nil
+
+            expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
+              .followings).to eq(1)
+            expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
+              .followers).to eq(1)
+
+            expect(response.status).to eq(200)
+            expect(json).to be_blank
+          end
+        end
+      end
+    end
+  end
+
+  describe 'unfollow user' do
+    context 'unauthenticated' do
+      it 'is unauthorized' do
+        get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/unfollow'
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
+      end
+    end
+
+    context 'authorized' do
+      let(:user) do
+        FactoryGirl.create(
+          :user,
+          id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+          email: 'a@user.com',
+          authentication_token: 'validtoken')
+      end
+      let(:friend) do
+        FactoryGirl.create(
+          :user,
+          id: '123e4567-e89b-12d3-a456-426655440000')
+      end
+
+      before do
+        user
+
+        # Reset counters
+        CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].destroy
+        CUserCounter['123e4567-e89b-12d3-a456-426655440000'].destroy
+      end
+
+      context 'user not exists' do
+        it 'is not found' do
+          get '/a/v1/users/id-not-found/unfollow',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
+      context 'user exists' do
+        it 'is successful' do
+          Sidekiq::Testing.inline! do
+            user.in_cassandra.follow(friend.in_cassandra)
+            expect(user.following?(friend)).to eq(true)
+            expect_any_instance_of(CUser).to receive(:decrement_follow_counters)
+
+            expect do
+              get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/unfollow',
+                  nil,
+                  'X-Email' => 'a@user.com',
+                  'X-Auth-Token' => 'validtoken'
+            end.to change { [Follower.count, Following.count] }.to([0, 0])
+
+            expect(response.status).to eq(200)
+            expect(json).to be_blank
+
+            expect(user.following?(friend)).to eq(false)
+            expect(friend.in_cassandra.followers.where(
+              id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to be_nil
+
+            # expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
+            #   .followings).to eq(0)
+            # expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
+            #   .followers).to eq(0)
           end
         end
       end

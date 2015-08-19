@@ -9,6 +9,7 @@ class CUserFaveUrl
   column :image_url, :text
   column :following_fave_count, :int
   column :published_at, :timestamp
+  column :faved_at, :timestamp
 
   timestamps
 

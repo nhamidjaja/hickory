@@ -8,6 +8,8 @@ class CUserFave
   column :title, :text
   column :image_url, :text
   column :published_at, :timestamp
+  column :faved_at, :timestamp
+
   timestamps
 
   validates :content_url, presence: true
