@@ -41,19 +41,20 @@ class User < ActiveRecord::Base
     self.authentication_token = Devise.friendly_token
   end
 
+  def in_cassandra
+    CUser.new(id: id.to_s)
+  end
+
   def faves(last_id = nil, limit = nil)
-    records = CUser.new(id: id.to_s).c_user_faves
+    records = in_cassandra.c_user_faves
     records = records.before(Cequel.uuid(last_id)) if last_id
     records = records.limit(limit) if limit
 
     records
   end
 
-  def follow(target)
-    Following.new(c_user_id: id.to_s, id: target.id.to_s)
-      .save!(consistency: :any)
-    Follower.new(c_user_id: target.id.to_s, id: id.to_s)
-      .save!(consistency: :any)
+  def following?(target)
+    in_cassandra.following?(target.in_cassandra)
   end
 
   protected

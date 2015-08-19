@@ -22,8 +22,15 @@ Rails.application.routes.draw do
       resources :users, only: [ :show ] do
         member do
           get 'faves'
+          get 'follow'
+          get 'unfollow'
         end
       end
+
+      namespace :me do
+        resources :fave_urls, only: [ :index ]
+      end
+
       resources :profile, only: [ :index, :create ]
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]

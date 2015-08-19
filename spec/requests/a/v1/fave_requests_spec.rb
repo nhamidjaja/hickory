@@ -31,6 +31,9 @@ RSpec.describe 'Fave API', type: :request do
               'X-Auth-Token' => 'validtoken'
         end.to change(CUserFave, :count).by(1)
 
+        expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].faves)
+          .to eq(1)
+
         expect(response.status).to eq(200)
       end
     end
