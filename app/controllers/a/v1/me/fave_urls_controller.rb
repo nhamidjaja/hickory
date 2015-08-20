@@ -9,7 +9,12 @@ module A
                       .c_user_fave_urls.consistency(:one)
                       .find_by_content_url(canon_url)
 
-          fail Errors::NotFound unless @fave_url
+          if @fave_url
+            render
+          else
+            render json: { fave_url: {} }
+            return
+          end
         end
       end
     end
