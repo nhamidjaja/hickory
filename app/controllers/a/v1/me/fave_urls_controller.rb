@@ -12,7 +12,7 @@ module A
           if @fave_url
             render
           else
-            render json: { fave_url: {} }
+            render json: { fave_url: nil }
             return
           end
         end

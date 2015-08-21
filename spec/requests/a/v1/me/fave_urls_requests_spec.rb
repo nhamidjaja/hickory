@@ -28,7 +28,7 @@ RSpec.describe 'Fave Urls API', type: :request do
               'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(200)
-          expect(json['fave_url']).to be_blank
+          expect(json['fave_url']).to be_nil
         end
       end
 
