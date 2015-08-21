@@ -44,7 +44,7 @@ class CUser
 
   private
 
-  def save_faves(content, faved_at)  # rubocop:disable Metrics/MethodLength
+  def save_faves(content, faved_at) # rubocop:disable Metrics/MethodLength
     fave_id = Cequel.uuid(faved_at)
 
     c_user_faves.new(
