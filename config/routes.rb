@@ -28,10 +28,10 @@ Rails.application.routes.draw do
       end
 
       namespace :me do
+        resources :profile, only: [ :index, :create ]
         resources :fave_urls, only: [ :index ]
       end
 
-      resources :profile, only: [ :index, :create ]
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
       resources :search, only: [ :index ]
