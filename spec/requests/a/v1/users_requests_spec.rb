@@ -122,6 +122,7 @@ RSpec.describe 'Users API', type: :request do
             expect(fave['title']).to_not be_blank
             expect(fave['image_url']).to_not be_blank
             expect(fave['published_at']).to_not be_blank
+            expect(fave['published_at']).to be_a(Fixnum)
           end
         end
 
