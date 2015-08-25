@@ -14,7 +14,7 @@ RSpec.describe 'Profile API', type: :request do
     context 'unauthorized' do
       context 'no email' do
         before do
-          get '/a/v1/profile',
+          get '/a/v1/me/profile',
               nil,
               'X-Auth-Token' => 'validtoken'
         end
@@ -27,7 +27,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'no token' do
         before do
-          get '/a/v1/profile',
+          get '/a/v1/me/profile',
               nil,
               'X-Email' => 'a@user.com'
         end
@@ -40,7 +40,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'unregistered email' do
         before do
-          get '/a/v1/profile',
+          get '/a/v1/me/profile',
               nil,
               'X-Email' => 'no@email.com',
               'X-Auth-Token' => 'atoken'
@@ -54,7 +54,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'token different from saved' do
         before do
-          get '/a/v1/profile',
+          get '/a/v1/me/profile',
               nil,
               'X-Email' => 'a@user.com', 'X-Auth-Token' => 'atoken'
         end
@@ -69,7 +69,7 @@ RSpec.describe 'Profile API', type: :request do
     context 'authorized' do
       context 'token already saved' do
         before do
-          get '/a/v1/profile',
+          get '/a/v1/me/profile',
               nil,
               'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
@@ -92,7 +92,7 @@ RSpec.describe 'Profile API', type: :request do
   describe 'edit self profile' do
     context 'unauthenticated' do
       it 'is unauthorized' do
-        post '/a/v1/profile',
+        post '/a/v1/me/profile',
              '{"user": {"username": "nicholas"}}',
              'Content-Type' => 'application/json'
 
@@ -104,7 +104,7 @@ RSpec.describe 'Profile API', type: :request do
     context 'authenticated' do
       context 'valid' do
         it 'is successful' do
-          post '/a/v1/profile',
+          post '/a/v1/me/profile',
                '{"user": {"username": "nicholas",
                "full_name": "Read Flyer",
                "description": "Description Flyer"}}',
@@ -121,7 +121,7 @@ RSpec.describe 'Profile API', type: :request do
 
       context 'invalid' do
         it 'is unprocessable entity' do
-          post '/a/v1/profile',
+          post '/a/v1/me/profile',
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
                'X-Email' => 'a@user.com',

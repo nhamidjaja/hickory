@@ -6,5 +6,6 @@ FactoryGirl.define do
     title 'A headline'
     image_url 'http://example.com/image.jpg'
     published_at { Time.zone.now }
+    faved_at { Time.zone.now }
   end
 end

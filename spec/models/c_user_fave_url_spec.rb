@@ -4,6 +4,10 @@ RSpec.describe CUserFaveUrl, type: :model do
   it { expect(FactoryGirl.build(:c_user_fave_url)).to be_valid }
 
   it { expect(FactoryGirl.build(:c_user_fave_url, id: nil)).to_not be_valid }
+  it do
+    expect(FactoryGirl.build(:c_user_fave_url, faved_at: nil))
+      .to_not be_valid
+  end
 
   describe '#find_or_initialize_by' do
     let(:fave_url) do

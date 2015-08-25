@@ -3,5 +3,6 @@ FactoryGirl.define do
     association :c_user, factory: :c_user, strategy: :build
     content_url { 'http://example.com/abc' }
     id { Cequel.uuid(Time.zone.now) }
+    faved_at { Time.zone.now.utc }
   end
 end

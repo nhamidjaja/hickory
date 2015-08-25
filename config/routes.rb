@@ -26,7 +26,12 @@ Rails.application.routes.draw do
           get 'unfollow'
         end
       end
-      resources :profile, only: [ :index, :create ]
+
+      namespace :me do
+        resources :profile, only: [ :index, :create ]
+        resources :fave_urls, only: [ :index ]
+      end
+
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
       resources :search, only: [ :index ]
