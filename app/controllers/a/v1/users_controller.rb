@@ -23,7 +23,7 @@ module A
       def unfollow
         target = User.find(params[:id])
 
-        current_user.in_cassandra.unfollow(target.in_cassandra)
+        UnfollowUserWorker.perform_async(current_user.id, target.id)
 
         render json: {}
       end
