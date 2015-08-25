@@ -5,6 +5,7 @@ module A
 
       def show
         @user = User.find(params[:id])
+        @recent_faves = @user.faves(nil, 20)
       end
 
       def faves

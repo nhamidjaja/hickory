@@ -36,6 +36,11 @@ RSpec.describe 'Users API', type: :request do
                              username: 'xyz',
                              full_name: 'Xyz Xyz',
                              description: 'Xyz Description')
+          21.times do
+            FactoryGirl.create(:c_user_fave,
+              c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+              )
+          end
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',
               nil,
@@ -48,6 +53,7 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['username']).to eq('xyz')
           expect(json['user']['full_name']).to eq('Xyz Xyz')
           expect(json['user']['description']).to eq('Xyz Description')
+          expect(json['user']['recent_faves'].count).to eq(20)
         end
       end
     end
