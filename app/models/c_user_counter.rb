@@ -5,4 +5,6 @@ class CUserCounter
   column :faves, :counter
   column :followers, :counter
   column :followings, :counter
+
+  validates :c_user_id, presence: true
 end

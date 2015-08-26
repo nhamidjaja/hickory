@@ -1,5 +1,5 @@
 require 'rails_helper'
 
 RSpec.describe CUserCounter, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { expect(FactoryGirl.build(:c_user_counter)).to be_valid }
 end

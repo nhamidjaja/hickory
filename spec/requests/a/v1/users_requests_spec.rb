@@ -38,8 +38,8 @@ RSpec.describe 'Users API', type: :request do
                              description: 'Xyz Description')
           21.times do
             FactoryGirl.create(:c_user_fave,
-              c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-              )
+                               c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+                              )
           end
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',

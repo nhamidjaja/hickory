@@ -53,6 +53,10 @@ class User < ActiveRecord::Base
     records
   end
 
+  def counter
+    in_cassandra.c_user_counters.first
+  end
+
   def following?(target)
     in_cassandra.following?(target.in_cassandra)
   end
