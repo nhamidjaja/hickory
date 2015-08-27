@@ -53,6 +53,12 @@ class User < ActiveRecord::Base
     records
   end
 
+  def counter
+    @counter ||= CUserCounter.find_or_initialize_by(c_user_id: id.to_s)
+
+    @counter
+  end
+
   def following?(target)
     in_cassandra.following?(target.in_cassandra)
   end

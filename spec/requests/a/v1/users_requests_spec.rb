@@ -31,11 +31,19 @@ RSpec.describe 'Users API', type: :request do
 
       context 'user exists' do
         it 'is successful' do
+          # Rspec workaround to reset counter
+          CUserCounter['4f16d362-a336-4b12-a133-4b8e39be7f8e'].destroy
+
           FactoryGirl.create(:user,
                              id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
                              username: 'xyz',
                              full_name: 'Xyz Xyz',
                              description: 'Xyz Description')
+          21.times do
+            FactoryGirl.create(:c_user_fave,
+                               c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+                              )
+          end
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',
               nil,
@@ -48,6 +56,10 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['username']).to eq('xyz')
           expect(json['user']['full_name']).to eq('Xyz Xyz')
           expect(json['user']['description']).to eq('Xyz Description')
+          expect(json['user']['recent_faves'].count).to eq(20)
+          expect(json['user']['faves']).to eq(0)
+          expect(json['user']['followers']).to eq(0)
+          expect(json['user']['followings']).to eq(0)
         end
       end
     end
@@ -285,10 +297,6 @@ RSpec.describe 'Users API', type: :request do
 
       before do
         user
-
-        # Reset counters
-        CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].destroy
-        CUserCounter['123e4567-e89b-12d3-a456-426655440000'].destroy
       end
 
       context 'user not exists' do
@@ -306,6 +314,10 @@ RSpec.describe 'Users API', type: :request do
       context 'user exists' do
         it 'is successful' do
           Sidekiq::Testing.inline! do
+            # Reset counters
+            CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].destroy
+            CUserCounter['123e4567-e89b-12d3-a456-426655440000'].destroy
+
             user.in_cassandra.follow(friend.in_cassandra)
             expect(user.following?(friend)).to eq(true)
             expect_any_instance_of(CUser).to receive(:decrement_follow_counters)
