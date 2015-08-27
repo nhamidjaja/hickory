@@ -202,7 +202,7 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
-  describe 'follow another user' do
+  describe 'follow a user' do
     context 'unauthenticated' do
       it 'is unauthorized' do
         get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/follow'
@@ -238,6 +238,18 @@ RSpec.describe 'Users API', type: :request do
               'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
+      context 'user is self' do
+        it 'is unprocessable entity' do
+          get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/follow',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(422)
           expect(json['errors']).to_not be_blank
         end
       end
