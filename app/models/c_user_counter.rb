@@ -1,5 +1,6 @@
 class CUserCounter
   include Cequel::Record
+  include Cequelable
 
   belongs_to :c_user
   column :faves, :counter

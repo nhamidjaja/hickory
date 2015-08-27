@@ -54,7 +54,9 @@ class User < ActiveRecord::Base
   end
 
   def counter
-    in_cassandra.c_user_counters.first
+    @counter ||= CUserCounter.find_or_initialize_by(c_user_id: id.to_s)
+
+    @counter
   end
 
   def following?(target)

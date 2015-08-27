@@ -214,21 +214,29 @@ RSpec.describe User, type: :model do
         followers: 2,
         followings: 3)
     end
-    let(:counter_association) do
-      instance_double('Cequel::Record::AssociationCollection')
+
+    context 'counter not set' do
+      before do
+        expect(CUserCounter).to receive(:find_or_initialize_by)
+          .with(c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+          .and_return(c_user_counter)
+      end
+
+      it { expect(user.counter.faves).to eq(1) }
+      it { expect(user.counter.followers).to eq(2) }
+      it { expect(user.counter.followings).to eq(3) }
     end
 
-    before do
-      allow(CUser).to receive(:new)
-        .with(id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
-        .and_return(c_user)
-      allow(c_user).to receive(:c_user_counters).and_return(counter_association)
-      allow(counter_association).to receive(:first).and_return(c_user_counter)
-    end
+    context 'counter already loaded' do
+      before do
+        user.instance_variable_set('@counter', c_user_counter)
+        expect(CUserCounter).to_not receive(:find_or_initialize_by)
+      end
 
-    it { expect(user.counter.faves).to eq(1) }
-    it { expect(user.counter.followers).to eq(2) }
-    it { expect(user.counter.followings).to eq(3) }
+      it { expect(user.counter.faves).to eq(1) }
+      it { expect(user.counter.followers).to eq(2) }
+      it { expect(user.counter.followings).to eq(3) }
+    end
   end
 
   describe '.following?' do
