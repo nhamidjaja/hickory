@@ -3,7 +3,10 @@ json.user do
   json.username @user.username
   json.full_name @user.full_name
   json.description @user.description
-  
+  json.faves @user.counter.faves
+  json.followers @user.counter.followers
+  json.followings @user.counter.followings
+
   json.recent_faves(@recent_faves) do |fave|
     json.id                     fave.id.to_s
     json.content_url            fave.content_url
