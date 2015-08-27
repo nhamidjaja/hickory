@@ -35,21 +35,30 @@ RSpec.describe 'User Registrations API', type: :request do
           'FbGraph2::User',
           email: 'new@email.com',
           id: 'x123',
-          access_token: 'fb-token'
+          access_token: 'fb-token',
+          name: 'John Doe'
         )
 
-        expect_any_instance_of(FbGraph2::User)
+        expect(FbGraph2::User).to receive(:me)
+          .with('fb-token')
+          .and_return(double)
+        expect(double)
           .to receive(:fetch)
           .and_return(double)
       end
 
       context 'valid user' do
         it 'creates user' do
-          post '/a/v1/registrations/facebook',
-               '{"user": {"username": "nicholas"}}',
-               'Content-Type' => 'application/json',
-               'X-Facebook-Token' => 'fb-token'
+          Sidekiq::Testing.inline! do
+            expect do
+              post '/a/v1/registrations/facebook',
+                   '{"user": {"username": "nicholas"}}',
+                   'Content-Type' => 'application/json',
+                   'X-Facebook-Token' => 'fb-token'
+            end.to change(User, :count).by(1)
 
+            expect(ActionMailer::Base.deliveries.count).to eq(1)
+          end
           expect(response.status).to eq(201)
           expect(json['user']['email']).to match('new@email.com')
           expect(json['user']['username']).to match('nicholas')
@@ -58,14 +67,13 @@ RSpec.describe 'User Registrations API', type: :request do
       end
 
       context 'invalid user' do
-        it 'is bad request' do
+        it 'is unprocessable entity' do
           post '/a/v1/registrations/facebook',
                '{"user": {"username": ""}}',
                'Content-Type' => 'application/json',
                'X-Facebook-Token' => 'fb-token'
-
-          expect(response.status).to eq(400)
-          expect(json['errors']['username']).to eq(['is invalid'])
+          expect(response.status).to eq(422)
+          expect(json['errors']['message']).to include('Username is invalid')
         end
       end
     end

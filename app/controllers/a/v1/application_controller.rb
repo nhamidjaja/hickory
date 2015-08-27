@@ -6,6 +6,7 @@ module A
       rescue_from StandardError, with: :render_internal_server_error
       rescue_from Errors::NotFound, with: :render_not_found
       rescue_from Errors::NotAuthorized, with: :render_unauthorized
+      rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
       prepend_before_action :disable_devise_trackable
 
@@ -48,6 +49,11 @@ module A
       def render_not_found(error)
         @error = error
         render('errors.json', status: :not_found)
+      end
+
+      def render_unprocessable_entity(error)
+        @error = error
+        render('errors.json', status: 422)
       end
 
       def render_internal_server_error(error)

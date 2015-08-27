@@ -10,11 +10,9 @@ AllCops:
     - 'bin/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
 
+Rails/FindBy:
+  Exclude:
+    - app/models/concerns/cequelable.rb
+
 Documentation:
   Enabled: false
-
-Style/Encoding:
-  Enabled: false
-
-Metrics/LineLength:
-  Max: 80

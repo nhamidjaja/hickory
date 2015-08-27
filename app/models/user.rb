@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   include PgSearch
-  # include ActiveUUID::UUID
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -20,15 +19,6 @@ class User < ActiveRecord::Base
                     tsearch: { prefix: true }
                   }
 
-  def ensure_authentication_token
-    return unless authentication_token.blank?
-    self.authentication_token = Devise.friendly_token
-  end
-
-  def self.from_omniauth(auth)
-    from_third_party_auth(Fave::Auth.from_omniauth(auth))
-  end
-
   def self.from_third_party_auth(auth)
     user = find_by_email(auth.email) ||
            find_by_provider_and_uid(auth.provider, auth.uid) ||
@@ -41,8 +31,36 @@ class User < ActiveRecord::Base
   def apply_third_party_auth(auth)
     self.provider = auth.provider
     self.uid = auth.uid
-    self.email = auth.email if self.new_record?
     self.omniauth_token = auth.token
+    self.email = auth.email if self.new_record?
+    self.full_name = auth.full_name if self.new_record?
+  end
+
+  def ensure_authentication_token
+    return unless authentication_token.blank?
+    self.authentication_token = Devise.friendly_token
+  end
+
+  def in_cassandra
+    CUser.new(id: id.to_s)
+  end
+
+  def faves(last_id = nil, limit = nil)
+    records = in_cassandra.c_user_faves
+    records = records.before(Cequel.uuid(last_id)) if last_id
+    records = records.limit(limit) if limit
+
+    records
+  end
+
+  def counter
+    @counter ||= CUserCounter.find_or_initialize_by(c_user_id: id.to_s)
+
+    @counter
+  end
+
+  def following?(target)
+    in_cassandra.following?(target.in_cassandra)
   end
 
   protected

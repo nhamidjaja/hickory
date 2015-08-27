@@ -2,7 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   root to: 'home#index'
-
+  
   devise_for :admins, skip: :registrations
 
   namespace :admin, authenticate: :admin do
@@ -19,11 +19,23 @@ Rails.application.routes.draw do
 
   namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
-      resources :users, only: [ :show ]
-      resources :profile, only: [ :index ]
+      resources :users, only: [ :show ] do
+        member do
+          get 'faves'
+          get 'follow'
+          get 'unfollow'
+        end
+      end
+
+      namespace :me do
+        resources :profile, only: [ :index, :create ]
+        resources :fave_urls, only: [ :index ]
+      end
+
       resources :top_articles, only: [ :index ]
       resources :master_feeds, only: [ :index ]
-      resources :search, only: [ :index]
+      resources :search, only: [ :index ]
+      resources :fave, only: [ :index ]
 
       resources :sessions, only: [] do
         collection do
