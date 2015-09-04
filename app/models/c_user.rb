@@ -13,11 +13,11 @@ class CUser
   validates :id, presence: true
 
   def fave(content, faved_at)
-    save_faves(content, faved_at)
+    fave = save_faves(content, faved_at)
 
     increment_faves_counter
 
-    true
+    fave
   end
 
   def follow(target)
@@ -47,18 +47,18 @@ class CUser
   def save_faves(content, faved_at) # rubocop:disable Metrics/MethodLength
     fave_id = Cequel.uuid(faved_at)
 
+    c_user_fave_urls.new(
+      content_url: content.url,
+      id: fave_id,
+      faved_at: faved_at
+    ).save!(consistency: :any)
+
     c_user_faves.new(
       id: fave_id,
       content_url: content.url,
       title: content.title,
       image_url: content.image_url,
       published_at: content.published_at,
-      faved_at: faved_at
-    ).save!(consistency: :any)
-
-    c_user_fave_urls.new(
-      content_url: content.url,
-      id: fave_id,
       faved_at: faved_at
     ).save!(consistency: :any)
   end
