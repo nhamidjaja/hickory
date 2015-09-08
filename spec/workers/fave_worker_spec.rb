@@ -11,7 +11,7 @@ RSpec.describe FaveWorker do
           url: 'http://example.com/hello',
           title: 'A headline',
           image_url: 'http://a.com/b.jpg',
-          published_at: Time.zone.local('2014-03-11 11:00:00 +03:00')
+          published_at: Time.zone.parse('2014-03-11 11:00:00 +03:00').utc
         )
       end
       let(:c_user) do
@@ -20,25 +20,102 @@ RSpec.describe FaveWorker do
           id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014')
         )
       end
-
-      before do
-        expect(Content).to receive(:find_or_initialize_by)
-          .with(url: 'http://example.com/hello')
-          .and_return(content)
-        expect(CUser).to receive(:new)
-          .with(id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
-          .and_return(c_user)
+      let(:fave_id) { Cequel.uuid(Time.zone.now.utc) }
+      let(:faved_at) do
+        Time.zone.parse('2015-08-18 05:31:28 UTC').utc
       end
 
-      it 'faves' do
-        expect(c_user).to receive(:fave)
-          .with(content, Time.zone.parse('2015-08-18 05:31:28 UTC').utc)
-
+      subject do
         worker.perform(
           'de305d54-75b4-431b-adb2-eb6b9e546014',
           'http://example.com/hello?source=xyz',
           '2015-08-18 05:31:28 UTC'
         )
+      end
+
+      before do
+        allow(Content).to receive(:find_or_initialize_by)
+          .with(url: 'http://example.com/hello')
+          .and_return(content)
+        allow(CUser).to receive(:new)
+          .with(id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
+          .and_return(c_user)
+
+        fave = instance_double(
+          'CUserFave',
+          c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
+          id: fave_id,
+          content_url: content.url,
+          title: content.title,
+          image_url: content.image_url,
+          published_at: content.published_at,
+          faved_at: faved_at
+          )
+        allow(c_user).to receive(:fave).and_return(fave)
+      end
+
+      it 'faves' do
+        expect(c_user).to receive(:fave)
+          .with(content, faved_at)
+
+        subject
+      end
+
+      context 'no followers' do
+        before do
+          allow(c_user).to receive(:followers)
+            .and_return([])
+        end
+
+        it do
+          expect { subject }.to_not change(FaveFollowWorker.jobs, :size)
+        end
+      end
+
+      context 'one follower' do
+        before do
+          followers = [instance_double(
+            'Follower',
+            c_user: c_user,
+            id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'))]
+          allow(c_user).to receive(:followers).and_return(followers)
+        end
+
+        it do
+          expect { subject }.to change(FaveFollowWorker.jobs, :size).by(1)
+        end
+
+        it do
+          expect(FaveFollowWorker).to receive(:perform_async)
+            .with('123e4567-e89b-12d3-a456-426655440000',
+                  'de305d54-75b4-431b-adb2-eb6b9e546014',
+                  fave_id.to_s,
+                  'http://example.com/hello',
+                  'A headline',
+                  'http://a.com/b.jpg',
+                  '2014-03-11 08:00:00 UTC',
+                  '2015-08-18 05:31:28 UTC'
+                 )
+
+          subject
+        end
+      end
+
+      context 'many followers' do
+        before do
+          followers = []
+          5.times do
+            followers.push(
+              instance_double('Follower',
+                              c_user: c_user,
+                              id: Cequel.uuid))
+          end
+          allow(c_user).to receive(:followers).and_return(followers)
+        end
+
+        it do
+          expect { subject }.to change(FaveFollowWorker.jobs, :size).by(5)
+        end
       end
     end
   end

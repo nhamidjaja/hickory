@@ -9,6 +9,7 @@ class CUser
   has_many :followings
   has_many :followers
   has_many :c_user_counters
+  has_many :following_feeds
 
   validates :id, presence: true
 
