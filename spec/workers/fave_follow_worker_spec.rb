@@ -8,8 +8,9 @@ RSpec.describe FaveFollowWorker do
     end
     let(:fave_id) { Cequel.uuid(Time.zone.now.utc) }
     let(:following_feeds) do
-      class_double('Cequel::Record::AssociationCollection')      
+      class_double('Cequel::Record::AssociationCollection')
     end
+    let(:new_feed) { instance_double('FollowingFeed') }
 
     before do
       allow(CUser).to receive(:new)
@@ -18,7 +19,6 @@ RSpec.describe FaveFollowWorker do
 
       allow(c_user).to receive(:following_feeds)
         .and_return(following_feeds)
-      new_feed = instance_double('FollowingFeed')
       allow(following_feeds).to receive(:new).and_return(new_feed)
       allow(new_feed).to receive(:save!)
     end
@@ -33,7 +33,8 @@ RSpec.describe FaveFollowWorker do
           image_url: 'http://a.com/b.jpg',
           published_at: '2015-09-05 00:00:00 UTC',
           faved_at: '2015-09-05 11:30:03 UTC'
-          )
+        )
+      expect(new_feed).to receive(:save!).with(consistency: :any)
 
       worker.perform(
         'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -44,7 +45,7 @@ RSpec.describe FaveFollowWorker do
         'http://a.com/b.jpg',
         '2015-09-05 00:00:00 UTC',
         '2015-09-05 11:30:03 UTC'
-        )
+      )
     end
   end
 end

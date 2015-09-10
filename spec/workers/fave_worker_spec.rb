@@ -50,7 +50,7 @@ RSpec.describe FaveWorker do
           image_url: content.image_url,
           published_at: content.published_at,
           faved_at: faved_at
-          )
+        )
         allow(c_user).to receive(:fave).and_return(fave)
       end
 

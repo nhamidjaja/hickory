@@ -15,7 +15,7 @@ class FaveWorker
 
   private
 
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def propagate_to_followers(faver, fave)
     faver.followers.each do |follower|
       FaveFollowWorker.perform_async(
@@ -25,7 +25,7 @@ class FaveWorker
         fave.content_url,
         fave.title,
         fave.image_url,
-        fave.published_at.utc.to_s,
+        fave.published_at.to_s,
         fave.faved_at.to_s
       )
     end
