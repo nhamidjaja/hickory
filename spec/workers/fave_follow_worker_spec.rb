@@ -31,7 +31,7 @@ RSpec.describe FaveFollowWorker do
           content_url: 'http://example.com/xyz',
           title: 'Some headline',
           image_url: 'http://a.com/b.jpg',
-          published_at: '2015-09-05 00:00:00 UTC',
+          published_at: Time.zone.parse('2015-09-05 00:00:00 UTC'),
           faved_at: '2015-09-05 11:30:03 UTC'
         )
       expect(new_feed).to receive(:save!).with(consistency: :any)

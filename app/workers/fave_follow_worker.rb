@@ -13,7 +13,7 @@ class FaveFollowWorker
       content_url: content_url,
       title: title,
       image_url: image_url,
-      published_at: published_at.blank? ? nil : published_at,
+      published_at: Time.zone.parse(published_at),
       faved_at: faved_at
     ).save!(consistency: :any)
   end
