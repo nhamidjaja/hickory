@@ -68,7 +68,7 @@ RSpec.describe FaveWorker do
         end
 
         it do
-          expect { subject }.to_not change(FaveFollowWorker.jobs, :size)
+          expect { subject }.to_not change(FollowingFeedWorker.jobs, :size)
         end
       end
 
@@ -82,11 +82,11 @@ RSpec.describe FaveWorker do
         end
 
         it do
-          expect { subject }.to change(FaveFollowWorker.jobs, :size).by(1)
+          expect { subject }.to change(FollowingFeedWorker.jobs, :size).by(1)
         end
 
         it do
-          expect(FaveFollowWorker).to receive(:perform_async)
+          expect(FollowingFeedWorker).to receive(:perform_async)
             .with('123e4567-e89b-12d3-a456-426655440000',
                   'de305d54-75b4-431b-adb2-eb6b9e546014',
                   fave_id.to_s,
@@ -114,7 +114,7 @@ RSpec.describe FaveWorker do
         end
 
         it do
-          expect { subject }.to change(FaveFollowWorker.jobs, :size).by(5)
+          expect { subject }.to change(FollowingFeedWorker.jobs, :size).by(5)
         end
       end
     end

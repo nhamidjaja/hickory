@@ -18,7 +18,7 @@ class FaveWorker
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def propagate_to_followers(faver, fave)
     faver.followers.each do |follower|
-      FaveFollowWorker.perform_async(
+      FollowingFeedWorker.perform_async(
         follower.id.to_s,
         faver.id.to_s,
         fave.id.to_s,

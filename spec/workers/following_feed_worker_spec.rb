@@ -1,10 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe FaveFollowWorker do
+RSpec.describe FollowingFeedWorker do
   describe '.perform' do
-    let(:worker) { FaveFollowWorker.new }
+    let(:worker) { FollowingFeedWorker.new }
     let(:c_user) do
       FactoryGirl.build(:c_user, id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
+    end
+    let(:target) do
+      FactoryGirl.build(:c_user, id: '123e4567-e89b-12d3-a456-426655440000')
     end
     let(:fave_id) { Cequel.uuid(Time.zone.now.utc) }
     let(:following_feeds) do
