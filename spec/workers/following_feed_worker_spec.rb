@@ -9,7 +9,6 @@ RSpec.describe FollowingFeedWorker do
     let(:target) do
       FactoryGirl.build(:c_user, id: '123e4567-e89b-12d3-a456-426655440000')
     end
-    let(:fave_id) { Cequel.uuid(Time.zone.now.utc) }
     let(:following_feeds) do
       class_double('Cequel::Record::AssociationCollection')
     end
@@ -29,7 +28,7 @@ RSpec.describe FollowingFeedWorker do
     it do
       expect(following_feeds).to receive(:new)
         .with(
-          id: fave_id.to_s,
+          id: Cequel.uuid('04390f20-5c23-11e5-885d-feff819cdc9f'),
           faver_id: '123e4567-e89b-12d3-a456-426655440000',
           content_url: 'http://example.com/xyz',
           title: 'Some headline',
@@ -42,7 +41,7 @@ RSpec.describe FollowingFeedWorker do
       worker.perform(
         'de305d54-75b4-431b-adb2-eb6b9e546014',
         '123e4567-e89b-12d3-a456-426655440000',
-        fave_id.to_s,
+        '04390f20-5c23-11e5-885d-feff819cdc9f',
         'http://example.com/xyz',
         'Some headline',
         'http://a.com/b.jpg',

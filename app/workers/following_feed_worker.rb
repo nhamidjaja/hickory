@@ -8,7 +8,7 @@ class FollowingFeedWorker
     id = Cequel.uuid(fave_id)
 
     c_user.following_feeds.new(
-      id: id.to_s,
+      id: id,
       faver_id: target_id,
       content_url: content_url,
       title: title,
