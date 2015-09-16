@@ -1,4 +1,4 @@
-class FollowingFeedWorker
+class StoryWorker
   include Sidekiq::Worker
 
   # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
@@ -7,7 +7,7 @@ class FollowingFeedWorker
     c_user = CUser.new(id: user_id)
     id = Cequel.uuid(fave_id)
 
-    c_user.following_feeds.new(
+    c_user.stories.new(
       id: id,
       faver_id: target_id,
       content_url: content_url,

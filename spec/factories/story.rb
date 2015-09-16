@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :following_feed do
+  factory :story do
     association :c_user, factory: :c_user, strategy: :build
     id { Cequel.uuid(Time.zone.now) }
     faver_id { Cequel.uuid }

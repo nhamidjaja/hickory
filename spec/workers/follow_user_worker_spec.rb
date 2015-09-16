@@ -40,7 +40,7 @@ RSpec.describe FollowUserWorker do
       end
 
       it do
-        expect { subject }.to_not change(FollowingFeedWorker.jobs, :size)
+        expect { subject }.to_not change(StoryWorker.jobs, :size)
       end
     end
 
@@ -60,11 +60,11 @@ RSpec.describe FollowUserWorker do
       end
 
       it do
-        expect { subject }.to change(FollowingFeedWorker.jobs, :size).by(1)
+        expect { subject }.to change(StoryWorker.jobs, :size).by(1)
       end
 
       it do
-        expect(FollowingFeedWorker).to receive(:perform_async)
+        expect(StoryWorker).to receive(:perform_async)
           .with('4f16d362-a336-4b12-a133-4b8e39be7f8e',
                 '9d6831a4-39d1-11e5-9128-17e501c711a8',
                 '05d08b05-f198-46c7-be00-e5fc848589c1',
@@ -93,7 +93,7 @@ RSpec.describe FollowUserWorker do
       end
 
       it do
-        expect { subject }.to change(FollowingFeedWorker.jobs, :size).by(3)
+        expect { subject }.to change(StoryWorker.jobs, :size).by(3)
       end
     end
   end

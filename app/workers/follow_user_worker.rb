@@ -14,7 +14,7 @@ class FollowUserWorker
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def collect_target_faves(user, target)
     target.c_user_faves.each do |fave|
-      FollowingFeedWorker.perform_async(
+      StoryWorker.perform_async(
         user.id.to_s,
         target.id.to_s,
         fave.id.to_s,

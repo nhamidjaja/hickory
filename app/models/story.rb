@@ -1,4 +1,4 @@
-class FollowingFeed
+class Story
   include Cequel::Record
 
   belongs_to :c_user

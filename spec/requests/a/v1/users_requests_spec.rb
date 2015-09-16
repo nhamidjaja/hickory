@@ -267,7 +267,7 @@ RSpec.describe 'Users API', type: :request do
             expect(user.following?(friend)).to eq(false)
 
             expect(friend.faves.size).to eq(3)
-            expect(user.in_cassandra.following_feeds.count).to eq(0)
+            expect(user.in_cassandra.stories.count).to eq(0)
 
             expect do
               get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
@@ -288,7 +288,7 @@ RSpec.describe 'Users API', type: :request do
             expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
               .followers).to eq(1)
 
-            expect(user.in_cassandra.following_feeds.count).to eq(3)
+            expect(user.in_cassandra.stories.count).to eq(3)
           end
         end
       end

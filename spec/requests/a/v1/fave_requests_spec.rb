@@ -32,7 +32,7 @@ RSpec.describe 'Fave API', type: :request do
 
     it 'is successful' do
       Sidekiq::Testing.inline! do
-        expect(FollowingFeed.count).to eq(0)
+        expect(Story.count).to eq(0)
         expect(user.in_cassandra.followers.count).to eq(3)
 
         expect do
@@ -46,7 +46,7 @@ RSpec.describe 'Fave API', type: :request do
 
         expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].faves)
           .to eq(1)
-        expect(FollowingFeed.count).to eq(3)
+        expect(Story.count).to eq(3)
       end
     end
   end
