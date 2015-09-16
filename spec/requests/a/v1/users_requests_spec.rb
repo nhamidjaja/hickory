@@ -321,6 +321,24 @@ RSpec.describe 'Users API', type: :request do
 
       before do
         user
+
+        user.in_cassandra.follow(friend.in_cassandra)
+        expect(user.following?(friend)).to eq(true)
+
+        CUserFave.delete_all
+        Story.delete_all
+        3.times do
+          id = Cequel.uuid(Time.zone.now)
+
+          FactoryGirl.create(:c_user_fave,
+                             c_user: friend.in_cassandra,
+                             id: id
+                            )
+          FactoryGirl.create(:story,
+                             c_user: user.in_cassandra,
+                             id: id
+                            )
+        end
       end
 
       context 'user not exists' do
@@ -342,9 +360,10 @@ RSpec.describe 'Users API', type: :request do
             CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].destroy
             CUserCounter['123e4567-e89b-12d3-a456-426655440000'].destroy
 
-            user.in_cassandra.follow(friend.in_cassandra)
-            expect(user.following?(friend)).to eq(true)
             expect_any_instance_of(CUser).to receive(:decrement_follow_counters)
+
+            expect(friend.faves.size).to eq(3)
+            expect(user.in_cassandra.stories.size).to eq(3)
 
             expect do
               get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/unfollow',
@@ -359,6 +378,8 @@ RSpec.describe 'Users API', type: :request do
             expect(user.following?(friend)).to eq(false)
             expect(friend.in_cassandra.followers.where(
               id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to be_nil
+
+            expect(user.in_cassandra.stories.size).to eq(0)
 
             # counters do not work properly in spec
             # expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']

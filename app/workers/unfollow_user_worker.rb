@@ -7,5 +7,11 @@ class UnfollowUserWorker
     target = CUser.new(id: target_id)
 
     user.unfollow(target)
+
+    target.c_user_faves.each do |fave|
+      RemoveStoryWorker.perform_async(
+        user.id.to_s,
+        fave.id.to_s)
+    end
   end
 end
