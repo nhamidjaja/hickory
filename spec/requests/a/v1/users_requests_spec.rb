@@ -228,6 +228,13 @@ RSpec.describe 'Users API', type: :request do
 
       before do
         user
+
+        CUserFave.delete_all
+        3.times do
+          FactoryGirl.create(:c_user_fave,
+                             c_user: friend.in_cassandra
+                            )
+        end
       end
 
       context 'user not exists' do
@@ -259,12 +266,18 @@ RSpec.describe 'Users API', type: :request do
           Sidekiq::Testing.inline! do
             expect(user.following?(friend)).to eq(false)
 
+            expect(friend.faves.size).to eq(3)
+            expect(user.in_cassandra.following_feeds.count).to eq(0)
+
             expect do
               get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
                   nil,
                   'X-Email' => 'a@user.com',
                   'X-Auth-Token' => 'validtoken'
             end.to change { [Follower.count, Following.count] }.to([1, 1])
+
+            expect(response.status).to eq(200)
+            expect(json).to be_blank
 
             expect(user.following?(friend)).to eq(true)
             expect(friend.in_cassandra.followers.where(
@@ -275,8 +288,7 @@ RSpec.describe 'Users API', type: :request do
             expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
               .followers).to eq(1)
 
-            expect(response.status).to eq(200)
-            expect(json).to be_blank
+            expect(user.in_cassandra.following_feeds.count).to eq(3)
           end
         end
       end
@@ -348,6 +360,7 @@ RSpec.describe 'Users API', type: :request do
             expect(friend.in_cassandra.followers.where(
               id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to be_nil
 
+            # counters do not work properly in spec
             # expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
             #   .followings).to eq(0)
             # expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
