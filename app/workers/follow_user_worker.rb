@@ -7,5 +7,23 @@ class FollowUserWorker
     target = CUser.new(id: target_id)
 
     user.follow(target)
+
+    collect_target_faves(user, target)
+  end
+
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def collect_target_faves(user, target)
+    target.c_user_faves.each do |fave|
+      FollowingFeedWorker.perform_async(
+        user.id.to_s,
+        target.id.to_s,
+        fave.id.to_s,
+        fave.content_url,
+        fave.title,
+        fave.image_url,
+        fave.published_at.to_s,
+        fave.faved_at.to_s
+      )
+    end
   end
 end
