@@ -12,7 +12,7 @@ RSpec.describe 'Fave API', type: :request do
   end
 
   context 'authorized' do
-    before do
+    let(:user) do
       FactoryGirl.create(
         :user,
         id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -22,8 +22,19 @@ RSpec.describe 'Fave API', type: :request do
       )
     end
 
-    it 'saves CUserFave' do
+    before do
+      3.times do
+        FactoryGirl.create(:follower,
+                           c_user: user.in_cassandra
+                          )
+      end
+    end
+
+    it 'is successful' do
       Sidekiq::Testing.inline! do
+        expect(Story.count).to eq(0)
+        expect(user.in_cassandra.followers.count).to eq(3)
+
         expect do
           get '/a/v1/fave?url=http://example.com/hello?source=xyz',
               nil,
@@ -31,10 +42,11 @@ RSpec.describe 'Fave API', type: :request do
               'X-Auth-Token' => 'validtoken'
         end.to change(CUserFave, :count).by(1)
 
+        expect(response.status).to eq(200)
+
         expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].faves)
           .to eq(1)
-
-        expect(response.status).to eq(200)
+        expect(Story.count).to eq(3)
       end
     end
   end
