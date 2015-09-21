@@ -67,7 +67,7 @@ RSpec.describe CUser, type: :model do
         .with(consistency: :any)
         .and_return(fave_url)
 
-      is_expected.to eq(true)
+      is_expected.to eq(fave)
     end
 
     it 'increments faves counter' do

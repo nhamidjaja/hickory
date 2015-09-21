@@ -16,6 +16,14 @@ module A
       def follow
         target = User.find(params[:id])
 
+        if current_user.eql?(target)
+          render json: {
+            errors: {
+              message: 'Cannot follow self'
+            } }, status: 422
+          return
+        end
+
         FollowUserWorker.perform_async(current_user.id, target.id)
 
         render json: {}
