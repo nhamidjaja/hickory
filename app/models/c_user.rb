@@ -27,6 +27,7 @@ class CUser
 
     followings.new(id: target.id).save!
     target.followers.new(id: id).save!
+    friends.where(id: target.id).destroy_all
 
     increment_follow_counters(target) unless already_following
   end
