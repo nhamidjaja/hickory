@@ -31,10 +31,10 @@ Rails.application.routes.draw do
         resources :profile, only: [ :index, :create ]
         resources :fave_urls, only: [ :index ]
         resources :stories, only: [ :index ]
+        resources :friends, only: [ :index ]
       end
 
       resources :top_articles, only: [ :index ]
-      resources :master_feeds, only: [ :index ]
       resources :search, only: [ :index ]
       resources :fave, only: [ :index ]
 
