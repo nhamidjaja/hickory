@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
+  has_one :featured_user
+
   validates :username,
             uniqueness: true,
             format: { with: /\A[a-z0-9_.]{2,30}\z/ }
