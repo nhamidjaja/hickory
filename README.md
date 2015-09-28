@@ -20,7 +20,7 @@ the following resources handy:
 
 
 
-For Mac OS X I recommend you to use [Homebrew](http://mxcl.github.io/homebrew/) for package manager.
+For Mac OS X use  Homebrew <http://mxcl.github.io/homebrew> for easy installations of libraries.
 
 And use [Ruby Version Manager](https://rvm.io/), and here's the [link](http://www.stewgleadow.com/blog/2011/12/10/installing-rvm-on-os-x-lion/) to install it on Mac.
 
@@ -92,6 +92,15 @@ Finished in 0.70621 seconds (files took 2.23 seconds to load)
 47 examples, 0 failures, 9 pending
 ```
 Verify that you have **0 failures**.
+
+#### Start sidekiq workers
+
+Sidekiq <http://sidekiq.org> is a simple, efficient background processor to handle asynchronous tasks
+
+
+```
+$ sidekiq -C config/sidekiq.yml
+```
 
 #### Run rails server
 
