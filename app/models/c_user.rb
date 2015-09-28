@@ -10,6 +10,7 @@ class CUser
   has_many :followers
   has_many :c_user_counters
   has_many :stories
+  has_many :friends
 
   validates :id, presence: true
 
@@ -26,6 +27,7 @@ class CUser
 
     followings.new(id: target.id).save!
     target.followers.new(id: id).save!
+    friends.where(id: target.id).destroy_all
 
     increment_follow_counters(target) unless already_following
   end

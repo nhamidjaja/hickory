@@ -220,7 +220,7 @@ RSpec.describe 'Users API', type: :request do
           email: 'a@user.com',
           authentication_token: 'validtoken')
       end
-      let(:friend) do
+      let(:target) do
         FactoryGirl.create(
           :user,
           id: '123e4567-e89b-12d3-a456-426655440000')
@@ -231,10 +231,16 @@ RSpec.describe 'Users API', type: :request do
 
         CUserFave.delete_all
         3.times do
-          FactoryGirl.create(:c_user_fave,
-                             c_user: friend.in_cassandra
-                            )
+          FactoryGirl.create(
+            :c_user_fave,
+            c_user: target.in_cassandra
+          )
         end
+
+        FactoryGirl.create(
+          :friend,
+          c_user: user.in_cassandra,
+          id: target.id.to_s)
       end
 
       context 'user not exists' do
@@ -264,10 +270,12 @@ RSpec.describe 'Users API', type: :request do
       context 'user exists' do
         it 'is successful' do
           Sidekiq::Testing.inline! do
-            expect(user.following?(friend)).to eq(false)
+            expect(user.following?(target)).to eq(false)
 
-            expect(friend.faves.size).to eq(3)
+            expect(target.faves.count).to eq(3)
             expect(user.in_cassandra.stories.count).to eq(0)
+
+            expect(user.in_cassandra.friends.count).to eq(1)
 
             expect do
               get '/a/v1/users/123e4567-e89b-12d3-a456-426655440000/follow',
@@ -279,8 +287,8 @@ RSpec.describe 'Users API', type: :request do
             expect(response.status).to eq(200)
             expect(json).to be_blank
 
-            expect(user.following?(friend)).to eq(true)
-            expect(friend.in_cassandra.followers.where(
+            expect(user.following?(target)).to eq(true)
+            expect(target.in_cassandra.followers.where(
               id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to_not be_nil
 
             expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
@@ -288,7 +296,11 @@ RSpec.describe 'Users API', type: :request do
             expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
               .followers).to eq(1)
 
+            # Merge target's faves into user's stories
             expect(user.in_cassandra.stories.count).to eq(3)
+
+            # Remove target from friends
+            expect(user.in_cassandra.friends.count).to eq(0)
           end
         end
       end
@@ -313,7 +325,7 @@ RSpec.describe 'Users API', type: :request do
           email: 'a@user.com',
           authentication_token: 'validtoken')
       end
-      let(:friend) do
+      let(:target) do
         FactoryGirl.create(
           :user,
           id: '123e4567-e89b-12d3-a456-426655440000')
@@ -322,8 +334,8 @@ RSpec.describe 'Users API', type: :request do
       before do
         user
 
-        user.in_cassandra.follow(friend.in_cassandra)
-        expect(user.following?(friend)).to eq(true)
+        user.in_cassandra.follow(target.in_cassandra)
+        expect(user.following?(target)).to eq(true)
 
         CUserFave.delete_all
         Story.delete_all
@@ -331,7 +343,7 @@ RSpec.describe 'Users API', type: :request do
           id = Cequel.uuid(Time.zone.now)
 
           FactoryGirl.create(:c_user_fave,
-                             c_user: friend.in_cassandra,
+                             c_user: target.in_cassandra,
                              id: id
                             )
           FactoryGirl.create(:story,
@@ -362,7 +374,7 @@ RSpec.describe 'Users API', type: :request do
 
             expect_any_instance_of(CUser).to receive(:decrement_follow_counters)
 
-            expect(friend.faves.size).to eq(3)
+            expect(target.faves.size).to eq(3)
             expect(user.in_cassandra.stories.size).to eq(3)
 
             expect do
@@ -375,8 +387,8 @@ RSpec.describe 'Users API', type: :request do
             expect(response.status).to eq(200)
             expect(json).to be_blank
 
-            expect(user.following?(friend)).to eq(false)
-            expect(friend.in_cassandra.followers.where(
+            expect(user.following?(target)).to eq(false)
+            expect(target.in_cassandra.followers.where(
               id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to be_nil
 
             expect(user.in_cassandra.stories.size).to eq(0)
