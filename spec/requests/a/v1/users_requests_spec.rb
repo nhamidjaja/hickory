@@ -57,9 +57,9 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['full_name']).to eq('Xyz Xyz')
           expect(json['user']['description']).to eq('Xyz Description')
           expect(json['user']['recent_faves'].count).to eq(20)
-          expect(json['user']['faves']).to eq(0)
-          expect(json['user']['followers']).to eq(0)
-          expect(json['user']['followings']).to eq(0)
+          expect(json['user']['faves_count']).to eq(0)
+          expect(json['user']['followers_count']).to eq(0)
+          expect(json['user']['followings_count']).to eq(0)
         end
       end
     end
