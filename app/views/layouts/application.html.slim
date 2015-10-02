@@ -1,15 +1,141 @@
 doctype html
 html
   head
-    title Hickory
+    = favicon_link_tag 'favicon.ico'
+    title
+      = yield(:title).present? ? "#{yield(:title)} | Flyer" : "Flyer"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     
     = render "layouts/google_analytics"
 
-  body
+  / body
+  /   == yield
+  /   javascript:
+  /     ga('set', 'location', location.href.split('#')[0]);
+  /     ga('send', 'pageview', { "title": document.title });
+
+body
+  nav.navbar.navbar-default.navbar-fixed-top
+    .container
+      .navbar-header
+        button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target="#navbar"
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        #logo
+          = link_to 'kippro', root_path, { class: 'navbar-brand' }
+        a.nav[href='#']
+      .collapse.navbar-collapse id="navbar"
+        ul.nav.navbar-nav.navbar-right.user_nav
+          / li
+          /   = link_to t('.navigation.call', phone_number: Rails.application.config.cs_phone_number.sub(/(\d{3})(\d{4})(\d{4})/, "(\\1) \\2-\\3")), "tel:#{Rails.application.config.cs_phone_number}", { onClick: "ga('send', 'event', 'call support', 'click', 'navigation bar');"}
+          / li.dropdown
+          /   = link_to locales_path, { class: 'dropdown-toggle', data: {toggle: 'dropdown' }, role: 'button', 'aria-expanded': 'false' } do
+          /     = t("defaults.locales.#{I18n.locale}")
+          /     span.caret
+          /   / a.dropdown-toggle data-toggle="dropdown" role="button" aria-expanded="false"
+          /   /   = t("defaults.locales.#{I18n.locale}") 
+          /     / span.caret
+          /   ul.dropdown-menu role="menu"
+          /     - (I18n.available_locales - [I18n.locale]).each do |l|
+          /       li
+          /         = link_to t("defaults.locales.#{l}"), locale_path(l)
+          - if user_signed_in?
+            li
+              = link_to t('devise.sign_out'), destroy_user_session_path, data: { method: 'delete' }
+          - else
+            li
+              = link_to t('devise.sign_in'), new_user_session_path, {}
+  - if notice.present?
+    .container-fluid.notification-wrapper.text-center
+      .row
+        .col-md-12.no-min-height
+          span.close-notification
+            i.fa.fa-close
+          = notice
+  - if alert.present?
+    .container-fluid.notification-wrapper.alert-notification.text-center
+      .row
+        .col-md-12.no-min-height
+          span.close-notification
+            i.fa.fa-close
+          = alert
+        
+        / - flash.each do |name, msg|
+        / = content_tag :div, msg, id: "flash_#{name}"
+  .main-wrapper
     == yield
+  / footer.footer
+  /   .container
+  /     .row
+  /       .col-sm-3.hidden-xs
+  /         .copyright
+  /           p.disclaimer 
+  /             | &copy; #{Time.zone.now.year} Kippro
+  /           / ul
+  /           /   li
+  /           /     a[href="#"] Privacy Policy
+  /           /   li.last
+  /           /     a[href="#"] Terms of Use
+  /       .col-sm-2.hidden-xs
+  /         h4 Kippro
+  /         / ul
+  /         /   li
+  /         /     = link_to 'About', page_path(id: "about")
+  /         /   li
+  /         /     = link_to 'Facebook', Rails.application.config.fb_page_url, { target: '_blank' }
+  /         /   li
+  /         /     = link_to 'LinkedIn', Rails.application.config.linkedin_page_url, { target: '_blank' }
+  /           / li
+  /           /   = link_to 'Careers', "https://sites.google.com/a/kippro.com/jobs/", { target: '_blank' }
+  /       .col-sm-2.hidden-xs
+          h4 Customer
+          ul
+            li
+              = link_to 'How it Works', page_path(id: 'how-it-works')
+        /     li
+        /       a[href="#"] Safety
+        /     li
+        /       a[href="#"] Location
+        /     li
+        /       a[href="#"] Download iPhone App
+        .col-sm-2.hidden-xs
+          h4 Pros
+          ul
+            li
+              = link_to 'Sign Up', new_professional_path
+        /     li
+        /       a[href="#"] Pro center
+        /     li
+        /       a[href="#"] Success Stories
+        .col-sm-3
+          h4 Questions? Need help?
+          ul
+            li
+              = link_to 'Facebook', Rails.application.config.fb_page_url, { target: '_blank' }
+            li
+              = link_to t('.navigation.call', phone_number: Rails.application.config.cs_phone_number.sub(/(\d{3})(\d{4})(\d{4})/, "(\\1) \\2-\\3")), "tel:#{Rails.application.config.cs_phone_number}", { onClick: "ga('send', 'event', 'call support', 'click', 'footer');"}
+        /     li
+        /       a[href="#"] How it Works
+        /     li
+        /       a[href="#"] Sign Up
+        /     li
+        /       a[href="#"] Success Stories
+      .row.visible-xs
+        .col-xs-12
+          hr
+          .copyright
+            p.disclaimer 
+              | &copy; #{Time.zone.now.year} Kippro
+            / ul
+            /   li
+            /     a[href="#"] Privacy Policy
+            /   li.last
+            /     a[href="#"] Terms of Use
     javascript:
       ga('set', 'location', location.href.split('#')[0]);
       ga('send', 'pageview', { "title": document.title });

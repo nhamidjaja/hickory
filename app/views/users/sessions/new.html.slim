@@ -1,6 +1,13 @@
-h2
-  | Log in
-/ = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+.container
+  .row
+    .col-sm-6.col-sm-offset-3
+      .box
+        h2.form-header Sign in to Flyer
+        .form-horizontal
+          .form-group
+            .text-center
+              = render "users/shared/links"
+
 /   .field
 /     = f.label :email
 /     br
@@ -15,4 +22,3 @@ h2
 /       = f.label :remember_me
 /   .actions
 /     = f.submit "Log in"
-= render "users/shared/links"
