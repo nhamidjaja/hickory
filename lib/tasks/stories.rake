@@ -1,6 +1,6 @@
 namespace :stories  do
   task seed: :environment do
-    p 'Create stories for username:'
+    print 'Create stories for username: '
     username = $stdin.gets.chomp.strip.to_s
 
     user = User.find_by_username(username)
@@ -9,7 +9,7 @@ namespace :stories  do
     end
 
     target = FactoryGirl.create(:user)
-    p "#{user.username} following #{target.username}"
+    print "#{user.username} following #{target.username}\n"
     FollowUserWorker.new.perform(user.id.to_s, target.id.to_s)
 
     articles = Content.limit(50).to_a
@@ -21,6 +21,6 @@ namespace :stories  do
       FaveWorker.new.perform(target.id.to_s, a.url, rand(900).minutes.ago.to_s)
     end
 
-    p "Success! #{user.username} should have #{articles.size} additional stories now. Don't forget to start sidekiq."
+    print "Success! #{user.username} should have #{articles.size} additional stories now. Don't forget to start sidekiq.\n"
   end
 end
