@@ -1,9 +1,19 @@
-secret_key_base: bd3bf03a1d93cf497d42605cf0712d2e0e9f8deae4124ee9e942a3a53831f03e03b5c126978541a23cf10f6bc4423cee25cd8e73c7e6e731fc25598d957a0355
-facebook_app_id: '836727739715222'
-facebook_app_secret: 'c4c169fcc7719ddb31f001802c756a07'
-google_analytics_tracking_id: UA-62541080-2
+local: &local
+  facebook_app_id: '836727739715222'
+  facebook_app_secret: 'c4c169fcc7719ddb31f001802c756a07'
+  google_analytics_tracking_id: UA-62541080-2
+  pg_username: ''
+  pg_password: ''
+  cass_username: ''
+  cass_password: ''
+
+
+development:
+  <<: *local
+  secret_key_base: bd3bf03a1d93cf497d42605cf0712d2e0e9f8deae4124ee9e942a3a53831f03e03b5c126978541a23cf10f6bc4423cee25cd8e73c7e6e731fc25598d957a0355
 
 test:
+  <<: *local
   secret_key_base: 14d5d7df990631f729198dc1cc3deb6bca6b0b0bea55e01c6d4b6b8935daa5cc4939e2c27021d41181b2d41c80fdbfe7915179aa8e4bee3eb98195313df8d4fe
 
 staging:

@@ -23,6 +23,7 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# UI
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 gem 'nprogress-rails'
@@ -38,6 +39,9 @@ gem 'nprogress-rails'
 
 # Cassandra ORM
 gem 'cequel'
+
+# Database replication
+gem 'ar-octopus'
 
 # ID generator
 # gem 'activeuuid'
