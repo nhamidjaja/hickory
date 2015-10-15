@@ -44,8 +44,9 @@ Next, copy **config/database.yml** and other configurations with the provided te
 
 ```
 $ cp config/database.example.yml config/database.yml
+$ cp config/shards.example.yml config/shards.yml // For database replication using Octopus
 $ cp config/cequel.example.yml config/cequel.yml  // ORM for Cassandra
-$ cp config/application.example.yml config/application.yml  // Figaro
+$ cp config/application.example.yml config/application.yml  // App configuration using Figaro
 ```
 And adjust the config if needed.
 
