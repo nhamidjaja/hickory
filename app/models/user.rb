@@ -21,6 +21,14 @@ class User < ActiveRecord::Base
                     tsearch: { prefix: true }
                   }
 
+  # Setters
+
+  def username=(value)
+    self[:username] = value.downcase
+  end
+
+  # Custom methods
+
   def self.from_third_party_auth(auth)
     user = find_by_email(auth.email) ||
            find_by_provider_and_uid(auth.provider, auth.uid) ||

@@ -26,10 +26,6 @@ RSpec.describe User, type: :model do
       it { expect(FactoryGirl.build(:user, username: '12')).to be_valid }
     end
 
-    describe 'capitalization' do
-      it { expect(FactoryGirl.build(:user, username: 'xyZ')).to_not be_valid }
-    end
-
     describe 'length' do
       it { expect(FactoryGirl.build(:user, username: '1' * 30)).to be_valid }
       it { expect(FactoryGirl.build(:user, username: '1')).to_not be_valid }
@@ -42,7 +38,14 @@ RSpec.describe User, type: :model do
     it 'is unique' do
       FactoryGirl.create(:user, username: 'nic')
 
-      expect(FactoryGirl.build(:user, username: 'nic')).to_not be_valid
+      expect(FactoryGirl.build(:user, username: 'NIC')).to_not be_valid
+    end
+
+    describe 'setter' do
+      it do
+        expect(FactoryGirl.build(:user, username: 'xyZ').username)
+          .to eq('xyz')
+      end
     end
   end
 
