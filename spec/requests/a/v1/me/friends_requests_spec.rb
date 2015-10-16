@@ -133,8 +133,11 @@ RSpec.describe 'Friends API', type: :request do
           end
 
           it 'is limited to 20' do
-            21.times do
-              u = FactoryGirl.create(:user)
+            21.times do |i|
+              u = FactoryGirl.create(
+                :user,
+                username: 'user_' + i.to_s
+              )
               FactoryGirl.create(
                 :friend,
                 c_user: user.in_cassandra,
