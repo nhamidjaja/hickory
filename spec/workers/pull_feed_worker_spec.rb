@@ -14,6 +14,7 @@ RSpec.describe PullFeedWorker do
       allow(Feeder).to receive(:find)
         .with('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
         .and_return(feeder)
+      allow(feeder.top_articles).to receive(:create!)
     end
 
     subject do
@@ -67,13 +68,19 @@ RSpec.describe PullFeedWorker do
           .and_return(double)
       end
 
-      it 'creates top article' do
-        subject
+      it 'creates TopArticle' do
+        expect(feeder.top_articles).to receive(:create!)
+          .with(
+            content_url: 'http://example.com/article',
+            title: 'An article',
+            image_url: 'http://example.com/img.png',
+            published_at: Time.zone.local('2015-01-10 11:11:11 +01:00')
+          )
 
-        expect(feeder.top_articles.size).to eq(1)
+        subject
       end
 
-      it 'pushes Content' do
+      it 'creates Content' do
         double = instance_double('Content')
         expect(Content).to receive(:new).with(
           url: 'http://example.com/article',
@@ -85,15 +92,6 @@ RSpec.describe PullFeedWorker do
         expect(double).to receive(:save!).with(consistency: :any)
 
         subject
-      end
-
-      describe 'attributes' do
-        before { subject }
-        let(:article) { feeder.top_articles.first }
-
-        it { expect(article.content_url).to eq('http://example.com/article') }
-        it { expect(article.title).to eq('An article') }
-        it { expect(article.image_url).to eq('http://example.com/img.png') }
       end
     end
   end
