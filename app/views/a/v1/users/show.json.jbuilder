@@ -6,6 +6,7 @@ json.user do
   json.faves_count @user.counter.faves
   json.followers_count @user.counter.followers
   json.followings_count @user.counter.followings
+  json.is_following current_user.following?(@user)
 
   json.recent_faves(@recent_faves) do |fave|
     json.id                     fave.id.to_s
