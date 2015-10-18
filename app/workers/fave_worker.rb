@@ -1,11 +1,10 @@
 class FaveWorker
   include Sidekiq::Worker
 
-  def perform(user_id, url, faved_time)
-    canon_url = Fave::Url.new(url).canon
-
-    content = Content.find_or_initialize_by(url: canon_url)
-
+  # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
+  def perform(user_id, url, faved_time,
+    title = nil, image_url = nil, published_at = nil)
+    content = get_content(url, title, image_url, published_at)
     faver = CUser.new(id: user_id)
     faved_at = Time.zone.parse(faved_time).utc
     fave = faver.fave(content, faved_at)
@@ -14,6 +13,19 @@ class FaveWorker
   end
 
   private
+
+  def get_content(url, title, image_url, published_at)
+    if title || image_url || published_at
+      return Content.new(
+        url: url,
+        title: title,
+        image_url: image_url,
+        published_at: Time.zone.parse(published_at).utc
+      ).save!(consistency: :any)
+    else
+      return Content.find_or_initialize_by(url: url)
+    end
+  end
 
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def propagate_to_followers(faver, fave)
