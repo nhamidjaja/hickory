@@ -1,3 +1,17 @@
+print '######################################################################'
+print '#                       _____ _                                      #'
+print '#                      |  ___| |_   _  ___ _ __                      #'
+print '#                      | |_  | | | | |/ _ \ `__|                     #'
+print '#                      |  _| | | |_| |  __/ |                        #'
+print '#                      |_|   |_|\__, |\___|_|                        #'
+print '#                               |___/                                #'
+print '#                                                                    #'
+print '#       Are you REALLY sure you want to deploy to production?        #'
+print '#               Enter y/N + enter to continue\n                      #'
+print '######################################################################'
+proceed = STDIN.gets[0..0] rescue nil
+exit unless proceed == 'y'
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
