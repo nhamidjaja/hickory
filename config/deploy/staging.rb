@@ -9,9 +9,6 @@
 
 server 'staging.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
 
-set :stage, :staging
-set :rails_env, 'staging'
-
 set :user,            'username'
 set :puma_threads,    [1, 6]
 set :puma_workers,    8
