@@ -4,6 +4,10 @@ lock '3.4.0'
 set :application, 'hickory'
 set :repo_url, 'git@gitlab.com:nhamidjaja/hickory.git'
 
+# https://github.com/seuros/capistrano-sidekiq/issues/49
+# ERROR: no tty present and no askpass program specified
+set :sidekiq_monit_default_hooks, false
+
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
@@ -33,6 +37,7 @@ set :linked_files, fetch(:linked_files, []).push(
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 set :linked_dirs, fetch(:linked_dirs, []).push(
+  'bin',
   'log', 
   'tmp/pids', 
   'tmp/cache', 
@@ -88,9 +93,24 @@ namespace :deploy do
 
   desc 'Cassandra migrations'
   namespace :cequel do
+    task :setup do
+      on primary(:web) do
+        within release_path do
+          with rails_env: fetch(:rails_env) do
+            execute :rake, 'cequel:keyspace:create'
+          end
+        end 
+      end
+    end
+
     task :migrations do
       on primary(:web) do
-        run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake cequel:migrate"
+        # run "cd #{current_path}; RAILS_ENV=#{ENV["RAILS_ENV"]} bundle exec rake cequel:migrate"
+        within release_path do
+          with rails_env: fetch(:rails_env) do
+            execute :rake, 'cequel:migrate'
+          end
+        end 
       end
     end
   end
