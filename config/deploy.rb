@@ -88,9 +88,11 @@ namespace :deploy do
 
   desc 'Cassandra migrations'
   namespace :cequel do
-    task :migrations, only: { primary: true } do
-     run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake cequel:migrate"
-   end
+    task :migrations do
+      on primary(:web) do
+        run "cd #{current_path}; RAILS_ENV=#{rails_env} bundle exec rake cequel:migrate"
+      end
+    end
   end
 
   before :starting,     :check_revision
