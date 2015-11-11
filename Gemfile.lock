@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/seuros/capistrano-puma.git
+  revision: c1d705db52a99f5222503038865d8c6c0a23530e
+  branch: master
+  specs:
+    capistrano3-puma (1.2.2)
+      capistrano (~> 3.0)
+      puma (>= 2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -71,9 +80,6 @@ GEM
     capistrano-sidekiq (0.5.4)
       capistrano
       sidekiq (>= 3.4)
-    capistrano3-puma (1.2.1)
-      capistrano (~> 3.0)
-      puma (>= 2.6)
     cassandra-driver (2.1.5)
       ione (~> 1.2)
     celluloid (0.17.2)
@@ -418,7 +424,7 @@ DEPENDENCIES
   capistrano-figaro-yml (~> 1.0.2)
   capistrano-rails (~> 1.1)
   capistrano-sidekiq
-  capistrano3-puma
+  capistrano3-puma!
   cequel
   coffee-rails (~> 4.1.0)
   devise
