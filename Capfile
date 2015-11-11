@@ -12,7 +12,6 @@ require 'capistrano/bundler'
 require 'capistrano/puma'
 require 'capistrano/puma/nginx'
 require 'capistrano/puma/workers'
-require 'capistrano/puma/monit'
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'
 
