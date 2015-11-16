@@ -12,6 +12,23 @@ print "######################################################################\n"
 proceed = STDIN.gets[0..0] rescue nil
 exit unless proceed == 'y'
 
+
+server 'web01.sg-sl.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
+
+set :puma_threads,    [1, 16]
+set :puma_workers,    8
+set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
+set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
+set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
+set :puma_access_log, "#{release_path}/log/puma.error.log"
+set :puma_error_log,  "#{release_path}/log/puma.access.log"
+set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+set :puma_preload_app, true
+set :puma_worker_timeout, nil
+set :puma_init_active_record, true
+
+
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.

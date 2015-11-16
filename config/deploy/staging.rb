@@ -7,9 +7,8 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-server 'staging.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
+server 'app.staging.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
 
-set :user,            'username'
 set :puma_threads,    [1, 6]
 set :puma_workers,    8
 set :puma_bind,       "unix://#{shared_path}/tmp/sockets/#{fetch(:application)}-puma.sock"
