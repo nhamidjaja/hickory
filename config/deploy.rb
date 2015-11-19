@@ -78,6 +78,8 @@ namespace :deploy do
 
   desc 'Initial Deploy'
   task :initial do
+    before 'deploy:finishing', 'deploy:cequel:setup'
+
     on roles(:app) do
       before 'deploy:restart', 'puma:start'
       invoke 'deploy'
