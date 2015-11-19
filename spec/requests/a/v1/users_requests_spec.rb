@@ -143,8 +143,8 @@ RSpec.describe 'Users API', type: :request do
         end
 
         context 'multiple faves' do
-          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.months) }
-          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.weeks) }
+          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.month) }
+          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.week) }
           let(:newest_id) { Cequel.uuid(Time.zone.now) }
           before do
             CUserFave.delete_all

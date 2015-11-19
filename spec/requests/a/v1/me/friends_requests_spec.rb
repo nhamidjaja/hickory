@@ -103,8 +103,8 @@ RSpec.describe 'Friends API', type: :request do
         end
 
         context 'many friends' do
-          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.months) }
-          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.weeks) }
+          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.month) }
+          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.week) }
           let(:newest_id) { Cequel.uuid(Time.zone.now) }
 
           before do

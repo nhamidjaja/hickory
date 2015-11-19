@@ -40,7 +40,9 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     it do
-      expect(GetFriendsFromFacebookWorker).to receive(:perform_async).with(kind_of(String))
+      expect(GetFriendsFromFacebookWorker)
+        .to receive(:perform_async)
+        .with(kind_of(String))
       post :create, user: FactoryGirl.attributes_for(:user)
     end
   end

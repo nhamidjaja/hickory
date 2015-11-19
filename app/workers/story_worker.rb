@@ -3,7 +3,7 @@ class StoryWorker
 
   # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
   def perform(user_id, target_id,
-    fave_id, content_url, title, image_url, published_at, faved_at)
+              fave_id, content_url, title, image_url, published_at, faved_at)
     c_user = CUser.new(id: user_id)
     id = Cequel.uuid(fave_id)
 
