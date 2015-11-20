@@ -10,7 +10,7 @@ module A
 
         begin
           user.save!
-          UserMailer.welcome(user).deliver_later
+          after_registration(user)
           sign_in_and_render(user)
         rescue ActiveRecord::RecordInvalid => e
           warden.custom_failure!
@@ -42,6 +42,11 @@ module A
       def sign_in_and_render(user)
         sign_in user, store: false
         render 'facebook', status: 201
+      end
+
+      def after_registration(user)
+        UserMailer.welcome(user).deliver_later
+        GetFriendsFromFacebookWorker.perform_async(user.id.to_s)
       end
     end
   end

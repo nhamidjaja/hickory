@@ -5,7 +5,7 @@
 ## Rails
 
 
-Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Control pattern.
+Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller pattern.
 
 Follow the guidelines to start developing your application. You can find
 the following resources handy:
@@ -18,14 +18,13 @@ the following resources handy:
 
 ## Installing Rails
 
+### Prerequisites
 
+- Homebrew <http://mxcl.github.io/homebrew> for easy installations of libraries.
+- Ruby Version Manager (RVM) <https://rvm.io/>, use this guide to install RVM <http://www.stewgleadow.com/blog/2011/12/10/installing-rvm-on-os-x-lion/>.
+- git flow <http://danielkummer.github.io/git-flow-cheatsheet/>, a workflow/branching model for development teams.
 
-For Mac OS X I recommend you to use [Homebrew](http://mxcl.github.io/homebrew/) for package manager.
-
-And use [Ruby Version Manager](https://rvm.io/), and here's the [link](http://www.stewgleadow.com/blog/2011/12/10/installing-rvm-on-os-x-lion/) to install it on Mac.
-
-
-Make sure you have the latest update from 'brew'
+Make sure you have the latest update from **brew**:
 
 ```
 $ brew update
@@ -34,28 +33,26 @@ $ cd hickory // the PROJECT DIRECTORY
 $ git checkout develop // cause we use git flow
 ```
 
-*More about [git flow](http://nvie.com/posts/a-successful-git-branching-model/)*
-
-
-Now that the gemset is set, run this
+Now that the Rails gemset is initialized, run:
 
 ```
 $ echo gem: --no-ri --no-rdoc > ~/.gemrc  // this option is to skip gem docs
 $ bundle install  // this will install the gems
 ```
 
-Next, copy config/create database.yml and other configurations. Don't worry we have a template
+Next, copy **config/database.yml** and other configurations with the provided templates:
 
 ```
 $ cp config/database.example.yml config/database.yml
+$ cp config/shards.example.yml config/shards.yml // For database replication using Octopus
 $ cp config/cequel.example.yml config/cequel.yml  // ORM for Cassandra
-$ cp config/application.example.yml config/application.yml
+$ cp config/application.example.yml config/application.yml  // App configuration using Figaro
 ```
 And adjust the config if needed.
 
 #### PostgreSQL
 
-Install and run **mysql**, with brew:
+Install and run **postgres**, with brew:
 
 ```
 $ brew install postgres
@@ -76,12 +73,12 @@ Follow the instructions to start postgres.
 Install and run **cassandra** with brew by following this guide <http://christopher-batey.blogspot.com/2013/05/installing-cassandra-on-mac-os-x.html>
 
 #### Run test suite
-To verify that everything works run the test suite:
+To verify that everything works as expected, run the test suite:
 
 ```
 $ rake db:create
 $ rake db:migrate
-$ rake db:test:prepare   // sync test database with development database
+$ rake db:test:prepare   // sync test environment database with development database
 $ rake cequel:keyspace:create
 $ rake cequel:keyspace:create RAILS_ENV=test
 $ rake cequel:migrate
@@ -92,6 +89,15 @@ Finished in 0.70621 seconds (files took 2.23 seconds to load)
 47 examples, 0 failures, 9 pending
 ```
 Verify that you have **0 failures**.
+
+#### Start sidekiq workers
+
+Sidekiq <http://sidekiq.org> is a simple, efficient background processor to handle asynchronous tasks
+
+
+```
+$ sidekiq -C config/sidekiq.yml
+```
 
 #### Run rails server
 
@@ -144,6 +150,46 @@ Again, verify that you have **0 failures**.
 #### Submitting
 Once you have completed, create a **merge request** through the git repository dashboard.
 
+
+***
+
+## Seeding Data
+
+First, take a look at the **db/seeds.rb** file to review the data that will be generated. Next, run the following command to execute the file.
+
+```
+$ rake db:seed
+```
+
+### Top Articles / Content
+
+To refresh articles from the list of RSS feeds, `Feeder`:
+
+```
+$ rake feeder:refresh
+```
+
+### Stories
+
+To generate articles shared by friends, `Story`:
+
+```
+$ rake stories:seed
+```
+
+Follow the prompts on screen.
+
+### Friends
+
+To generate friends, `Friend`:
+
+```
+$ rake friends:seed
+```
+
+Follow the prompts on screen.
+
+
 ***
 
 ## Updating dependencies
@@ -166,7 +212,14 @@ $ rspec
 ### If *rails* is out-of-date:
 
 Go to <http://railsdiff.com> to track the required changes.
-Modify source code with the changes, for example if upgrading to Rails 4.2.3:
+Modify source code with the changes, for example if upgrading from Rails 4.2.2 to 4.2.3:
+
+```
+# RailsDiff
+-gem 'rails', '4.2.2'
++gem 'rails', '4.2.3'
+```
+Update Gemfile:
 
 ```
 # Gemfile
@@ -180,7 +233,7 @@ Use bundler to update rails:
 $ bundle update rails
 ```
 
-Verify that it hasn't caused breaking changes:
+Again, verify that it hasn't caused breaking changes:
 
 ```
 $ rspec

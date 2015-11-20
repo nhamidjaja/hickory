@@ -12,7 +12,7 @@ module Hickory
     config.autoload_paths << "#{config.root}/app/src"
     
     config.active_record.schema_format = :sql   # Use sql for uuid id support
-    config.secret_key_base = Figaro.env.secret_key_base
+    config.secret_key_base = Figaro.env.secret_key_base!
 
     config.active_job.queue_adapter = :sidekiq
 

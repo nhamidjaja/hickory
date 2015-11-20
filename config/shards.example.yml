@@ -1,0 +1,27 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  host: localhost
+
+octopus:
+  replicated: true
+  environments:
+    - development
+    - staging
+    - production
+  development:
+    slave01:
+      <<: *default
+      database: hickory-development
+  staging:
+    slave01:
+      <<: *default
+      database: hickory-staging
+  production:
+    slave01:
+      host: localhost
+      encoding: utf8
+      adapter: postgresql
+      database: hickory
+      username: <%= Figaro.env.pg_username! %>
+      password: <%= Figaro.env.pg_password! %>

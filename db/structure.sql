@@ -65,6 +65,17 @@ CREATE TABLE admins (
 
 
 --
+-- Name: featured_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE featured_users (
+    user_id uuid NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
 -- Name: feeders; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -140,6 +151,14 @@ CREATE TABLE users (
 
 ALTER TABLE ONLY admins
     ADD CONSTRAINT admins_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: featured_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY featured_users
+    ADD CONSTRAINT featured_users_pkey PRIMARY KEY (user_id);
 
 
 --
@@ -275,4 +294,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150720120110');
 INSERT INTO schema_migrations (version) VALUES ('20150804064421');
 
 INSERT INTO schema_migrations (version) VALUES ('20150804064601');
+
+INSERT INTO schema_migrations (version) VALUES ('20150926084547');
 

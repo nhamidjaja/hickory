@@ -35,6 +35,10 @@ RSpec.describe 'Fave API', type: :request do
         expect(Story.count).to eq(0)
         expect(user.in_cassandra.followers.count).to eq(3)
 
+        # Workaround to assert counter increment
+        expect_any_instance_of(Cequel::Metal::DataSet).to receive(:increment)
+          .with(faves: 1)
+
         expect do
           get '/a/v1/fave?url=http://example.com/hello?source=xyz',
               nil,
@@ -44,8 +48,6 @@ RSpec.describe 'Fave API', type: :request do
 
         expect(response.status).to eq(200)
 
-        expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014'].faves)
-          .to eq(1)
         expect(Story.count).to eq(3)
       end
     end

@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook]
 
+  has_one :featured_user
+
   validates :username,
             uniqueness: true,
             format: { with: /\A[a-z0-9_.]{2,30}\z/ }
@@ -18,6 +20,14 @@ class User < ActiveRecord::Base
                   using: {
                     tsearch: { prefix: true }
                   }
+
+  # Setters
+
+  def username=(value)
+    self[:username] = value.downcase
+  end
+
+  # Custom methods
 
   def self.from_third_party_auth(auth)
     user = find_by_email(auth.email) ||

@@ -2,12 +2,14 @@ require 'rails_helper'
 
 RSpec.describe 'Profile API', type: :request do
   before do
-    FactoryGirl.create(:user,
-                       email: 'a@user.com',
-                       username: 'my_user',
-                       full_name: 'My User',
-                       description: 'My Description',
-                       authentication_token: 'validtoken')
+    FactoryGirl.create(
+      :user,
+      id: '4f16d362-a336-4b12-a133-4b8e39be7f8a',
+      email: 'a@user.com',
+      username: 'my_user',
+      full_name: 'My User',
+      description: 'My Description',
+      authentication_token: 'validtoken')
   end
 
   describe 'authentication' do
@@ -68,22 +70,24 @@ RSpec.describe 'Profile API', type: :request do
 
     context 'authorized' do
       context 'token already saved' do
-        before do
+        it 'returns current user' do
           get '/a/v1/me/profile',
               nil,
               'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
-        end
 
-        it 'returns current user' do
           expect(request.env['devise.skip_trackable']).to eq(true)
           expect(response.status).to eq(200)
 
-          expect(json['user']['id']).to_not be_blank
-          expect(json['user']['email']).to eq('a@user.com')
+          expect(json['user']['id'])
+            .to eq('4f16d362-a336-4b12-a133-4b8e39be7f8a')
           expect(json['user']['username']).to eq('my_user')
           expect(json['user']['full_name']).to eq('My User')
           expect(json['user']['description']).to eq('My Description')
+          expect(json['user']['recent_faves']).to eq([])
+          expect(json['user']['faves_count']).to eq(0)
+          expect(json['user']['followers_count']).to eq(0)
+          expect(json['user']['followings_count']).to eq(0)
         end
       end
     end

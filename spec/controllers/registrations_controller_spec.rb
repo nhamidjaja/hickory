@@ -31,10 +31,19 @@ RSpec.describe RegistrationsController, type: :controller do
   describe 'POST #create' do
     it 'sends email' do
       Sidekiq::Testing.inline! do
+        expect(GetFriendsFromFacebookWorker).to receive(:perform_async)
+
         expect do
           post :create, user: FactoryGirl.attributes_for(:user)
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
+    end
+
+    it do
+      expect(GetFriendsFromFacebookWorker)
+        .to receive(:perform_async)
+        .with(kind_of(String))
+      post :create, user: FactoryGirl.attributes_for(:user)
     end
   end
 end

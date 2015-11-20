@@ -6,8 +6,8 @@ javascript:
     
 - if current_user
   javascript:
-    ga('create', '#{Figaro.env.google_analytics_tracking_id}', { 'userId': '#{current_user.id.to_s}' });
+    ga('create', '#{Figaro.env.google_analytics_tracking_id!}', { 'userId': '#{current_user.id.to_s}' });
 - else
   javascript:
-    ga('create', '#{Figaro.env.google_analytics_tracking_id}', 'auto');
+    ga('create', '#{Figaro.env.google_analytics_tracking_id!}', 'auto');
     

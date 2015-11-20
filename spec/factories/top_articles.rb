@@ -4,6 +4,6 @@ FactoryGirl.define do
     association :feeder, factory: :feeder, strategy: :build
     title { Faker::Lorem.sentence }
     image_url { Faker::Internet.url }
-    published_at { Faker::Date.between(1.days.ago, Time.zone.today) }
+    published_at { Faker::Date.between(1.day.ago, Time.zone.today) }
   end
 end

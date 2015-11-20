@@ -2,8 +2,8 @@
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
   config.omniauth :facebook,
-    Figaro.env.facebook_app_id,
-    Figaro.env.facebook_app_secret,
+    Figaro.env.facebook_app_id!,
+    Figaro.env.facebook_app_secret!,
     { scope: 'email,user_friends' }
   config.scoped_views = true
 

@@ -2,7 +2,10 @@ class RegistrationsController < Devise::RegistrationsController
   def create
     super
 
-    UserMailer.welcome(resource).deliver_later if resource.persisted?
+    return unless resource.persisted?
+
+    UserMailer.welcome(resource).deliver_later
+    GetFriendsFromFacebookWorker.perform_async(resource.id.to_s)
   end
 
   private

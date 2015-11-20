@@ -2,7 +2,11 @@ module A
   module V1
     module Me
       class ProfileController < A::V1::ApplicationController
-        def index; end
+        def index
+          @user = current_user
+          @recent_faves = @user.faves(nil, 20)
+          render 'a/v1/users/show.json'
+        end
 
         def create
           @user = current_user
