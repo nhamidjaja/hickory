@@ -16,6 +16,8 @@ require 'capistrano/puma/jungle'
 require 'capistrano/sidekiq'
 require 'capistrano/sidekiq/monit'
 
+require 'whenever/capistrano'
+
 
 # Include tasks from other gems included in your Gemfile
 #
