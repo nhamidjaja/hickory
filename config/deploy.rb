@@ -4,6 +4,9 @@ lock '3.4.0'
 set :application, 'hickory'
 set :repo_url, 'git@gitlab.com:nhamidjaja/hickory.git'
 
+# whenever crontab
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+
 # https://github.com/seuros/capistrano-sidekiq/issues/49
 # ERROR: no tty present and no askpass program specified
 set :sidekiq_monit_default_hooks, false
