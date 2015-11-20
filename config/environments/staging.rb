@@ -7,17 +7,17 @@ Rails.application.configure do
     address:              'smtp.mandrillapp.com',
     port:                 587,
     user_name:            'nhamidjaja@gmail.com',
-    password:             'ivaWYbhpFP7atiqcH9vE0w',
+    password:             'vJwhyENORED6SuTCSoNhlQ',
     authentication:       :plain,
     enable_starttls_auto: true,
     }
-  config.action_mailer.default_url_options = { host: 'app.readflyer.com' }
+  config.action_mailer.default_url_options = { host: 'app.staging.readflyer.com' }
 
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
   ##### End custom config ######
 
-  # Code is not reloaded between requests.
+   # Code is not reloaded between requests.
   config.cache_classes = true
 
   # Eager load code on boot. This eager loads most of Rails and

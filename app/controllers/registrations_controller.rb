@@ -5,7 +5,7 @@ class RegistrationsController < Devise::RegistrationsController
     return unless resource.persisted?
 
     UserMailer.welcome(resource).deliver_later
-    GetFriendsFromFacebookWorker.perform_async(resource)
+    GetFriendsFromFacebookWorker.perform_async(resource.id.to_s)
   end
 
   private

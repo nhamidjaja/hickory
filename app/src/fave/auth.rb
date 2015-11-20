@@ -5,7 +5,7 @@ module Fave
     attr_reader :email, :uid, :provider, :token, :full_name
 
     def initialize(user_email, user_provider, user_uid, user_token,
-      user_full_name = nil)
+                   user_full_name = nil)
 
       @email = user_email
       @provider = user_provider

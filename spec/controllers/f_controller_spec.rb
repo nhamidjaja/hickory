@@ -14,7 +14,8 @@ RSpec.describe FController, type: :controller do
         expect(FaveWorker).to receive(:perform_async)
           .with(
             current_user.id.to_s,
-            'http://example.com/hello?source=xyz'
+            'http://example.com/hello?source=xyz',
+            kind_of(String)
           ).once
 
         get :index, url: 'http://example.com/hello?source=xyz'
