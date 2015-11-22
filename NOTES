@@ -1,0 +1,11 @@
+[1.0.2]
+Sun Nov 22 17:46:23 WIB 2015
+- Fix capistrano binstub conflict
+
+[1.0.1]
+Fri Nov 20 16:33:52 WIB 2015
+- Capistrano integration for whenever crontab
+
+[1.0.0]
+Fri Nov 20 12:15:27 WIB 2015
+- Initial release
