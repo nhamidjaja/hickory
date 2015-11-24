@@ -6,7 +6,7 @@ local: &local
   pg_password: ''
   cass_username: ''
   cass_password: ''
-
+  redis_host: localhost
 
 development:
   <<: *local
