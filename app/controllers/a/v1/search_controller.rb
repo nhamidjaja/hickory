@@ -7,7 +7,7 @@ module A
         @users = []
         return unless params[:query]
 
-        @users = User.search_by_username(params[:query]).take(10)
+        @users = User.search(params[:query]).take(10)
       end
     end
   end

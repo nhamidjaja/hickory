@@ -141,7 +141,8 @@ CREATE TABLE users (
     omniauth_token character varying,
     authentication_token character varying,
     description text,
-    full_name character varying
+    full_name character varying,
+    tsv tsvector
 );
 
 
@@ -242,6 +243,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (re
 
 
 --
+-- Name: index_users_on_tsv; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_users_on_tsv ON users USING gist (tsv);
+
+
+--
 -- Name: index_users_on_username; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -253,6 +261,13 @@ CREATE UNIQUE INDEX index_users_on_username ON users USING btree (username);
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv', 'pg_catalog.simple', 'username', 'full_name');
 
 
 --
@@ -296,4 +311,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150804064421');
 INSERT INTO schema_migrations (version) VALUES ('20150804064601');
 
 INSERT INTO schema_migrations (version) VALUES ('20150926084547');
+
+INSERT INTO schema_migrations (version) VALUES ('20151125082134');
 

@@ -27,7 +27,7 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true
 
-
+before :starting,     :check_revision
 
 # server-based syntax
 # ======================
