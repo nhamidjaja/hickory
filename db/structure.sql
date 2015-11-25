@@ -215,13 +215,6 @@ CREATE INDEX index_top_articles_on_published_at ON top_articles USING btree (pub
 
 
 --
--- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -313,4 +306,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150804064601');
 INSERT INTO schema_migrations (version) VALUES ('20150926084547');
 
 INSERT INTO schema_migrations (version) VALUES ('20151125082134');
+
+INSERT INTO schema_migrations (version) VALUES ('20151125164633');
 
