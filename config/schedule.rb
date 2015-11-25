@@ -1,4 +1,6 @@
-every :day, at: '10:00pm' do
+# Remember to test with `whenever` command after any changes
+
+every :hour do
   rake 'feeder:refresh'
 end
 
