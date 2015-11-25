@@ -6,9 +6,8 @@ print "#                      |  _| | | |_| |  __/ |                        #\n"
 print "#                      |_|   |_|\\__, |\\___|_|                        #\n"
 print "#                               |___/                                #\n"
 print "#                                                                    #\n"
-print "#       Are you REALLY sure you want to deploy to production?        #\n"
-print "#               Enter y/N + enter to continue                        #\n"
 print "######################################################################\n"
+print "Are you sure you want to deploy to production (y/N)? "
 proceed = STDIN.gets[0..0] rescue nil
 exit unless proceed == 'y'
 
