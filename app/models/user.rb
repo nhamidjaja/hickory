@@ -15,8 +15,8 @@ class User < ActiveRecord::Base
 
   before_save :ensure_authentication_token
 
-  pg_search_scope :search_by_username,
-                  against: :username,
+  pg_search_scope :search,
+                  against: [:username, :full_name],
                   using: {
                     tsearch: { prefix: true }
                   }

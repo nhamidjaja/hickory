@@ -11,18 +11,19 @@ RSpec.describe 'Search API', type: :request do
   end
 
   context 'authorized' do
-    context 'search user by their username' do
-      before do
-        FactoryGirl.create(:user,
-                           email: 'a@user.com',
-                           username: 'user1',
-                           authentication_token: 'validtoken')
-      end
+    before do
+      FactoryGirl.create(:user,
+                         email: 'a@user.com',
+                         username: 'user1',
+                         full_name: '',
+                         authentication_token: 'validtoken')
+    end
 
+    describe 'search User by username' do
       context 'blank query' do
         it 'is empty' do
           # Do not do a database query when there is no input
-          expect(User).to_not receive(:search_by_username)
+          expect(User).to_not receive(:search)
 
           get '/a/v1/search',
               nil,
@@ -85,6 +86,19 @@ RSpec.describe 'Search API', type: :request do
             expect(json['users'].size).to eq(10)
           end
         end
+      end
+    end
+
+    describe 'search User by full_name' do
+      it 'partial matches' do
+        FactoryGirl.create(:user,
+                           username: 'ab',
+                           full_name: 'john'
+                          )
+        get '/a/v1/search?query=jo',
+            nil,
+            'X-Email' => 'a@user.com',
+            'X-Auth-Token' => 'validtoken'
       end
     end
   end

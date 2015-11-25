@@ -49,8 +49,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#search_by_username' do
-    it { expect(User).to respond_to(:search_by_username) }
+  describe '#search' do
+    it { expect(User).to respond_to(:search) }
   end
 
   describe '#from_third_party_auth' do
