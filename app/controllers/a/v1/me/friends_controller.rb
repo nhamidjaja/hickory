@@ -7,10 +7,10 @@ module A
 
           return if params[:last_id]
 
-          featured_user = FeaturedUser.order('RANDOM()').first
-          return unless featured_user
+          featured = FeaturedUser.select(:user_id).order('RANDOM()').limit(3).to_a
+          converted = featured.map{ |f| Friend.new(id: f.user_id.to_s) }
 
-          @friends.unshift(Friend.new(id: featured_user.user_id.to_s))
+          @friends.unshift(*converted)
         end
 
         private

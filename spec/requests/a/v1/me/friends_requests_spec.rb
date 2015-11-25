@@ -185,6 +185,30 @@ RSpec.describe 'Friends API', type: :request do
             end
           end
         end
+
+        context 'many featured users' do
+          before do
+            6.times do |i|
+              FactoryGirl.create(
+                :featured_user,
+                user: FactoryGirl.create(
+                  :user,
+                  username: "xyz#{i.to_s}"
+                  )
+                )
+            end
+          end
+
+          it 'is limited to 3' do
+            get '/a/v1/me/friends',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['friends'].size).to eq(3)
+          end
+        end
       end
     end
   end
