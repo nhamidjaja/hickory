@@ -76,7 +76,7 @@ namespace :deploy do
       unless `git rev-parse HEAD` == `git rev-parse origin/master`
         print "WARNING: HEAD is not the same as origin/master\n"
         print "Run `git push` to sync changes.\n"
-        print "Enter y if you wish to continue: "
+        print "Are you sure you want to continue (y/N)? "
         proceed = STDIN.gets[0..0] rescue nil
         exit unless proceed == 'y'
       end
