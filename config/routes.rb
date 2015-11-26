@@ -1,7 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  root to: 'home#index'
+  root :to => redirect('http://readflyer.com?ref=flyerwebapp')
   
   scope '/z' do
     devise_for :admins, skip: :registrations
