@@ -193,9 +193,9 @@ RSpec.describe 'Friends API', type: :request do
                 :featured_user,
                 user: FactoryGirl.create(
                   :user,
-                  username: "xyz#{i.to_s}"
-                  )
+                  username: "xyz#{i}"
                 )
+              )
             end
           end
 
