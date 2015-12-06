@@ -1,6 +1,7 @@
 class FController < ApplicationController
   before_action :authenticate_user!
 
+  # rubocop:disable Metrics/AbcSize
   def index
     FaveWorker.perform_async(
       current_user.id.to_s,
@@ -9,7 +10,7 @@ class FController < ApplicationController
       params[:title],
       params[:image_url],
       params[:published_at]
-      )
+    )
 
     render layout: false
   end

@@ -22,10 +22,10 @@ RSpec.describe FController, type: :controller do
           ).once
 
         get :index,
-          url: 'http://example.com/hello?source=xyz',
-          title: 'Something headline',
-          image_url: 'https://a.com/b.jpg',
-          published_at: '2015-12-06 16:35:02 +0700'
+            url: 'http://example.com/hello?source=xyz',
+            title: 'Something headline',
+            image_url: 'https://a.com/b.jpg',
+            published_at: '2015-12-06 16:35:02 +0700'
       end
     end
   end
