@@ -15,10 +15,17 @@ RSpec.describe FController, type: :controller do
           .with(
             current_user.id.to_s,
             'http://example.com/hello?source=xyz',
-            kind_of(String)
+            kind_of(String),
+            'Something headline',
+            'https://a.com/b.jpg',
+            '2015-12-06 16:35:02 +0700'
           ).once
 
-        get :index, url: 'http://example.com/hello?source=xyz'
+        get :index,
+          url: 'http://example.com/hello?source=xyz',
+          title: 'Something headline',
+          image_url: 'https://a.com/b.jpg',
+          published_at: '2015-12-06 16:35:02 +0700'
       end
     end
   end
