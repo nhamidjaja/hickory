@@ -14,4 +14,13 @@ class FController < ApplicationController
 
     render layout: false
   end
+
+  def preview
+    @content = Content.new(
+      url: params[:url],
+      title: params[:title],
+      image_url: params[:image_url],
+      published_at: params[:published_at]
+    )
+  end
 end

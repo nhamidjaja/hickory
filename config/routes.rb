@@ -1,27 +1,29 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  root :to => redirect('http://readflyer.com?ref=flyerwebapp')
-  
+  root to: redirect('http://readflyer.com?ref=flyerwebapp')
+
   scope '/z' do
     devise_for :admins, skip: :registrations
 
     authenticate :admin do
-      mount Sidekiq::Web => "/sidekiq"
+      mount Sidekiq::Web => '/sidekiq'
       mount RailsAdmin::Engine => '/', as: 'rails_admin'
     end
   end
-  
 
   devise_for :users, controllers: { registrations: 'registrations',
                                     omniauth_callbacks: 'omniauth_callbacks' }
 
-
-  resources :f, only: [ :index ]
+  resources :f, only: [:index] do
+    collection do
+      get 'preview'
+    end
+  end
 
   namespace :a, constraints: { format: :json }, defaults: { format: :json } do
     namespace :v1 do
-      resources :users, only: [ :show ] do
+      resources :users, only: [:show] do
         member do
           get 'faves'
           get 'follow'
@@ -30,15 +32,15 @@ Rails.application.routes.draw do
       end
 
       namespace :me do
-        resources :profile, only: [ :index, :create ]
-        resources :fave_urls, only: [ :index ]
-        resources :stories, only: [ :index ]
-        resources :friends, only: [ :index ]
+        resources :profile, only: [:index, :create]
+        resources :fave_urls, only: [:index]
+        resources :stories, only: [:index]
+        resources :friends, only: [:index]
       end
 
-      resources :top_articles, only: [ :index ]
-      resources :search, only: [ :index ]
-      resources :fave, only: [ :index ]
+      resources :top_articles, only: [:index]
+      resources :search, only: [:index]
+      resources :fave, only: [:index]
 
       resources :sessions, only: [] do
         collection do
@@ -52,7 +54,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
