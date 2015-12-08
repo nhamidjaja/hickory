@@ -49,6 +49,14 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.description' do
+    describe 'getter' do
+      it do
+        expect(FactoryGirl.build(:user, description: nil).description).to eq('')
+      end
+    end
+  end
+
   describe '#search' do
     it { expect(User).to respond_to(:search) }
   end
