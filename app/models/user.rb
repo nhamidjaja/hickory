@@ -27,6 +27,10 @@ class User < ActiveRecord::Base
     self[:username] = value.downcase
   end
 
+  def description
+    self[:description] || ''
+  end
+
   # Custom methods
 
   def self.from_third_party_auth(auth)
