@@ -1,5 +1,6 @@
 # Fave Web Widget
-## API
+Placing a fave widget on your site is as easy as placing a hyperlink using an `<a>` tag. The `href` attribute will need to be inserted programmatically along with the endpoint and the following query parameters:
+
 ### Endpoint
 GET http://app.readflyer.com/f
 
@@ -15,8 +16,64 @@ GET http://app.readflyer.com/f
 
 http://app.readflyer.com/f?url=http://example.com/xyz&title=Something%20Crazy%20Going%20On&image_url=http://example.com/pic.jpg
 
+### Button Styling
+We do not have a strict styling requirement. We prefer for you to prepare a design that suits your web page's overall UI, but we do ask you to include our logo and the text **Fave** in the button. If you require graphical assets such as logos for a customized design, feel free to contact us and we will provide it for you.
+
+If you wish to use our default styling it is available as such:
+
+<div style="width: 90px; margin: 0 0 15px 0;">
+<style>
+.btn-fave {
+  -webkit-border-radius: 3; -moz-border-radius: 3; border-radius: 3px; font-family: Helvetica Neue; color: #ffffff; font-size: 11px; font-weight: bold; background: #f59930; padding: 3px 10px 0px 10px; text-decoration: none;
+}
+.btn-fave:hover {
+  background: #ea8a20; text-decoration: none;
+}
+.btn-fave img{
+  padding-right: 3px; height: 18px;
+}
+.btn-fave span{
+  font-size: 18px;
+}
+</style>
+  <a href="http://app.readflyer.com">
+    <div class="btn-fave"><img src="./flyer-base-flat-01.svg" />
+      <span>
+        Fave
+      </span>
+    </div>
+  </a>
+</div>
+
+```
+  <style>
+  .btn-fave {
+    -webkit-border-radius: 3; -moz-border-radius: 3; border-radius: 3px; font-family: Helvetica Neue; color: #ffffff; font-size: 11px; font-weight: bold; background: #f59930; padding: 3px 10px 0px 10px; text-decoration: none;
+  }
+  .btn-fave:hover {
+    background: #ea8a20; text-decoration: none;
+  }
+  .btn-fave img{
+    padding-right: 3px; height: 18px;
+  }
+  .btn-fave span{
+    font-size: 18px;
+  }
+  </style>
+  
+  <div style="width: 90px; margin: 0 0 15px 0;">
+    <a href="http://app.readflyer.com">
+      <div class="btn-fave"><img src="./flyer-base-flat-01.svg" />
+        <span>
+          Fave
+        </span>
+      </div>
+    </a>
+  </div>
+```
 
 ## Testing
+You can test out what a fave will look like by going to the following URL using your web browser:
 ### Web Preview Endpoint
 GET http://app.readflyer.com/f/preview
 
