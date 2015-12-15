@@ -23,7 +23,7 @@ http://app.readflyer.com/f?url=http://example.com/xyz&title=Something%20Crazy%20
 ### Button Styling
 We do not have a strict styling requirement. We prefer for you to prepare a design that suits your web page's overall UI, but we do ask you to include our logo and the text **Fave** in the button. If you require graphical assets such as logos for a customized design, feel free to contact us and we will provide it for you.
 
-If you wish to use our default styling it is available as such:
+If you wish to use our default styling it is available below. However, at the moment, we ask that you host the logo on your web server for better performance.
 
 <div style="width: 90px; margin: 0 0 15px 0;">
 <style>
