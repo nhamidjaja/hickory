@@ -1,4 +1,8 @@
 # Fave Web Widget
+## Introduction
+A fave web widget allows a user to easily share articles they find interesting to their followers. With one click, all of the user's followers will be able to read the same articles that the original user is reading. Theoretically the better your content, the more viral it becomes.
+
+## How?
 Placing a fave widget on your site is as easy as placing a hyperlink using an `<a>` tag. The `href` attribute will need to be inserted programmatically along with the endpoint and the following query parameters:
 
 ### Endpoint
