@@ -2,6 +2,7 @@
   .row
     .col-sm-12
       .project-item
+          h4 = current_user.username
           = link_to @content.url do |l|
             = image_tag @content.image_url, { style: 'width: 100%;' }
             h1 = @content.title || @content.url
