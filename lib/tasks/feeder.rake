@@ -1,5 +1,7 @@
 namespace :feeder do
   task refresh: :environment do
+    Rake::Task['feeder:refresh'].reenable
+    
     print "Clearing pull_feed queue\n"
     Sidekiq::Queue.new('pull_feed').clear
 
