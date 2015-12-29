@@ -4,7 +4,8 @@ class FaveWorker
   # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
   def perform(user_id, url, faved_time,
               title = nil, image_url = nil, published_at = nil)
-    content = get_content(url, title, image_url, published_at)
+    canon_url = Fave::Url.new(url).canon
+    content = get_content(canon_url, title, image_url, published_at)
     faver = CUser.new(id: user_id)
     faved_at = Time.zone.parse(faved_time).utc
     fave = faver.fave(content, faved_at)
