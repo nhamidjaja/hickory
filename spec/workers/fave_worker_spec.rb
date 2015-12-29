@@ -53,6 +53,13 @@ RSpec.describe FaveWorker do
         allow(c_user).to receive(:fave).and_return(fave)
       end
 
+      it 'finds with canon url' do
+        expect(Content).to receive(:find_or_initialize_by)
+          .with(url: 'http://example.com/hello')
+
+        subject
+      end
+
       it 'faves' do
         expect(c_user).to receive(:fave)
           .with(content, faved_at)
