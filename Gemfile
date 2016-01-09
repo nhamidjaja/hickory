@@ -75,7 +75,6 @@ gem 'newrelic_rpm'
 
 # Facebook Graph API wrapper
 gem 'fb_graph2'
-gem 'koala'
 
 # RSS parser
 gem 'feedjira'
