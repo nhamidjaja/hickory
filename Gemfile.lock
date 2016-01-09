@@ -45,6 +45,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     ar-octopus (0.8.5)
       activerecord (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -175,6 +176,10 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    koala (2.2.0)
+      addressable
+      faraday
+      multi_json
     listen (3.0.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -414,6 +419,7 @@ DEPENDENCIES
   guard-sidekiq
   jbuilder (~> 2.0)
   jquery-rails
+  koala
   newrelic_rpm
   nprogress-rails
   omniauth
