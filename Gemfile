@@ -34,6 +34,8 @@ gem 'capistrano-sidekiq', group: :development, require: false
 # App server
 gem 'puma'
 
+gem 'rack-timeout'
+
 # UI
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
