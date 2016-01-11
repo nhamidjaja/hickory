@@ -34,6 +34,8 @@ gem 'capistrano-sidekiq', group: :development, require: false
 # App server
 gem 'puma'
 
+gem 'rack-timeout'
+
 # UI
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
@@ -75,7 +77,6 @@ gem 'newrelic_rpm'
 
 # Facebook Graph API wrapper
 gem 'fb_graph2'
-gem 'koala'
 
 # RSS parser
 gem 'feedjira'
