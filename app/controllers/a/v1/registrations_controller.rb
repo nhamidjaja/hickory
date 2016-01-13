@@ -2,7 +2,6 @@ module A
   module V1
     class RegistrationsController < A::V1::ApplicationController
       skip_before_action :authenticate_user_from_token!
-      rescue_from FbGraph2::Exception::InvalidToken, with: :render_unauthorized
 
       def facebook
         token = grab_facebook_token!
@@ -32,9 +31,16 @@ module A
       end
 
       def fetch_user_from_facebook(token)
-        fb_user = FbGraph2::User.me(token).fetch
+        graph = Koala::Facebook::API.new(token, Figaro.env.facebook_app_secret!)
+
+        begin
+          fb_user = graph.get_object('me')
+        rescue Koala::Facebook::APIError => e
+          raise(Errors::NotAuthorized, e.message)
+        end
+
         user = User.new(user_params)
-        user.apply_third_party_auth(Fave::Auth.from_facebook(fb_user))
+        user.apply_third_party_auth(Fave::Auth.from_koala(fb_user, token))
 
         user
       end

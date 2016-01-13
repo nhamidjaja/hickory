@@ -14,9 +14,15 @@ RSpec.describe 'User Registrations API', type: :request do
 
     context 'with invalid token' do
       before do
-        expect_any_instance_of(FbGraph2::User)
-          .to receive(:fetch)
-          .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid token')
+        double = instance_double('Koala::Facebook::API')
+        expect(Koala::Facebook::API)
+          .to receive(:new)
+          .with('invalid-token', kind_of(String))
+          .and_return(double)
+
+        expect(double)
+          .to receive(:get_object)
+          .and_raise(Koala::Facebook::APIError.new(401, 'Invalid token'))
       end
 
       it 'is unauthorized' do
@@ -30,24 +36,30 @@ RSpec.describe 'User Registrations API', type: :request do
     end
 
     context 'valid token' do
-      let(:fb_user) do
-        instance_double(
-          'FbGraph2::User',
-          email: 'new@email.com',
-          id: 'x123',
-          access_token: 'fb-token',
-          name: 'John Doe',
-          friends: []
-        )
+      let(:koala) do
+        instance_double('Koala::Facebook::API')
       end
 
       before do
-        allow(FbGraph2::User).to receive(:me)
-          .with('fb-token')
+        expect(Koala::Facebook::API)
+          .to receive(:new)
+          .at_least(:once)
+          .with('fb-token', kind_of(String))
+          .and_return(koala)
+
+        fb_user = {
+          'email' => 'some@email.com',
+          'id' => 'x123',
+          'access_token' => 'fb-token',
+          'name' => 'John Doe'
+        }
+        expect(koala)
+          .to receive(:get_object)
           .and_return(fb_user)
-        allow(fb_user)
-          .to receive(:fetch)
-          .and_return(fb_user)
+        allow(koala)
+          .to receive(:get_connections)
+          .with('me', 'friends')
+          .and_return([])
       end
 
       context 'valid user' do
@@ -61,7 +73,7 @@ RSpec.describe 'User Registrations API', type: :request do
             end.to change(User, :count).by(1)
 
             expect(response.status).to eq(201)
-            expect(json['user']['email']).to match('new@email.com')
+            expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['username']).to match('nicholas')
             expect(json['user']['authentication_token']).to_not be_blank
             expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -82,6 +94,13 @@ RSpec.describe 'User Registrations API', type: :request do
 
       describe 'suggested friends' do
         context 'no friends' do
+          before do
+            expect(koala)
+              .to receive(:get_connections)
+              .with('me', 'friends')
+              .and_return([])
+          end
+
           it do
             Sidekiq::Testing.inline! do
               expect do
@@ -98,11 +117,13 @@ RSpec.describe 'User Registrations API', type: :request do
 
         context 'one friend' do
           before do
-            fb_friend = instance_double(
-              'FbGraph2::User',
-              id: '0987'
-            )
-            allow(fb_user).to receive(:friends).and_return([fb_friend])
+            expect(koala)
+              .to receive(:get_connections)
+              .with('me', 'friends')
+              .and_return([
+                { 'name' => 'John Doe',
+                  'id' => '0987' }
+              ])
           end
 
           context 'friend not found' do

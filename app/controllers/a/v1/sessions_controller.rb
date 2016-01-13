@@ -2,7 +2,6 @@ module A
   module V1
     class SessionsController < A::V1::ApplicationController
       skip_before_action :authenticate_user_from_token!
-      rescue_from FbGraph2::Exception::InvalidToken, with: :render_unauthorized
 
       def facebook
         token = request.headers['X-Facebook-Token']
