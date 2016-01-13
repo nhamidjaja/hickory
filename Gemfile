@@ -75,6 +75,9 @@ gem 'sinatra', require: false
 # Server monitoring
 gem 'newrelic_rpm'
 
+# Parallel HTTP requests
+gem 'typhoeus'
+
 # Facebook Graph API wrapper
 gem 'koala'
 
