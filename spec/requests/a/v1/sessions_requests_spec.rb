@@ -15,6 +15,7 @@ RSpec.describe 'Sessions API', type: :request do
         double = instance_double('Koala::Facebook::API')
         expect(Koala::Facebook::API)
           .to receive(:new)
+          .with('invalid-token', kind_of(String))
           .and_return(double)
 
         expect(double)
@@ -33,6 +34,7 @@ RSpec.describe 'Sessions API', type: :request do
         double = instance_double('Koala::Facebook::API')
         expect(Koala::Facebook::API)
           .to receive(:new)
+          .with('fb-token', kind_of(String))
           .and_return(double)
 
         fb_user = {
