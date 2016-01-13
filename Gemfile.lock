@@ -45,6 +45,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     ar-octopus (0.8.5)
       activerecord (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -52,7 +53,6 @@ GEM
     ast (2.2.0)
     astrolabe (1.3.1)
       parser (~> 2.2)
-    attr_required (1.0.0)
     autoprefixer-rails (6.2.3)
       execjs
       json
@@ -107,6 +107,8 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
+    ethon (0.8.1)
+      ffi (>= 1.3.0)
     execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -119,12 +121,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     faraday_middleware (0.10.0)
       faraday (>= 0.7.4, < 0.10)
-    fb_graph2 (0.7.5)
-      activesupport (>= 3.2)
-      httpclient (>= 2.4)
-      multi_json
-      rack-oauth2 (>= 1.1)
-      url_safe_base64
     feedjira (2.0.0)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
@@ -158,7 +154,6 @@ GEM
     haml (4.0.7)
       tilt
     hashie (3.4.3)
-    httpclient (2.7.1)
     i18n (0.7.0)
     ione (1.2.3)
     jbuilder (2.4.0)
@@ -175,6 +170,10 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    koala (2.2.0)
+      addressable
+      faraday
+      multi_json
     listen (3.0.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -231,12 +230,6 @@ GEM
       slop (~> 3.4)
     puma (2.15.3)
     rack (1.6.4)
-    rack-oauth2 (1.2.1)
-      activesupport (>= 2.3)
-      attr_required (>= 0.0.5)
-      httpclient (>= 2.4)
-      multi_json (>= 1.3.6)
-      rack (>= 1.1)
     rack-pjax (0.8.0)
       nokogiri (~> 1.5)
       rack (~> 1.1)
@@ -373,12 +366,13 @@ GEM
     tins (1.6.0)
     turbolinks (2.5.3)
       coffee-rails
+    typhoeus (1.0.1)
+      ethon (>= 0.8.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    url_safe_base64 (0.2.2)
     warden (1.2.4)
       rack (>= 1.0)
     web-console (2.2.1)
@@ -407,7 +401,6 @@ DEPENDENCIES
   devise
   factory_girl_rails
   faker
-  fb_graph2
   feedjira
   figaro
   font-awesome-rails
@@ -415,6 +408,7 @@ DEPENDENCIES
   guard-sidekiq
   jbuilder (~> 2.0)
   jquery-rails
+  koala
   newrelic_rpm
   nprogress-rails
   omniauth
@@ -436,6 +430,7 @@ DEPENDENCIES
   slim
   spring
   turbolinks
+  typhoeus
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
   whenever

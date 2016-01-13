@@ -12,9 +12,15 @@ RSpec.describe 'Sessions API', type: :request do
 
     context 'with invalid token' do
       before do
-        expect_any_instance_of(FbGraph2::User)
-          .to receive(:fetch)
-          .and_raise(FbGraph2::Exception::InvalidToken, 'Invalid Token')
+        double = instance_double('Koala::Facebook::API')
+        expect(Koala::Facebook::API)
+          .to receive(:new)
+          .with('invalid-token', kind_of(String))
+          .and_return(double)
+
+        expect(double)
+          .to receive(:get_object)
+          .and_raise(Koala::Facebook::APIError.new(401, 'Invalid token'))
         get '/a/v1/sessions/facebook',
             nil,
             'X-Facebook-Token' => 'invalid-token'
@@ -24,21 +30,25 @@ RSpec.describe 'Sessions API', type: :request do
     end
 
     context 'valid token' do
+      before do
+        double = instance_double('Koala::Facebook::API')
+        expect(Koala::Facebook::API)
+          .to receive(:new)
+          .with('fb-token', kind_of(String))
+          .and_return(double)
+
+        fb_user = {
+          'email' => 'some@email.com',
+          'id' => 'x123',
+          'access_token' => 'fb-token',
+          'name' => 'John Doe'
+        }
+        expect(double)
+          .to receive(:get_object)
+          .and_return(fb_user)
+      end
+
       context 'new user' do
-        before do
-          double = instance_double(
-            'FbGraph2::User',
-            email: 'new@email.com',
-            id: 'x123',
-            access_token: 'fb-token',
-            name: 'John Doe'
-          )
-
-          expect_any_instance_of(FbGraph2::User)
-            .to receive(:fetch)
-            .and_return(double)
-        end
-
         it 'is not found' do
           get '/a/v1/sessions/facebook',
               nil,
@@ -51,18 +61,7 @@ RSpec.describe 'Sessions API', type: :request do
 
       context 'existing email' do
         before do
-          FactoryGirl.create(:user, email: 'existing@email.com')
-          double = instance_double(
-            'FbGraph2::User',
-            email: 'existing@email.com',
-            id: 'x123',
-            access_token: 'fb-token',
-            name: 'John Doe'
-          )
-
-          expect_any_instance_of(FbGraph2::User)
-            .to receive(:fetch)
-            .and_return(double)
+          FactoryGirl.create(:user, email: 'some@email.com')
         end
 
         context 'valid facebook token' do
@@ -72,7 +71,7 @@ RSpec.describe 'Sessions API', type: :request do
                 'X-Facebook-Token' => 'fb-token'
 
             expect(response.status).to eq(200)
-            expect(json['user']['email']).to match('existing@email.com')
+            expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['authentication_token']).to_not be_blank
           end
         end

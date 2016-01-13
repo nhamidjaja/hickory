@@ -58,6 +58,7 @@ module A
 
       def render_internal_server_error(error)
         # TODO: log error
+        NewRelic::Agent.notice_error(error)
         @error = error
         render('errors.json', status: :internal_server_error)
       end
