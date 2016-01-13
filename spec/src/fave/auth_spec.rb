@@ -49,4 +49,21 @@ RSpec.describe Fave::Auth do
     it { expect(subject.token).to eq('abc098') }
     it { expect(subject.full_name).to eq('Jane Doe') }
   end
+
+  describe '#from_koala' do
+    let(:koala_user) do
+      { 'id' => 'x123',
+        'email' => 'a@b.com',
+        'name' => 'Jane Doe'
+       }
+    end
+
+    subject { Fave::Auth.from_koala(koala_user, 'abc098') }
+
+    it { expect(subject.email).to eq('a@b.com') }
+    it { expect(subject.provider).to eq('facebook') }
+    it { expect(subject.uid).to eq('x123') }
+    it { expect(subject.token).to eq('abc098') }
+    it { expect(subject.full_name).to eq('Jane Doe') }
+  end
 end

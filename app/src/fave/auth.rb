@@ -27,5 +27,10 @@ module Fave
       Auth.new(fb_user.email, 'facebook', fb_user.id, fb_user.access_token,
                fb_user.name)
     end
+
+    def self.from_koala(koala_user, token)
+      Auth.new(koala_user['email'], 'facebook', koala_user['id'], token,
+               koala_user['name'])
+    end
   end
 end
