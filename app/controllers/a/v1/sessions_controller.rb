@@ -12,6 +12,7 @@ module A
 
         fail(Errors::NotFound, 'Unregistered user') if user.new_record?
 
+        user.record_new_session
         user.save!
         sign_in user, store: false
       end
