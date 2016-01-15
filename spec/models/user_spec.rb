@@ -275,6 +275,20 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.record_new_session' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'increments sign_in_count' do
+      expect { user.record_new_session }
+        .to change { user.sign_in_count }
+        .from(0).to(1)
+    end
+
+    it 'timestamps last_sign_in_at' do
+      expect { user.record_new_session }.to change { user.last_sign_in_at }
+    end
+  end
+
   describe '.password_required?' do
     subject { user.send(:password_required?) }
 

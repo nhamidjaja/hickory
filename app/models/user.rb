@@ -77,6 +77,11 @@ class User < ActiveRecord::Base
     in_cassandra.following?(target.in_cassandra)
   end
 
+  def record_new_session
+    self.sign_in_count += 1
+    self.last_sign_in_at = Time.zone.now
+  end
+
   protected
 
   def password_required?
