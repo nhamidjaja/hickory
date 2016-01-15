@@ -82,6 +82,15 @@ class User < ActiveRecord::Base
     self.last_sign_in_at = Time.zone.now
   end
 
+  def record_current_request
+    self.current_sign_in_at = Time.zone.now
+  end
+
+  def proactive?
+    current = current_sign_in_at || Time.at(0).utc
+    current > 1.day.ago
+  end
+
   protected
 
   def password_required?

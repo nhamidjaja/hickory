@@ -289,6 +289,29 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.record_current_request' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'timestamps current_sign_in_at' do
+      expect { user.record_current_request }
+        .to change { user.current_sign_in_at }
+    end
+  end
+
+  describe '.proactive?' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it do
+      expect(user.proactive?).to eq(false)
+    end
+
+    it do
+      user.current_sign_in_at = (Time.zone.now - 6.hours)
+
+      expect(user.proactive?).to eq(true)
+    end
+  end
+
   describe '.password_required?' do
     subject { user.send(:password_required?) }
 
