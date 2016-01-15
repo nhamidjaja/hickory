@@ -25,6 +25,7 @@ module A
         # timing attacks.
 
         if user && Devise.secure_compare(user.authentication_token, token)
+          record_request(user)
           sign_in user, store: false
           return
         end
@@ -61,6 +62,10 @@ module A
         NewRelic::Agent.notice_error(error)
         @error = error
         render('errors.json', status: :internal_server_error)
+      end
+
+      def record_request(user)
+        user.record_current_request unless user.proactive?
       end
     end
   end
