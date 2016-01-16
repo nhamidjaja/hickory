@@ -66,7 +66,7 @@ module A
 
       def record_request(user)
         return if user.proactive?
-        
+
         user.record_current_request
         user.save
       end
