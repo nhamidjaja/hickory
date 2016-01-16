@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
   def record_new_session
     self.sign_in_count += 1
     self.last_sign_in_at = Time.zone.now
+    record_current_request
   end
 
   def record_current_request

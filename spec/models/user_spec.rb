@@ -287,6 +287,11 @@ RSpec.describe User, type: :model do
     it 'timestamps last_sign_in_at' do
       expect { user.record_new_session }.to change { user.last_sign_in_at }
     end
+
+    it 'timestamps current_sign_in_at' do
+      expect { user.record_new_session }
+        .to change { user.current_sign_in_at }
+    end
   end
 
   describe '.record_current_request' do
