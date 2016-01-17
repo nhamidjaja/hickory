@@ -1,13 +1,30 @@
 .container
   .row
-    .col-sm-6.col-sm-offset-3
+    .col-sm-12.text-center
       .box
-        h2.form-header Sign in to Flyer
-        .form-horizontal
-          .form-group
-            .text-center
-              = render "users/shared/links"
-
+        h1
+          | Read and share articles via Flyer
+        br
+          .form-horizontal
+            .form-group
+              .text-center
+                = render "users/shared/links"
+  .row
+    .col-sm-8.col-sm-push-4.banner-info-left
+        h2 The news app where you are in control
+        p Get news from people you care about. It can be your friends, celebrities, or influencers that you look up to. You will be surprised by where their interests lie, someone unexpected may even be a basketball fan ;)
+        = link_to 'https://play.google.com/store/apps/details?id=com.readflyer.app&referrer=utm_source%3Dflyerwebapp%26utm_medium%3Dbadge%26utm_campaign%3Dlogin' do
+          = image_tag 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Get_it_on_Google_play.svg/320px-Get_it_on_Google_play.svg.png'
+    .col-sm-4.col-sm-pull-8
+      .mobile-device
+        = image_tag 'android-home.png', alt: 'Read selected news'
+  .row
+    .col-sm-8.banner-info-left
+        h2 Share with just one press of a button
+        p Use the fave button to easily spread the good news. There are some things that you just shouldn't keep to yourself.
+    .col-sm-4
+      .mobile-device
+        = image_tag 'android-article.jpg', alt: 'Share article on Flyer'
 /   .field
 /     = f.label :email
 /     br
