@@ -109,7 +109,7 @@ h1 {
 }
 .banner-info-left h2{
   font-size: 2em;
-  margin: 6em 0 1em 0;
+  margin: 4em 0 1em 0;
   color: #333;
   line-height: 1.5em;
 }
@@ -533,7 +533,7 @@ ul.error {
   .box {
     // background: #f9f9f9;
     // border-radius: 4px;
-    margin: 3em 0;
+    margin: 1em 0;
     padding: 1em;
   }
   .feature-heading {
@@ -559,7 +559,10 @@ ul.error {
   }
   .banner-info-left h2 {
     font-size: 2em;
-    margin: 5em 0 1em 0;
+    margin: 3em 0 1em 0;
+  }
+  .banner-info-left p{
+    margin: 0 0 1em 0;
   }
 }
 
@@ -567,6 +570,12 @@ ul.error {
   body {
     padding-top: 50px;
     padding-bottom: 0;
+  }
+  .box {
+    // background: #f9f9f9;
+    // border-radius: 4px;
+    margin: 0.5em 0;
+    padding: 1em;
   }
   .navbar-default {
     .navbar-collapse {
@@ -586,7 +595,7 @@ ul.error {
   }
   .banner-info-left h2 {
     font-size: 1.37em;
-    margin: 5em 0 2em 0;
+    margin: 3em 0 1em 0;
   }
   .jumbotron {
     padding-top: 50px;
