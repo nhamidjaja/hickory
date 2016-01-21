@@ -6,8 +6,8 @@ module A
           canon_url = Fave::Url.new(params[:url]).canon
 
           @fave_url = current_user.in_cassandra
-                      .c_user_fave_urls.consistency(:one)
-                      .find_by_content_url(canon_url)
+                                  .c_user_fave_urls.consistency(:one)
+                                  .find_by_content_url(canon_url)
 
           if @fave_url
             render

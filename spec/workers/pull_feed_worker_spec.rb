@@ -19,7 +19,7 @@ RSpec.describe PullFeedWorker do
 
     subject do
       PullFeedWorker.new
-        .perform('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
+                    .perform('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
     end
 
     context 'no entries' do
