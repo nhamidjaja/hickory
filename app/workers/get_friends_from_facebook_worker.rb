@@ -20,8 +20,8 @@ class GetFriendsFromFacebookWorker
 
     return unless local
     Friend.new(c_user_id: user.id.to_s, id: local.id.to_s)
-      .save!(consistency: :any)
+          .save!(consistency: :any)
     Friend.new(c_user_id: local.id.to_s, id: user.id.to_s)
-      .save!(consistency: :any)
+          .save!(consistency: :any)
   end
 end

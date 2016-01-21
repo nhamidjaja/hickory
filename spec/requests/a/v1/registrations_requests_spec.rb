@@ -121,9 +121,9 @@ RSpec.describe 'User Registrations API', type: :request do
               .to receive(:get_connections)
               .with('me', 'friends')
               .and_return([
-                { 'name' => 'John Doe',
-                  'id' => '0987' }
-              ])
+                            { 'name' => 'John Doe',
+                              'id' => '0987' }
+                          ])
           end
 
           context 'friend not found' do

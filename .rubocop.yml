@@ -1,5 +1,4 @@
 AllCops:
-  RunRailsCops: true
   Include:
     - '**/Rakefile'
     - '**/config.ru'
@@ -9,7 +8,8 @@ AllCops:
     - 'script/**/*'
     - 'bin/**/*'
     - !ruby/regexp /old_and_unused\.rb$/
-
+Rails:
+  Enabled: true
 Rails/FindBy:
   Exclude:
     - app/models/concerns/cequelable.rb
