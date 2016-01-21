@@ -4,6 +4,10 @@ html
     title Hickory
 
     = render "layouts/google_analytics"
+    
+    javascript:
+      ga('set', 'location', location.href.split('#')[0]);
+      ga('send', 'pageview', { "title": document.title });
 
   body onload='window.close();'
     | You just faved an article! Feel free to close this window now.
