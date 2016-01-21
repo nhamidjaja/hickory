@@ -39,7 +39,7 @@ RSpec.describe FController, type: :controller do
     context 'signed in user' do
       login_user
 
-      it { expect(get :preview).to render_template(:preview) }
+      it { expect(get(:preview)).to render_template(:preview) }
 
       describe 'content' do
         before do

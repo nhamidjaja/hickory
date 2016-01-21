@@ -46,8 +46,8 @@ class User < ActiveRecord::Base
     self.provider = auth.provider
     self.uid = auth.uid
     self.omniauth_token = auth.token
-    self.email = auth.email if self.new_record?
-    self.full_name = auth.full_name if self.new_record?
+    self.email = auth.email if new_record?
+    self.full_name = auth.full_name if new_record?
   end
 
   def ensure_authentication_token
