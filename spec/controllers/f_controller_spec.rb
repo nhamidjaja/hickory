@@ -27,10 +27,40 @@ RSpec.describe FController, type: :controller do
             image_url: 'https://a.com/b.jpg',
             published_at: '2015-12-06 16:35:02 +0700'
       end
+
+      it 'assigns url' do
+        get :index,
+            url: 'http://example.com/hello?source=xyz',
+            title: 'Something headline',
+            image_url: 'https://a.com/b.jpg',
+            published_at: '2015-12-06 16:35:02 +0700'
+
+        expect(assigns(:url)).to eq('http://example.com/hello?source=xyz')
+      end
+
+      it 'renders index template' do
+        get :index,
+            url: 'http://example.com/hello?source=xyz',
+            title: 'Something headline',
+            image_url: 'https://a.com/b.jpg',
+            published_at: '2015-12-06 16:35:02 +0700'
+
+        expect(response).to render_template(:index)
+      end
+
+      it 'is successful' do
+        get :index,
+            url: 'http://example.com/hello?source=xyz',
+            title: 'Something headline',
+            image_url: 'https://a.com/b.jpg',
+            published_at: '2015-12-06 16:35:02 +0700'
+
+        expect(response).to be_success
+      end
     end
   end
 
-  describe 'GET #index' do
+  describe 'GET #preview' do
     context 'unsigned in user' do
       before { get :preview }
       it { expect(response).to redirect_to(new_user_session_path) }
@@ -57,6 +87,8 @@ RSpec.describe FController, type: :controller do
         it { expect(subject.title).to eq('Something headline') }
         it { expect(subject.image_url).to eq('https://a.com/b.jpg') }
         it { expect(subject.published_at).to be_a_kind_of(Time) }
+        it { expect(response).to be_success }
+        it { expect(response).to render_template(:preview) }
       end
     end
   end
