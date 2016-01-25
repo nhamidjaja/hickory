@@ -29,6 +29,13 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe 'POST #create' do
+    it do
+      expect(PrefollowUserWorker)
+        .to receive(:perform_async)
+        .with(kind_of(String))
+      post :create, user: FactoryGirl.attributes_for(:user)
+    end
+
     it 'sends email' do
       Sidekiq::Testing.inline! do
         expect(GetFriendsFromFacebookWorker).to receive(:perform_async)
