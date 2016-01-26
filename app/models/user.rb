@@ -55,6 +55,10 @@ class User < ActiveRecord::Base
     self.authentication_token = Devise.friendly_token
   end
 
+  def rememberable_value
+    authentication_token
+  end
+
   def in_cassandra
     CUser.new(id: id.to_s)
   end
