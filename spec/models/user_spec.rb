@@ -152,6 +152,13 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.rememberable_value' do
+    let(:user) { FactoryGirl.build(:user, authentication_token: 'abcdef') }
+    subject { user.rememberable_value }
+
+    it { is_expected.to eq('abcdef') }
+  end
+
   describe '.in_cassandra' do
     it do
       user = FactoryGirl.build(
