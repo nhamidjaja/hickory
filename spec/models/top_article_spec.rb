@@ -14,13 +14,6 @@ RSpec.describe TopArticle, type: :model do
     it { expect(FactoryGirl.build(:top_article, title: '')).to_not be_valid }
   end
 
-  describe '.image_url' do
-    it do
-      expect(FactoryGirl.build(:top_article,
-                               image_url: '')).to_not be_valid
-    end
-  end
-
   describe '#since' do
     context 'unspecified last_published_at' do
       subject { TopArticle.since(nil) }
