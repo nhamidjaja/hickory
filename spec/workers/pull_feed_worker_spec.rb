@@ -14,6 +14,12 @@ RSpec.describe PullFeedWorker do
       allow(Feeder).to receive(:find)
         .with('55a27bc8-3db3-11e5-b5a1-13c85fe6896f')
         .and_return(feeder)
+      response = instance_double(
+        'Typhoeus::Response',
+        body: '<rss></rss>')
+      allow(Typhoeus).to receive(:get)
+        .with('http://tryflyer.com/feed.rss', timeout: 5)
+        .and_return(response)
       allow(feeder.top_articles).to receive(:create!)
     end
 
@@ -28,8 +34,8 @@ RSpec.describe PullFeedWorker do
           'Feedjira::Parser::Atom',
           entries: []
         )
-        expect(Feedjira::Feed).to receive(:fetch_and_parse)
-          .with('http://tryflyer.com/feed.rss')
+        expect(Feedjira::Feed).to receive(:parse)
+          .with('<rss></rss>')
           .and_return(double)
       end
 
@@ -63,8 +69,8 @@ RSpec.describe PullFeedWorker do
           'Feedjira::Parser::Atom',
           entries: [entry]
         )
-        expect(Feedjira::Feed).to receive(:fetch_and_parse)
-          .with('http://tryflyer.com/feed.rss')
+        expect(Feedjira::Feed).to receive(:parse)
+          .with('<rss></rss>')
           .and_return(double)
       end
 
