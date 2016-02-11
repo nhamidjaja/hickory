@@ -47,8 +47,19 @@ class CUser
 
   private
 
-  def save_faves(content, faved_at) # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def save_faves(content, faved_at)
     fave_id = Cequel.uuid(faved_at)
+
+    stories.new(
+      id: fave_id,
+      faver_id: id,
+      content_url: content.url,
+      title: content.title,
+      image_url: content.image_url,
+      published_at: content.published_at,
+      faved_at: faved_at
+    ).save!(consistency: :any)
 
     c_user_fave_urls.new(
       content_url: content.url,

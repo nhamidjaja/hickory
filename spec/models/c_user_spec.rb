@@ -21,24 +21,60 @@ RSpec.describe CUser, type: :model do
       )
     end
     let(:fave_url) do
-      FactoryGirl.build(
-        :c_user_fave_url,
-        c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
-        content_url: 'http://example.com/hello',
-        id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000')
-      )
+      instance_double('CUserFaveUrl')
     end
     let(:fave) do
-      FactoryGirl.build(
-        :c_user_fave,
-        c_user_id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'),
-        content_url: 'http://example.com/hello',
-        id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000')
-      )
+      instance_double('CUserFave')
+    end
+    let(:story) do
+      instance_double('Story')
     end
     let(:faved_at) { Time.zone.parse('2015-08-18 05:31:28 UTC').utc }
 
     before do
+      allow(c_user.c_user_faves).to receive(:new)
+        .and_return(fave)
+      allow(fave).to receive(:save!).and_return(fave)
+
+      allow(c_user.c_user_fave_urls).to receive(:new).and_return(fave_url)
+      allow(fave_url).to receive(:save!)
+
+      allow(c_user.stories).to receive(:new).and_return(story)
+      allow(story).to receive(:save!)
+
+      allow_any_instance_of(CUser).to receive(:increment_faves_counter)
+    end
+
+    subject { c_user.fave(content, faved_at) }
+
+    it 'saves Story' do
+      expect(c_user.stories).to receive(:new)
+        .with(
+          id: an_instance_of(Cassandra::TimeUuid),
+          faver_id: an_instance_of(Cassandra::TimeUuid),
+          content_url: 'http://example.com/hello',
+          title: 'A headline',
+          image_url: 'http://a.com/b.jpg',
+          published_at: Time.zone.local('2014-03-11 11:00:00 +03:00'),
+          faved_at: faved_at)
+      expect(story).to receive(:save!).with(consistency: :any)
+
+      is_expected.to eq(fave)
+    end
+
+    it 'saves CUserFaveUrl' do
+      expect(c_user.c_user_fave_urls).to receive(:new)
+        .with(
+          content_url: 'http://example.com/hello',
+          id: an_instance_of(Cassandra::TimeUuid),
+          faved_at: faved_at)
+      expect(fave_url).to receive(:save!)
+        .with(consistency: :any)
+
+      is_expected.to eq(fave)
+    end
+
+    it 'saves CUserFave' do
       expect(c_user.c_user_faves).to receive(:new)
         .with(
           id: an_instance_of(Cassandra::TimeUuid),
@@ -46,26 +82,8 @@ RSpec.describe CUser, type: :model do
           title: 'A headline',
           image_url: 'http://a.com/b.jpg',
           published_at: Time.zone.local('2014-03-11 11:00:00 +03:00'),
-          faved_at: faved_at
-        )
-        .and_return(fave)
-      expect(c_user.c_user_fave_urls).to receive(:new)
-        .with(
-          content_url: 'http://example.com/hello',
-          id: an_instance_of(Cassandra::TimeUuid),
-          faved_at: faved_at
-        )
-        .and_return(fave_url)
-      allow_any_instance_of(CUser).to receive(:increment_faves_counter)
-    end
-
-    subject { c_user.fave(content, faved_at) }
-
-    it 'saves CUserFave and CUserFaveUrl' do
-      expect(fave).to receive(:save!).with(consistency: :any).and_return(fave)
-      expect(fave_url).to receive(:save!)
-        .with(consistency: :any)
-        .and_return(fave_url)
+          faved_at: faved_at)
+      expect(fave).to receive(:save!).with(consistency: :any)
 
       is_expected.to eq(fave)
     end
