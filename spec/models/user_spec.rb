@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
       it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
 
       it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
-      it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
+      it { expect(FactoryGirl.build(:user, username: '.a')).to_not be_valid }
       it { expect(FactoryGirl.build(:user, username: '12')).to be_valid }
     end
 
