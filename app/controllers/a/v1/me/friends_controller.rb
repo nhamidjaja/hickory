@@ -7,7 +7,7 @@ module A
 
           return if params[:last_id]
 
-          newest = User.select(:id).order('last_sign_in_at DESC').limit(5)
+          newest = User.select(:id).order('updated_at DESC').limit(5)
           mapped = newest.map { |f| Friend.new(id: f.id.to_s) }
           @friends.unshift(*mapped).uniq
 
