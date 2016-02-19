@@ -173,16 +173,16 @@ RSpec.describe 'Friends API', type: :request do
               expect(json['friends'][0]['id']).to eq(newest_id.to_s)
             end
 
-            it 'is at the top' do
-              get '/a/v1/me/friends',
-                  nil,
-                  'X-Email' => 'a@user.com',
-                  'X-Auth-Token' => 'validtoken'
+            # it 'is at the top' do
+            #   get '/a/v1/me/friends',
+            #       nil,
+            #       'X-Email' => 'a@user.com',
+            #       'X-Auth-Token' => 'validtoken'
 
-              expect(response.status).to eq(200)
-              expect(json['friends'][0]['id'])
-                .to eq('f1ac29af-813e-4769-aaea-a0c697bbaa17')
-            end
+            #   expect(response.status).to eq(200)
+            #   expect(json['friends'][0]['id'])
+            #     .to eq('f1ac29af-813e-4769-aaea-a0c697bbaa17')
+            # end
           end
         end
 
