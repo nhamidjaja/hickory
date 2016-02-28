@@ -12,7 +12,7 @@ proceed = STDIN.gets[0..0] rescue nil
 exit unless proceed == 'y'
 
 
-server 'web01.sg-sla.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
+server 'web01.sg-sl.readflyer.com', user: 'ubuntu', roles: %w{app db web}, primary: true
 
 set :puma_threads,    [1, 16]
 set :puma_workers,    8
