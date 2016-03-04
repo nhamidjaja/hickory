@@ -1,3 +1,4 @@
+# TODO: Deprecate this
 module Cequelable
   extend ActiveSupport::Concern
 

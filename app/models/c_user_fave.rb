@@ -12,6 +12,16 @@ class CUserFave
 
   timestamps
 
+  validates :c_user_id, presence: true
+  validates :id, presence: true
   validates :content_url, presence: true
   validates :faved_at, presence: true
+
+  def increment_view
+    Cequel::Metal::DataSet
+      .new(:fave_counters, FaveCounter.connection)
+      .consistency(:one)
+      .where(c_user_id: c_user_id, id: id)
+      .increment(views: 1)
+  end
 end
