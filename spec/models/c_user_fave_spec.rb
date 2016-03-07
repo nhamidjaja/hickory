@@ -17,7 +17,6 @@ RSpec.describe CUserFave, type: :model do
       .to_not be_valid
   end
 
-
   it do
     expect(FactoryGirl.build(
              :c_user_fave,
@@ -35,8 +34,8 @@ RSpec.describe CUserFave, type: :model do
   describe '.increment_view' do
     let(:fave) do
       FactoryGirl.build(:c_user_fave,
-        c_user_id: '123e4567-e89b-12d3-a456-426655440000',
-        id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
+                        c_user_id: '123e4567-e89b-12d3-a456-426655440000',
+                        id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
     end
     let(:metal) { instance_double('Cequel::Metal::DataSet') }
 
