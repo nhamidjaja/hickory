@@ -40,10 +40,8 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
   end
 
-  RSpec.configure do |config|
-    config.before :each do
-      Typhoeus::Expectation.clear
-    end
+  config.before :each do
+    Typhoeus::Expectation.clear
   end
 
   # Cequel database cleaner for spec

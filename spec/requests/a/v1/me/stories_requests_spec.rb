@@ -80,7 +80,7 @@ RSpec.describe 'Stories API', type: :request do
           expect(story['published_at']).to be_a(Fixnum)
           expect(story['faved_at']).to be_a(Fixnum)
           expect(story['views_count']).to be(0)
-          
+
           expect(story['faver']['id'])
             .to eq('de305d54-75b4-431b-adb2-eb6b9e546014')
           expect(story['faver']['username']).to eq('faver')

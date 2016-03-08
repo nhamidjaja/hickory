@@ -23,7 +23,8 @@ module A
 
         def count_view
           if count_as_view?
-            ViewArticleWorker.perform_async(current_user.id.to_s, params[:faver_id],
+            ViewArticleWorker.perform_async(current_user.id.to_s,
+                                            params[:faver_id],
                                             params[:attribution_id])
           end
         end
