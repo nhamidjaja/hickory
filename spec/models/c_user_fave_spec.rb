@@ -31,6 +31,43 @@ RSpec.describe CUserFave, type: :model do
       .to_not be_valid
   end
 
+  describe '.counter' do
+    let(:c_user) { FactoryGirl.build(:c_user,
+      id: '4f16d362-a336-4b12-a133-4b8e39be7f8e') }
+    let(:c_user_fave) { FactoryGirl.build(:c_user_fave,
+      c_user: c_user,
+      id: '123e4567-e89b-12d3-a456-426655440000') }
+    let(:fave_counter) do
+      FactoryGirl.build(:fave_counter,
+        c_user: c_user,
+        id: '123e4567-e89b-12d3-a456-426655440000',
+        views: 23)
+    end
+
+    context 'unloaded' do
+      before do
+        c = double('FaveCounter')
+        allow(FaveCounter).to receive(:consistency)
+          .and_return(c)
+        allow(c).to receive(:find_or_initialize_by)
+          .with(c_user_id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'),
+            id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'))
+          .and_return(fave_counter)
+      end
+
+      it { expect(c_user_fave.counter.views).to eq(23) }
+    end
+
+    context 'preloaded' do
+      before do
+        c_user_fave.instance_variable_set('@counter', fave_counter)
+        expect(CUserCounter).to_not receive(:find_or_initialize_by)
+      end
+
+      it { expect(c_user_fave.counter.views).to eq(23) }
+    end
+  end
+
   describe '.increment_view' do
     let(:fave) do
       FactoryGirl.build(:c_user_fave,

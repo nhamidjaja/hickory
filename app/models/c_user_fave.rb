@@ -17,6 +17,15 @@ class CUserFave
   validates :content_url, presence: true
   validates :faved_at, presence: true
 
+  def counter
+    @counter ||= FaveCounter.consistency(:one)
+                             .find_or_initialize_by(
+                              c_user_id: c_user_id,
+                              id: id)
+
+    @counter
+  end
+  
   def increment_view
     Cequel::Metal::DataSet
       .new(:fave_counters, FaveCounter.connection)
