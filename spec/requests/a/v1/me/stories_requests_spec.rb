@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Stories API', type: :request do
+  before do
+    # data integrity
+    Story.delete_all
+  end
+
   describe 'get list of stories' do
     context 'unauthenticated' do
       it 'is unauthorized' do
@@ -74,6 +79,8 @@ RSpec.describe 'Stories API', type: :request do
           expect(story['image_url']).to eq('http://a.com/i.jpg')
           expect(story['published_at']).to be_a(Fixnum)
           expect(story['faved_at']).to be_a(Fixnum)
+          expect(story['views_count']).to be(0)
+          
           expect(story['faver']['id'])
             .to eq('de305d54-75b4-431b-adb2-eb6b9e546014')
           expect(story['faver']['username']).to eq('faver')

@@ -1,5 +1,6 @@
 class FaveCounter
   include Cequel::Record
+  include Cequelable
 
   belongs_to :c_user
   key :id, :timeuuid, order: :desc
