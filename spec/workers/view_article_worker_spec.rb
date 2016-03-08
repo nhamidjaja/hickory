@@ -19,7 +19,8 @@ RSpec.describe ViewArticleWorker do
               id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'))
       expect(metal).to receive(:increment).with(views: 1)
 
-      worker.perform('de305d54-75b4-431b-adb2-eb6b9e546014',
+      worker.perform('6e927505-dc1f-4b01-9490-a0d2523b904a',
+                    'de305d54-75b4-431b-adb2-eb6b9e546014',
                      '123e4567-e89b-12d3-a456-426655440000')
     end
   end
