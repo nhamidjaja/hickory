@@ -24,7 +24,8 @@ RSpec.describe Story, type: :model do
     let(:story) do
       FactoryGirl.build(:story,
                         c_user: c_user,
-                        id: '123e4567-e89b-12d3-a456-426655440000')
+                        id: '123e4567-e89b-12d3-a456-426655440000',
+                        faver_id: '5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
     end
     let(:fave_counter) do
       FactoryGirl.build(:fave_counter,
@@ -39,7 +40,7 @@ RSpec.describe Story, type: :model do
         allow(FaveCounter).to receive(:consistency)
           .and_return(c)
         allow(c).to receive(:find_or_initialize_by)
-          .with(c_user_id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'),
+          .with(c_user_id: Cequel.uuid('5fa565e3-79ab-4e66-8e6f-3e4d9e343427'),
                 id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'))
           .and_return(fave_counter)
       end

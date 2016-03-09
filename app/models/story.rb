@@ -19,7 +19,7 @@ class Story
   def counter
     @counter ||= FaveCounter.consistency(:one)
                             .find_or_initialize_by(
-                              c_user_id: c_user_id,
+                              c_user_id: faver_id,
                               id: id)
 
     @counter

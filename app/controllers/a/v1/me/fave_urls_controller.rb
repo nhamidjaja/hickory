@@ -22,7 +22,9 @@ module A
         private
 
         def count_view
+          p 'count'
           if count_as_view?
+            p '<<<<'
             ViewArticleWorker.perform_async(current_user.id.to_s,
                                             params[:faver_id],
                                             params[:attribution_id])
