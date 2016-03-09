@@ -48,7 +48,7 @@ RSpec.describe 'Fave API', type: :request do
 
         expect(response.status).to eq(200)
 
-        expect(Story.count).to eq(3)
+        expect(Story.count).to eq(4)
       end
     end
   end

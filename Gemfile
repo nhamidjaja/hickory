@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5'
+gem 'rails', '4.2.5.2'
 
 # Postgres client
 gem 'pg'
@@ -33,8 +33,6 @@ gem 'capistrano-sidekiq', group: :development, require: false
 
 # App server
 gem 'puma'
-
-gem 'rack-timeout'
 
 # UI
 gem 'bootstrap-sass'

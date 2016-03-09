@@ -136,6 +136,18 @@ RSpec.describe FaveWorker do
             '2015-04-16 03:11:28 UTC'
           )
         end
+
+        it 'handles nil published_at' do
+          expect_any_instance_of(Content).to receive(:save!).and_return(content)
+          worker.perform(
+            'de305d54-75b4-431b-adb2-eb6b9e546014',
+            'http://example.com/hello?source=xyz',
+            '2015-08-18 05:31:28 UTC',
+            'some title',
+            'an image',
+            nil
+          )
+        end
       end
     end
   end

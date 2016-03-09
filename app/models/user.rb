@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   validates :username,
             uniqueness: true,
-            format: { with: /\A[a-z0-9_.]{2,30}\z/ }
+            format: { with: /\A[a-z0-9_]{2,30}\z/ }
 
   before_save :ensure_authentication_token
 
@@ -46,13 +46,17 @@ class User < ActiveRecord::Base
     self.provider = auth.provider
     self.uid = auth.uid
     self.omniauth_token = auth.token
-    self.email = auth.email if self.new_record?
-    self.full_name = auth.full_name if self.new_record?
+    self.email = auth.email if new_record?
+    self.full_name = auth.full_name if new_record?
   end
 
   def ensure_authentication_token
     return unless authentication_token.blank?
     self.authentication_token = Devise.friendly_token
+  end
+
+  def rememberable_value
+    authentication_token
   end
 
   def in_cassandra
@@ -75,6 +79,21 @@ class User < ActiveRecord::Base
 
   def following?(target)
     in_cassandra.following?(target.in_cassandra)
+  end
+
+  def record_new_session
+    self.sign_in_count += 1
+    self.last_sign_in_at = Time.zone.now
+    record_current_request
+  end
+
+  def record_current_request
+    self.current_sign_in_at = Time.zone.now
+  end
+
+  def proactive?
+    current = current_sign_in_at || Time.at(0).utc
+    current > 1.day.ago
   end
 
   protected

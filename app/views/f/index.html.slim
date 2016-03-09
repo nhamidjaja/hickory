@@ -1,9 +1,10 @@
-doctype html
-html
-  head
-    title Hickory
+.container
+  .row
+    .col-sm-12
+      h2 Faved!
+      p = @url
+      .form-horizontal
+        .form-group
+          .text-center
+            = link_to 'Close', 'javascript:window.open(\'\',\'_self\').close();', class: "btn btn-lg btn-success button-big"
 
-    = render "layouts/google_analytics"
-
-  body onload='window.close();'
-    | You just faved an article! Feel free to close this window now.

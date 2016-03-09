@@ -1,7 +1,7 @@
 class FaveWorker
   include Sidekiq::Worker
 
-  # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
+  # rubocop:disable Metrics/ParameterLists
   def perform(user_id, url, faved_time,
               title = nil, image_url = nil, published_at = nil)
     canon_url = Fave::Url.new(url).canon
@@ -17,12 +17,12 @@ class FaveWorker
 
   def get_content(url, title, image_url, published_at)
     if title || image_url || published_at
-      return Content.new(
-        url: url,
-        title: title,
-        image_url: image_url,
-        published_at: Time.zone.parse(published_at).utc
-      ).save!(consistency: :any)
+      publish_time ||= Time.zone.now
+      return Content.new(url: url,
+                         title: title,
+                         image_url: image_url,
+                         published_at: publish_time
+                        ).save!(consistency: :any)
     else
       return Content.find_or_initialize_by(url: url)
     end

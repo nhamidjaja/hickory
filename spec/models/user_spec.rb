@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
       it { expect(FactoryGirl.build(:user, username: 'a\n')).to_not be_valid }
 
       it { expect(FactoryGirl.build(:user, username: '_a')).to be_valid }
-      it { expect(FactoryGirl.build(:user, username: '.a')).to be_valid }
+      it { expect(FactoryGirl.build(:user, username: '.a')).to_not be_valid }
       it { expect(FactoryGirl.build(:user, username: '12')).to be_valid }
     end
 
@@ -152,6 +152,13 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.rememberable_value' do
+    let(:user) { FactoryGirl.build(:user, authentication_token: 'abcdef') }
+    subject { user.rememberable_value }
+
+    it { is_expected.to eq('abcdef') }
+  end
+
   describe '.in_cassandra' do
     it do
       user = FactoryGirl.build(
@@ -272,6 +279,48 @@ RSpec.describe User, type: :model do
     it do
       expect(user_double).to receive(:following?).with(target_double)
       user.following?(target)
+    end
+  end
+
+  describe '.record_new_session' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'increments sign_in_count' do
+      expect { user.record_new_session }
+        .to change { user.sign_in_count }
+        .from(0).to(1)
+    end
+
+    it 'timestamps last_sign_in_at' do
+      expect { user.record_new_session }.to change { user.last_sign_in_at }
+    end
+
+    it 'timestamps current_sign_in_at' do
+      expect { user.record_new_session }
+        .to change { user.current_sign_in_at }
+    end
+  end
+
+  describe '.record_current_request' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it 'timestamps current_sign_in_at' do
+      expect { user.record_current_request }
+        .to change { user.current_sign_in_at }
+    end
+  end
+
+  describe '.proactive?' do
+    let(:user) { FactoryGirl.build(:user) }
+
+    it do
+      expect(user.proactive?).to eq(false)
+    end
+
+    it do
+      user.current_sign_in_at = (Time.zone.now - 6.hours)
+
+      expect(user.proactive?).to eq(true)
     end
   end
 
