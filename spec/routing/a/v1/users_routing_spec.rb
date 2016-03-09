@@ -39,5 +39,13 @@ RSpec.describe 'users routes', type: :routing do
                    action: 'followers',
                    id: 'some-id',
                    format: :json)
-   end
+  end
+
+  it 'GET followings' do
+    expect(get('/a/v1/users/some-id/followings'))
+      .to route_to(controller: 'a/v1/users',
+                   action: 'followings',
+                   id: 'some-id',
+                   format: :json)
+  end
 end

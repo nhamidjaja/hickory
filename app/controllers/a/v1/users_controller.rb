@@ -46,6 +46,16 @@ module A
 
         @followers = @followers.limit(30)
       end
+
+      def followings
+        @user = User.find(params[:id])
+        @followings = @user.in_cassandra.followings
+
+        last_id = params[:last_id]
+        @followings = @followings.before(Cequel.uuid(last_id)) if last_id
+
+        @followings = @followings.limit(30)
+      end
     end
   end
 end

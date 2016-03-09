@@ -29,6 +29,7 @@ Rails.application.routes.draw do
           get 'follow'
           get 'unfollow'
           get 'followers'
+          get 'followings'
         end
       end
 
