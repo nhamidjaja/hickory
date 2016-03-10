@@ -8,6 +8,17 @@ class UnfollowUserWorker
 
     user.unfollow(target)
 
+    GoogleAnalyticsApi.new.event(
+      'user_followers',
+      target_id,
+      user_id,
+      -1,
+      user_id)
+
+    remove_target_faves(user, target)
+  end
+
+  def remove_target_faves(user, target)
     target.c_user_faves.each do |fave|
       RemoveStoryWorker.perform_async(
         user.id.to_s,

@@ -34,6 +34,17 @@ RSpec.describe FollowUserWorker do
       subject
     end
 
+    it 'records event in GA' do
+      expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
+        .with('user_followers',
+              '9d6831a4-39d1-11e5-9128-17e501c711a8',
+              '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+              1,
+              '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+
+      subject
+    end
+
     context 'no faves by target' do
       before do
         allow(target).to receive(:c_user_faves).and_return([])
