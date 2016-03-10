@@ -29,7 +29,7 @@ RSpec.describe ViewArticleWorker do
     it 'records event in GA' do
       expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
         .with('article',
-              '6e927505-dc1f-4b01-9490-a0d2523b904a',
+              'de305d54-75b4-431b-adb2-eb6b9e546014',
               'de305d54-75b4-431b-adb2-eb6b9e546014/'\
               '123e4567-e89b-12d3-a456-426655440000',
               1,

@@ -8,7 +8,7 @@ class ViewArticleWorker
 
     GoogleAnalyticsApi.new.event(
       'article',
-      viewer_id,
+      faver_id,
       faver_id + '/' + attribution_id,
       1,
       viewer_id)
