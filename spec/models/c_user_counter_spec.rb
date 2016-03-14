@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.describe CUserCounter, type: :model do
   it { expect(FactoryGirl.build(:c_user_counter)).to be_valid }
 
+  it do
+    expect(FactoryGirl.build(:c_user_counter, c_user_id: nil))
+      .to_not be_valid
+  end
+
   describe '.faves' do
     it do
       expect(FactoryGirl.build(:c_user_counter, faves: 12).faves)

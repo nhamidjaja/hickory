@@ -15,5 +15,6 @@ json.user do
     json.image_url              fave.image_url
     json.published_at           fave.published_at.to_i
     json.faved_at               fave.faved_at.to_i
+    json.views_count            fave.counter.views
   end
 end

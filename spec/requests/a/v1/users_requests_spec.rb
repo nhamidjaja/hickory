@@ -66,7 +66,7 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
-  describe 'get user list of faves' do
+  describe 'get list of faves' do
     context 'unauthenticated' do
       it 'is unauthorized' do
         get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/faves'
@@ -139,6 +139,7 @@ RSpec.describe 'Users API', type: :request do
             expect(fave['published_at']).to be_a(Fixnum)
             expect(fave['faved_at']).to_not be_blank
             expect(fave['faved_at']).to be_a(Fixnum)
+            expect(fave['views_count']).to eq(0)
           end
         end
 

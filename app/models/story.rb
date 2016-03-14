@@ -15,4 +15,13 @@ class Story
   validates :faver_id, presence: true
   validates :content_url, presence: true
   validates :faved_at, presence: true
+
+  def counter
+    @counter ||= FaveCounter.consistency(:one)
+                            .find_or_initialize_by(
+                              c_user_id: faver_id,
+                              id: id)
+
+    @counter
+  end
 end
