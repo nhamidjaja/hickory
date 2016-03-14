@@ -24,14 +24,14 @@ module A
         def count_view
           if count_as_view?
             ViewArticleWorker.perform_async(current_user.id.to_s,
-                                            params[:faver_id],
-                                            params[:attribution_id])
+                                            params[:attribution_id],
+                                            params[:story_id])
           end
         end
 
         def count_as_view?
-          params[:faver_id].present? &&
-            !params[:faver_id].eql?(current_user.id.to_s)
+          params[:attribution_id].present? &&
+            !params[:attribution_id].eql?(current_user.id.to_s)
         end
       end
     end

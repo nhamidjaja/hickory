@@ -28,8 +28,8 @@ RSpec.describe 'Fave Urls API', type: :request do
             expect_any_instance_of(CUserFave).to receive(:increment_view)
 
             get '/a/v1/me/fave_urls?url=http://example.com/not-faved'\
-              '&faver_id=de305d54-75b4-431b-adb2-eb6b9e546014'\
-              '&attribution_id=123e4567-e89b-12d3-a456-426655440000',
+              '&attribution_id=de305d54-75b4-431b-adb2-eb6b9e546014'\
+              '&story_id=123e4567-e89b-12d3-a456-426655440000',
                 nil,
                 'X-Email' => 'a@user.com',
                 'X-Auth-Token' => 'validtoken'
@@ -54,8 +54,8 @@ RSpec.describe 'Fave Urls API', type: :request do
             expect_any_instance_of(CUserFave).to receive(:increment_view)
 
             get '/a/v1/me/fave_urls?url=http://example.com'\
-              '&faver_id=de305d54-75b4-431b-adb2-eb6b9e546014'\
-              '&attribution_id=123e4567-e89b-12d3-a456-426655440000',
+              '&attribution_id=de305d54-75b4-431b-adb2-eb6b9e546014'\
+              '&story_id=123e4567-e89b-12d3-a456-426655440000',
                 nil,
                 'X-Email' => 'a@user.com',
                 'X-Auth-Token' => 'validtoken'
@@ -74,8 +74,8 @@ RSpec.describe 'Fave Urls API', type: :request do
             expect_any_instance_of(CUserFave).to_not receive(:increment_view)
 
             get '/a/v1/me/fave_urls?url=http://example.com/not-faved'\
-              '&faver_id=4f16d362-a336-4b12-a133-4b8e39be7f8e'\
-              '&attribution_id=123e4567-e89b-12d3-a456-426655440000',
+              '&attribution_id=4f16d362-a336-4b12-a133-4b8e39be7f8e'\
+              '&story_id=123e4567-e89b-12d3-a456-426655440000',
                 nil,
                 'X-Email' => 'a@user.com',
                 'X-Auth-Token' => 'validtoken'
