@@ -36,6 +36,26 @@ module A
 
         render json: {}
       end
+
+      def followers
+        @user = User.find(params[:id])
+        @followers = @user.in_cassandra.followers
+
+        last_id = params[:last_id]
+        @followers = @followers.before(Cequel.uuid(last_id)) if last_id
+
+        @followers = @followers.limit(30)
+      end
+
+      def followings
+        @user = User.find(params[:id])
+        @followings = @user.in_cassandra.followings
+
+        last_id = params[:last_id]
+        @followings = @followings.before(Cequel.uuid(last_id)) if last_id
+
+        @followings = @followings.limit(30)
+      end
     end
   end
 end

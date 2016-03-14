@@ -235,7 +235,10 @@ RSpec.describe User, type: :model do
 
     context 'counter not set' do
       before do
-        expect(CUserCounter).to receive(:find_or_initialize_by)
+        c = double('CUserCounter')
+        allow(CUserCounter).to receive(:consistency)
+          .and_return(c)
+        allow(c).to receive(:find_or_initialize_by)
           .with(c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
           .and_return(c_user_counter)
       end

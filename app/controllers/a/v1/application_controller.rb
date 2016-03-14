@@ -30,7 +30,7 @@ module A
           return
         end
 
-        fail Errors::NotAuthorized, 'Failed to sign in'
+        raise Errors::NotAuthorized, 'Failed to sign in'
       end
 
       protected

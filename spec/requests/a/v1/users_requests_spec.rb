@@ -66,7 +66,7 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
-  describe 'get user list of faves' do
+  describe 'get list of faves' do
     context 'unauthenticated' do
       it 'is unauthorized' do
         get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/faves'
@@ -139,6 +139,7 @@ RSpec.describe 'Users API', type: :request do
             expect(fave['published_at']).to be_a(Fixnum)
             expect(fave['faved_at']).to_not be_blank
             expect(fave['faved_at']).to be_a(Fixnum)
+            expect(fave['views_count']).to eq(0)
           end
         end
 
@@ -402,6 +403,263 @@ RSpec.describe 'Users API', type: :request do
             #   .followings).to eq(0)
             # expect(CUserCounter['123e4567-e89b-12d3-a456-426655440000']
             #   .followers).to eq(0)
+          end
+        end
+      end
+    end
+  end
+
+  describe 'get list of followers' do
+    context 'unauthenticated' do
+      it 'is unauthorized' do
+        get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/followers'
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
+      end
+    end
+
+    context 'authorized' do
+      before do
+        FactoryGirl.create(:user,
+                           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                           email: 'a@user.com',
+                           authentication_token: 'validtoken')
+        Follower.delete_all
+      end
+
+      context 'user not exists' do
+        it 'is not found' do
+          get '/a/v1/users/id-not-found/faves',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
+      context 'user exists' do
+        context 'no followers' do
+          it 'is empty' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followers',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followers']).to be_empty
+          end
+        end
+
+        context 'one follower' do
+          before do
+            Follower.delete_all
+
+            FactoryGirl.create(:user,
+                               id: '123e4567-e89b-12d3-a456-426655440000',
+                               username: 'some_user',
+                               full_name: 'John Doe'
+                              )
+            FactoryGirl.create(
+              :follower,
+              c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+              id: '123e4567-e89b-12d3-a456-426655440000'
+            )
+          end
+
+          it 'is successful' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followers',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followers'].size).to eq(1)
+
+            follower = json['followers'].first
+            expect(follower['id']).to eq('123e4567-e89b-12d3-a456-426655440000')
+            expect(follower['username']).to eq('some_user')
+            expect(follower['full_name']).to eq('John Doe')
+          end
+        end
+
+        context 'multiple followers' do
+          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.month) }
+          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.week) }
+          let(:newest_id) { Cequel.uuid(Time.zone.now) }
+          before do
+            [newest_id, oldest_id, middle_id].each do |i|
+              FactoryGirl.create(:user,
+                                 id: i.to_s
+                                )
+              FactoryGirl.create(
+                :follower,
+                c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                id: i
+              )
+            end
+          end
+
+          it 'is paginated by last id' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014' \
+            "/followers?last_id=#{middle_id}",
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followers'].size).to eq(1)
+            expect(json['followers'][0]['id']).to eq(oldest_id.to_s)
+          end
+
+          it 'is limited to 30' do
+            31.times do
+              u = FactoryGirl.create(:user)
+              FactoryGirl.create(
+                :follower,
+                c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                id: u.id.to_s
+              )
+            end
+
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followers',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followers'].size).to eq(30)
+          end
+        end
+      end
+    end
+  end
+
+  describe 'get list of followings' do
+    context 'unauthenticated' do
+      it 'is unauthorized' do
+        get '/a/v1/users/99a89669-557c-4c7a-a533-d1163caad65f/followings'
+
+        expect(response.status).to eq(401)
+        expect(json['errors']).to_not be_blank
+      end
+    end
+
+    context 'authorized' do
+      before do
+        FactoryGirl.create(:user,
+                           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                           email: 'a@user.com',
+                           authentication_token: 'validtoken')
+        Following.delete_all
+      end
+
+      context 'user not exists' do
+        it 'is not found' do
+          get '/a/v1/users/id-not-found/faves',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(404)
+          expect(json['errors']).to_not be_blank
+        end
+      end
+
+      context 'user exists' do
+        context 'no followings' do
+          it 'is empty' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followings',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followings']).to be_empty
+          end
+        end
+
+        context 'one following' do
+          before do
+            Following.delete_all
+
+            FactoryGirl.create(:user,
+                               id: '123e4567-e89b-12d3-a456-426655440000',
+                               username: 'some_user',
+                               full_name: 'John Doe'
+                              )
+            FactoryGirl.create(
+              :following,
+              c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+              id: '123e4567-e89b-12d3-a456-426655440000'
+            )
+          end
+
+          it 'is successful' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followings',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followings'].size).to eq(1)
+
+            following = json['followings'].first
+            expect(following['id'])
+              .to eq('123e4567-e89b-12d3-a456-426655440000')
+            expect(following['username']).to eq('some_user')
+            expect(following['full_name']).to eq('John Doe')
+          end
+        end
+
+        context 'multiple followings' do
+          let(:oldest_id) { Cequel.uuid(Time.zone.now - 1.month) }
+          let(:middle_id) { Cequel.uuid(Time.zone.now - 1.week) }
+          let(:newest_id) { Cequel.uuid(Time.zone.now) }
+          before do
+            [newest_id, oldest_id, middle_id].each do |i|
+              FactoryGirl.create(:user,
+                                 id: i.to_s
+                                )
+              FactoryGirl.create(
+                :following,
+                c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                id: i
+              )
+            end
+          end
+
+          it 'is paginated by last id' do
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014' \
+            "/followings?last_id=#{middle_id}",
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followings'].size).to eq(1)
+            expect(json['followings'][0]['id']).to eq(oldest_id.to_s)
+          end
+
+          it 'is limited to 30' do
+            31.times do
+              u = FactoryGirl.create(:user)
+              FactoryGirl.create(
+                :following,
+                c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                id: u.id.to_s
+              )
+            end
+
+            get '/a/v1/users/de305d54-75b4-431b-adb2-eb6b9e546014/followings',
+                nil,
+                'X-Email' => 'a@user.com',
+                'X-Auth-Token' => 'validtoken'
+
+            expect(response.status).to eq(200)
+            expect(json['followings'].size).to eq(30)
           end
         end
       end

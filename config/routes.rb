@@ -28,6 +28,8 @@ Rails.application.routes.draw do
           get 'faves'
           get 'follow'
           get 'unfollow'
+          get 'followers'
+          get 'followings'
         end
       end
 

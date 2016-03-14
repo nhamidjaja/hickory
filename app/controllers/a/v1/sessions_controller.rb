@@ -5,12 +5,12 @@ module A
 
       def facebook
         token = request.headers['X-Facebook-Token']
-        fail(Errors::NotAuthorized, 'No Facebook token provided') unless token
+        raise(Errors::NotAuthorized, 'No Facebook token provided') unless token
 
         fb_user = fetch_facebook_user(token)
         user = User.from_third_party_auth(Fave::Auth.from_koala(fb_user, token))
 
-        fail(Errors::NotFound, 'Unregistered user') if user.new_record?
+        raise(Errors::NotFound, 'Unregistered user') if user.new_record?
 
         user.record_new_session
         user.save!

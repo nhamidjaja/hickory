@@ -40,6 +40,10 @@ RSpec.configure do |config|
     ActionMailer::Base.deliveries.clear
   end
 
+  config.before :each do
+    Typhoeus::Expectation.clear
+  end
+
   # Cequel database cleaner for spec
   records = []
 

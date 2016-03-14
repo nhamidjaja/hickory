@@ -72,7 +72,8 @@ class User < ActiveRecord::Base
   end
 
   def counter
-    @counter ||= CUserCounter.find_or_initialize_by(c_user_id: id.to_s)
+    @counter ||= CUserCounter.consistency(:one)
+                             .find_or_initialize_by(c_user_id: id.to_s)
 
     @counter
   end
