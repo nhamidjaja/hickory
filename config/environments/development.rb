@@ -1,11 +1,10 @@
 Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.mandrillapp.com',
+    address:              'smtp.sparkpostmail.com',
     port:                 587,
-    user_name:            'nhamidjaja@gmail.com',
-    password:             'SWoomkaUtMI5nbs_SakVnw',
-    authentication:       :plain,
+    user_name:            'SMTP_Injection',
+    password:             '42247af8101210b97152eb9a7bf8ca17aa144a72',
     enable_starttls_auto: true,
     }
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }

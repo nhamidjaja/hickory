@@ -6,9 +6,8 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address:              'smtp.mandrillapp.com',
     port:                 587,
-    user_name:            'nhamidjaja@gmail.com',
-    password:             'ivaWYbhpFP7atiqcH9vE0w',
-    authentication:       :plain,
+    user_name:            'SMTP_Injection',
+    password:             '0d57db9bfcece72eb8df616e91935685aa8f3e3a',
     enable_starttls_auto: true,
     }
   config.action_mailer.default_url_options = { host: 'app.readflyer.com' }
