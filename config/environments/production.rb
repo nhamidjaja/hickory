@@ -4,10 +4,10 @@ Rails.application.configure do
   ##### Begin custom config ######
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address:              'smtp.mandrillapp.com',
+    address:              'smtp.sparkpostmail.com',
     port:                 587,
     user_name:            'SMTP_Injection',
-    password:             '42247af8101210b97152eb9a7bf8ca17aa144a72',
+    password:             '0d57db9bfcece72eb8df616e91935685aa8f3e3a',
     enable_starttls_auto: true,
     }
   config.action_mailer.default_url_options = { host: 'app.readflyer.com' }
