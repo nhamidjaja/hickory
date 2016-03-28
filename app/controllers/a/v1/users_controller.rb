@@ -42,7 +42,7 @@ module A
         @followers = @user.in_cassandra.followers
 
         last_id = params[:last_id]
-        @followers = @followers.before(Cequel.uuid(last_id)) if last_id
+        @followers = @followers.after(Cequel.uuid(last_id)) if last_id
 
         @followers = @followers.limit(30)
       end
@@ -52,7 +52,7 @@ module A
         @followings = @user.in_cassandra.followings
 
         last_id = params[:last_id]
-        @followings = @followings.before(Cequel.uuid(last_id)) if last_id
+        @followings = @followings.after(Cequel.uuid(last_id)) if last_id
 
         @followings = @followings.limit(30)
       end
