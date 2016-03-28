@@ -52,7 +52,7 @@ module A
 
       def after_registration(user)
         PrefollowUserWorker.perform_async(user.id.to_s)
-        UserMailer.welcome(user).deliver_later
+        UserMailer.tcc_announce(user).deliver_later
         GetFriendsFromFacebookWorker.perform_async(user.id.to_s)
       end
     end

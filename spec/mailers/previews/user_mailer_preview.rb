@@ -5,4 +5,10 @@ class UserMailerPreview < ActionMailer::Preview
       FactoryGirl.build(:user)
     )
   end
+
+  def tcc_announce
+    UserMailer.tcc_announce(
+      FactoryGirl.build(:user)
+    )
+  end
 end
