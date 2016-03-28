@@ -511,7 +511,7 @@ RSpec.describe 'Users API', type: :request do
 
             expect(response.status).to eq(200)
             expect(json['followers'].size).to eq(1)
-            expect(json['followers'][0]['id']).to eq(oldest_id.to_s)
+            expect(json['followers'][0]['id']).to eq(newest_id.to_s)
           end
 
           it 'is limited to 30' do
@@ -640,7 +640,7 @@ RSpec.describe 'Users API', type: :request do
 
             expect(response.status).to eq(200)
             expect(json['followings'].size).to eq(1)
-            expect(json['followings'][0]['id']).to eq(oldest_id.to_s)
+            expect(json['followings'][0]['id']).to eq(newest_id.to_s)
           end
 
           it 'is limited to 30' do
