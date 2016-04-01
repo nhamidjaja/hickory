@@ -175,13 +175,13 @@ RSpec.describe 'User Registrations API', type: :request do
                        '{"user": {"username": "nicholas"}}',
                        'Content-Type' => 'application/json',
                        'X-Facebook-Token' => 'fb-token'
-                end.to change(Friend, :count).by(2)
+                end.to change(Follower, :count).by(2)
 
                 expect(response.status).to eq(201)
-                expect(friend.in_cassandra.friends.size).to eq(1)
+                expect(friend.in_cassandra.followers.size).to eq(1)
 
                 user = User.find_by_username('nicholas')
-                expect(user.in_cassandra.friends.size).to eq(1)
+                expect(user.in_cassandra.followers.size).to eq(1)
               end
             end
           end
