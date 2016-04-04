@@ -24,11 +24,16 @@ class PullFeedWorker
     feed.entries.each do |entry|
       feeder.top_articles.create!(
         content_url: Fave::Url.new(entry.url).canon,
-        title: entry.title, image_url: entry.image,
+        title: entry.title, image_url: get_image_url(entry),
         published_at: entry.published)
 
       update_content(entry)
     end
+  end
+
+  # TODO: untested
+  def get_image_url(entry)
+    entry.try(:image) || entry.try(:enclosure_url)
   end
 
   def update_content(entry)
