@@ -75,7 +75,7 @@ RSpec.describe PullFeedWorker do
           'Feedjira::Parser::Atom',
           entries: [entry]
         )
-        expect(Feedjira::Feed).to receive(:parse)
+        allow(Feedjira::Feed).to receive(:parse)
           .with('<rss></rss>')
           .and_return(double)
       end
