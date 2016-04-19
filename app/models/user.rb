@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
          :omniauthable, omniauth_providers: [:facebook]
 
   has_one :featured_user
+  has_many :gcms
 
   validates :username,
             uniqueness: true,
