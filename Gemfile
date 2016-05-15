@@ -24,7 +24,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Deployment
-gem 'capistrano', '~> 3.4.0', group: :development, require: false
+gem 'capistrano', '~> 3.5.0', group: :development, require: false
 gem 'capistrano-rails', '~> 1.1', group: :development, require: false
 gem 'capistrano-figaro-yml', '~> 1.0.2', group: :development, require: false
 gem 'capistrano-bundler', group: :development, require: false
