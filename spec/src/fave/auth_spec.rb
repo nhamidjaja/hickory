@@ -37,8 +37,7 @@ RSpec.describe Fave::Auth do
                       email: 'a@b.com',
                       id: 'x123',
                       access_token: 'abc098',
-                      name: 'Jane Doe'
-                     )
+                      name: 'Jane Doe')
     end
 
     subject { Fave::Auth.from_facebook(fb_user) }
@@ -54,8 +53,7 @@ RSpec.describe Fave::Auth do
     let(:koala_user) do
       { 'id' => 'x123',
         'email' => 'a@b.com',
-        'name' => 'Jane Doe'
-       }
+        'name' => 'Jane Doe' }
     end
 
     subject { Fave::Auth.from_koala(koala_user, 'abc098') }

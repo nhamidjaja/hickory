@@ -9,7 +9,8 @@ RSpec.describe 'Profile API', type: :request do
       username: 'my_user',
       full_name: 'My User',
       description: 'My Description',
-      authentication_token: 'validtoken')
+      authentication_token: 'validtoken'
+    )
   end
 
   describe 'authentication' do

@@ -11,6 +11,7 @@ class ViewArticleWorker
       faver_id,
       faver_id + '/' + story_id,
       1,
-      viewer_id)
+      viewer_id
+    )
   end
 end

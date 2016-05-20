@@ -10,7 +10,8 @@ RSpec.describe Follower, type: :model do
       expect(FactoryGirl.build(
                :follower,
                c_user: c_user,
-               id: c_user.id))
+               id: c_user.id
+      ))
         .to_not be_valid
     end
   end

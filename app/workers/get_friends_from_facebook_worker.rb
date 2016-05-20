@@ -5,7 +5,8 @@ class GetFriendsFromFacebookWorker
     user = User.find(user_id)
 
     graph = Koala::Facebook::API.new(
-      user.omniauth_token, Figaro.env.facebook_app_secret!)
+      user.omniauth_token, Figaro.env.facebook_app_secret!
+    )
     friends = graph.get_connections('me', 'friends')
 
     friends.each do |f|

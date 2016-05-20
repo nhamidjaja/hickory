@@ -17,7 +17,8 @@ RSpec.describe 'Fave Urls API', type: :request do
           :user,
           id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
           email: 'a@user.com',
-          authentication_token: 'validtoken')
+          authentication_token: 'validtoken'
+        )
 
         allow(Typhoeus).to receive(:post)
       end

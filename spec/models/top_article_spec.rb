@@ -23,7 +23,8 @@ RSpec.describe TopArticle, type: :model do
 
         expect(TopArticle).to receive(:all).and_return(relation)
         expect(relation).to receive(:order).with(
-          published_at: :desc)
+          published_at: :desc
+        )
 
         subject
       end
@@ -39,10 +40,12 @@ RSpec.describe TopArticle, type: :model do
 
         expect(TopArticle).to receive(:all).and_return(relation)
         expect(relation).to receive(:order).with(
-          published_at: :desc).and_return(order)
+          published_at: :desc
+        ).and_return(order)
         expect(order).to receive(:where).with(
           'published_at < ?',
-          Time.zone.parse('2015-07-20 19:01:10 +03:00'))
+          Time.zone.parse('2015-07-20 19:01:10 +03:00')
+        )
 
         subject
       end

@@ -26,7 +26,8 @@ RSpec.describe FollowUserWorker do
     subject do
       worker.perform(
         '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-        '9d6831a4-39d1-11e5-9128-17e501c711a8')
+        '9d6831a4-39d1-11e5-9128-17e501c711a8'
+      )
     end
 
     it do
@@ -67,7 +68,8 @@ RSpec.describe FollowUserWorker do
             image_url: 'http://a.com/b.jpg',
             published_at: '2014-03-11 08:00:00 UTC',
             faved_at: '2015-08-18 05:31:28 UTC'
-          )])
+          )]
+        )
       end
 
       it do
@@ -83,8 +85,7 @@ RSpec.describe FollowUserWorker do
                 'A headline',
                 'http://a.com/b.jpg',
                 '2014-03-11 08:00:00 UTC',
-                '2015-08-18 05:31:28 UTC'
-               )
+                '2015-08-18 05:31:28 UTC')
 
         subject
       end

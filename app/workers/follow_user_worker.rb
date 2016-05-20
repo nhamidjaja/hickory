@@ -13,7 +13,8 @@ class FollowUserWorker
       target_id,
       user_id,
       1,
-      user_id)
+      user_id
+    )
 
     collect_target_faves(user, target)
   end

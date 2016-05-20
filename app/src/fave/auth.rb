@@ -19,8 +19,7 @@ module Fave
                auth['provider'],
                auth['uid'],
                auth['credentials']['token'],
-               auth['info']['name']
-              )
+               auth['info']['name'])
     end
 
     def self.from_facebook(fb_user)

@@ -93,8 +93,7 @@ RSpec.describe 'Search API', type: :request do
       it 'partial matches' do
         FactoryGirl.create(:user,
                            username: 'ab',
-                           full_name: 'john'
-                          )
+                           full_name: 'john')
         get '/a/v1/search?query=jo',
             nil,
             'X-Email' => 'a@user.com',

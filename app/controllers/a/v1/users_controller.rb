@@ -18,9 +18,8 @@ module A
 
         if current_user.eql?(target)
           render json: {
-            errors: {
-              message: 'Cannot follow self'
-            } }, status: 422
+            errors: { message: 'Cannot follow self' }
+          }, status: 422
           return
         end
 

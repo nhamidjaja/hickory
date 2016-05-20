@@ -1,2 +1,6 @@
-module A::V1::FeaturedUsersHelper
+module A
+  module V1
+    module FeaturedUsersHelper
+    end
+  end
 end

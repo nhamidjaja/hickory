@@ -40,9 +40,10 @@ RSpec.describe 'Users API', type: :request do
                              full_name: 'Xyz Xyz',
                              description: 'Xyz Description')
           21.times do
-            FactoryGirl.create(:c_user_fave,
-                               c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-                              )
+            FactoryGirl.create(
+              :c_user_fave,
+              c_user_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+            )
           end
 
           get '/a/v1/users/4f16d362-a336-4b12-a133-4b8e39be7f8e',
@@ -52,7 +53,8 @@ RSpec.describe 'Users API', type: :request do
 
           expect(response.status).to eq(200)
           expect(json['user']['id']).to eq(
-            '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+            '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+          )
           expect(json['user']['username']).to eq('xyz')
           expect(json['user']['full_name']).to eq('Xyz Xyz')
           expect(json['user']['description']).to eq('Xyz Description')
@@ -221,12 +223,14 @@ RSpec.describe 'Users API', type: :request do
           :user,
           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
           email: 'a@user.com',
-          authentication_token: 'validtoken')
+          authentication_token: 'validtoken'
+        )
       end
       let(:target) do
         FactoryGirl.create(
           :user,
-          id: '123e4567-e89b-12d3-a456-426655440000')
+          id: '123e4567-e89b-12d3-a456-426655440000'
+        )
       end
 
       before do
@@ -243,7 +247,8 @@ RSpec.describe 'Users API', type: :request do
         FactoryGirl.create(
           :friend,
           c_user: user.in_cassandra,
-          id: target.id.to_s)
+          id: target.id.to_s
+        )
       end
 
       context 'user not exists' do
@@ -294,7 +299,8 @@ RSpec.describe 'Users API', type: :request do
 
             expect(user.following?(target)).to eq(true)
             expect(target.in_cassandra.followers.where(
-              id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to_not be_nil
+              id: 'de305d54-75b4-431b-adb2-eb6b9e546014'
+            ).first).to_not be_nil
 
             # expect(CUserCounter['de305d54-75b4-431b-adb2-eb6b9e546014']
             #   .followings).to eq(1)
@@ -328,12 +334,14 @@ RSpec.describe 'Users API', type: :request do
           :user,
           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
           email: 'a@user.com',
-          authentication_token: 'validtoken')
+          authentication_token: 'validtoken'
+        )
       end
       let(:target) do
         FactoryGirl.create(
           :user,
-          id: '123e4567-e89b-12d3-a456-426655440000')
+          id: '123e4567-e89b-12d3-a456-426655440000'
+        )
       end
 
       before do
@@ -349,12 +357,10 @@ RSpec.describe 'Users API', type: :request do
 
           FactoryGirl.create(:c_user_fave,
                              c_user: target.in_cassandra,
-                             id: id
-                            )
+                             id: id)
           FactoryGirl.create(:story,
                              c_user: user.in_cassandra,
-                             id: id
-                            )
+                             id: id)
         end
       end
 
@@ -394,7 +400,8 @@ RSpec.describe 'Users API', type: :request do
 
             expect(user.following?(target)).to eq(false)
             expect(target.in_cassandra.followers.where(
-              id: 'de305d54-75b4-431b-adb2-eb6b9e546014').first).to be_nil
+              id: 'de305d54-75b4-431b-adb2-eb6b9e546014'
+            ).first).to be_nil
 
             expect(user.in_cassandra.stories.size).to eq(0)
 
@@ -460,8 +467,7 @@ RSpec.describe 'Users API', type: :request do
             FactoryGirl.create(:user,
                                id: '123e4567-e89b-12d3-a456-426655440000',
                                username: 'some_user',
-                               full_name: 'John Doe'
-                              )
+                               full_name: 'John Doe')
             FactoryGirl.create(
               :follower,
               c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -492,8 +498,7 @@ RSpec.describe 'Users API', type: :request do
           before do
             [newest_id, oldest_id, middle_id].each do |i|
               FactoryGirl.create(:user,
-                                 id: i.to_s
-                                )
+                                 id: i.to_s)
               FactoryGirl.create(
                 :follower,
                 c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -588,8 +593,7 @@ RSpec.describe 'Users API', type: :request do
             FactoryGirl.create(:user,
                                id: '123e4567-e89b-12d3-a456-426655440000',
                                username: 'some_user',
-                               full_name: 'John Doe'
-                              )
+                               full_name: 'John Doe')
             FactoryGirl.create(
               :following,
               c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -621,8 +625,7 @@ RSpec.describe 'Users API', type: :request do
           before do
             [newest_id, oldest_id, middle_id].each do |i|
               FactoryGirl.create(:user,
-                                 id: i.to_s
-                                )
+                                 id: i.to_s)
               FactoryGirl.create(
                 :following,
                 c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
