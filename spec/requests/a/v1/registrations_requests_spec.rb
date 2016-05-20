@@ -79,24 +79,6 @@ RSpec.describe 'User Registrations API', type: :request do
             expect(ActionMailer::Base.deliveries.count).to eq(1)
           end
         end
-
-        describe 'prefollow users' do
-          before do
-            FactoryGirl.create_list(:featured_user, 3)
-          end
-          it do
-            Sidekiq::Testing.inline! do
-              expect do
-                post '/a/v1/registrations/facebook',
-                     '{"user": {"username": "nicholas"}}',
-                     'Content-Type' => 'application/json',
-                     'X-Facebook-Token' => 'fb-token'
-              end.to change(Following, :count).by(3)
-
-              expect(response.status).to eq(201)
-            end
-          end
-        end
       end
 
       context 'invalid user' do
