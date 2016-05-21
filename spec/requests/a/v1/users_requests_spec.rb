@@ -34,11 +34,14 @@ RSpec.describe 'Users API', type: :request do
           # Rspec workaround to reset counter
           CUserCounter['4f16d362-a336-4b12-a133-4b8e39be7f8e'].destroy
 
-          FactoryGirl.create(:user,
-                             id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-                             username: 'xyz',
-                             full_name: 'Xyz Xyz',
-                             description: 'Xyz Description')
+          FactoryGirl.create(
+            :user,
+            id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+            username: 'xyz',
+            full_name: 'Xyz Xyz',
+            description: 'Xyz Description',
+            profile_picture_url: 'http://abc.com/p.jpg'
+          )
           21.times do
             FactoryGirl.create(
               :c_user_fave,
@@ -58,6 +61,9 @@ RSpec.describe 'Users API', type: :request do
           expect(json['user']['username']).to eq('xyz')
           expect(json['user']['full_name']).to eq('Xyz Xyz')
           expect(json['user']['description']).to eq('Xyz Description')
+          expect(json['user']['profile_picture_url'])
+            .to eq('http://abc.com/p.jpg')
+
           expect(json['user']['faves_count']).to eq(0)
           expect(json['user']['followers_count']).to eq(0)
           expect(json['user']['followings_count']).to eq(0)

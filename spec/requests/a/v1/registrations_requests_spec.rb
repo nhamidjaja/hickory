@@ -20,7 +20,7 @@ RSpec.describe 'User Registrations API', type: :request do
           .with('invalid-token', kind_of(String))
           .and_return(double)
 
-        expect(double)
+        allow(double)
           .to receive(:get_object)
           .and_raise(Koala::Facebook::APIError.new(401, 'Invalid token'))
       end
@@ -51,10 +51,16 @@ RSpec.describe 'User Registrations API', type: :request do
           'email' => 'some@email.com',
           'id' => 'x123',
           'access_token' => 'fb-token',
-          'name' => 'John Doe'
+          'name' => 'John Doe',
+          'picture' =>
+          { 'data' =>
+            {
+              'url' => 'http://abc.com/123.jpg'
+            } }
         }
-        expect(koala)
+        allow(koala)
           .to receive(:get_object)
+          .with('me', 'fields' => 'email,name,id,picture')
           .and_return(fb_user)
         allow(koala)
           .to receive(:get_connections)
@@ -76,6 +82,7 @@ RSpec.describe 'User Registrations API', type: :request do
             expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['username']).to match('nicholas')
             expect(json['user']['authentication_token']).to_not be_blank
+            expect(json['user']['profile_picture_url']).to eq('http://abc.com/123.jpg')
             expect(ActionMailer::Base.deliveries.count).to eq(1)
           end
         end

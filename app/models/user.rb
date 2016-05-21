@@ -46,6 +46,7 @@ class User < ActiveRecord::Base
     self.provider = auth.provider
     self.uid = auth.uid
     self.omniauth_token = auth.token
+    self.profile_picture_url = auth.picture
     self.email = auth.email if new_record?
     self.full_name = auth.full_name if new_record?
   end

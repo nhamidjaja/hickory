@@ -73,7 +73,8 @@ RSpec.describe User, type: :model do
                       provider: 'fb',
                       uid: 'x123',
                       token: 'abc098',
-                      full_name: 'John Doe')
+                      full_name: 'John Doe',
+                      picture: 'http://abc.com/pic.jpg')
     end
 
     subject { User.from_third_party_auth(auth) }
@@ -91,6 +92,7 @@ RSpec.describe User, type: :model do
         expect(subject.provider).to eq('fb')
         expect(subject.uid).to eq('x123')
         expect(subject.omniauth_token).to eq('abc098')
+        expect(subject.profile_picture_url).to eq('http://abc.com/pic.jpg')
       end
     end
 

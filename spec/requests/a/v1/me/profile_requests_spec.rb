@@ -9,6 +9,7 @@ RSpec.describe 'Profile API', type: :request do
       username: 'my_user',
       full_name: 'My User',
       description: 'My Description',
+      profile_picture_url: 'http://abc.com/n.jpg',
       authentication_token: 'validtoken'
     )
   end
@@ -85,6 +86,9 @@ RSpec.describe 'Profile API', type: :request do
           expect(json['user']['username']).to eq('my_user')
           expect(json['user']['full_name']).to eq('My User')
           expect(json['user']['description']).to eq('My Description')
+          expect(json['user']['profile_picture_url'])
+            .to eq('http://abc.com/n.jpg')
+
           expect(json['user']['recent_faves']).to eq([])
           expect(json['user']['faves_count']).to eq(0)
           expect(json['user']['followers_count']).to eq(0)
