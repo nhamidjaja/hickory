@@ -50,6 +50,7 @@ RSpec.describe 'Sessions API', type: :request do
         }
         allow(double)
           .to receive(:get_object)
+          .with('me', 'fields' => 'email,name,id,picture')
           .and_return(fb_user)
       end
 
