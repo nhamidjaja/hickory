@@ -20,7 +20,8 @@ class Story
     @counter ||= FaveCounter.consistency(:one)
                             .find_or_initialize_by(
                               c_user_id: faver_id,
-                              id: id)
+                              id: id
+                            )
 
     @counter
   end

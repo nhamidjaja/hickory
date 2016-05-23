@@ -21,8 +21,7 @@ class FaveWorker
       return Content.new(url: url,
                          title: title,
                          image_url: image_url,
-                         published_at: publish_time
-                        ).save!(consistency: :any)
+                         published_at: publish_time).save!(consistency: :any)
     else
       return Content.find_or_initialize_by(url: url)
     end

@@ -13,7 +13,8 @@ class UnfollowUserWorker
       target_id,
       user_id,
       -1,
-      user_id)
+      user_id
+    )
 
     remove_target_faves(user, target)
   end
@@ -22,7 +23,8 @@ class UnfollowUserWorker
     target.c_user_faves.each do |fave|
       RemoveStoryWorker.perform_async(
         user.id.to_s,
-        fave.id.to_s)
+        fave.id.to_s
+      )
     end
   end
 end

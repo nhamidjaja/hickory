@@ -34,7 +34,7 @@ module A
         graph = Koala::Facebook::API.new(token, Figaro.env.facebook_app_secret!)
 
         begin
-          fb_user = graph.get_object('me')
+          fb_user = graph.get_object('me', 'fields' => 'email,name,id,picture')
         rescue Koala::Facebook::APIError => e
           raise(Errors::NotAuthorized, e.message)
         end
@@ -51,7 +51,6 @@ module A
       end
 
       def after_registration(user)
-        PrefollowUserWorker.perform_async(user.id.to_s)
         UserMailer.tcc_announce(user).deliver_later
         GetFriendsFromFacebookWorker.perform_async(user.id.to_s)
       end

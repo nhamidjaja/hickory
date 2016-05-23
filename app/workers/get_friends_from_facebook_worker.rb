@@ -5,24 +5,16 @@ class GetFriendsFromFacebookWorker
     user = User.find(user_id)
 
     graph = Koala::Facebook::API.new(
-      user.omniauth_token, Figaro.env.facebook_app_secret!)
+      user.omniauth_token, Figaro.env.facebook_app_secret!
+    )
     friends = graph.get_connections('me', 'friends')
 
     friends.each do |f|
-      find_and_follow_friend(user, f)
+      find_and_save_friend(user, f)
     end
   end
 
   private
-
-  def find_and_follow_friend(user, friend)
-    local = User.find_by_provider_and_uid('facebook', friend['id'])
-
-    return unless local
-
-    FollowUserWorker.perform_async(user.id.to_s, local.id.to_s)
-    FollowUserWorker.perform_async(local.id.to_s, user.id.to_s)
-  end
 
   def find_and_save_friend(user, friend)
     local = User.find_by_provider_and_uid('facebook', friend['id'])

@@ -5,11 +5,13 @@ RSpec.describe FaveCounter, type: :model do
 
   it do
     expect(FactoryGirl.build(
-             :fave_counter, c_user_id: nil)).to_not be_valid
+             :fave_counter, c_user_id: nil
+    )).to_not be_valid
   end
   it do
     expect(FactoryGirl.build(
-             :fave_counter, id: nil)).to_not be_valid
+             :fave_counter, id: nil
+    )).to_not be_valid
   end
 
   describe '.views' do
