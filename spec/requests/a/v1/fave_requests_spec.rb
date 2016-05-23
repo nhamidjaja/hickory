@@ -25,8 +25,7 @@ RSpec.describe 'Fave API', type: :request do
     before do
       3.times do
         FactoryGirl.create(:follower,
-                           c_user: user.in_cassandra
-                          )
+                           c_user: user.in_cassandra)
       end
     end
 

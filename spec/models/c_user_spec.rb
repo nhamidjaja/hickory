@@ -56,7 +56,8 @@ RSpec.describe CUser, type: :model do
           title: 'A headline',
           image_url: 'http://a.com/b.jpg',
           published_at: Time.zone.local('2014-03-11 11:00:00 +03:00'),
-          faved_at: faved_at)
+          faved_at: faved_at
+        )
       expect(story).to receive(:save!).with(consistency: :any)
 
       is_expected.to eq(fave)
@@ -67,7 +68,8 @@ RSpec.describe CUser, type: :model do
         .with(
           content_url: 'http://example.com/hello',
           id: an_instance_of(Cassandra::TimeUuid),
-          faved_at: faved_at)
+          faved_at: faved_at
+        )
       expect(fave_url).to receive(:save!)
         .with(consistency: :any)
 
@@ -82,7 +84,8 @@ RSpec.describe CUser, type: :model do
           title: 'A headline',
           image_url: 'http://a.com/b.jpg',
           published_at: Time.zone.local('2014-03-11 11:00:00 +03:00'),
-          faved_at: faved_at)
+          faved_at: faved_at
+        )
       expect(fave).to receive(:save!).with(consistency: :any)
 
       is_expected.to eq(fave)

@@ -21,7 +21,8 @@ class CUserFave
     @counter ||= FaveCounter.consistency(:one)
                             .find_or_initialize_by(
                               c_user_id: c_user_id,
-                              id: id)
+                              id: id
+                            )
 
     @counter
   end

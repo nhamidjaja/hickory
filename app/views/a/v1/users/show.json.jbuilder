@@ -3,6 +3,8 @@ json.user do
   json.username @user.username
   json.full_name @user.full_name
   json.description @user.description
+  json.profile_picture_url @user.profile_picture_url
+
   json.faves_count @user.counter.faves
   json.followers_count @user.counter.followers
   json.followings_count @user.counter.followings

@@ -6,7 +6,8 @@ RSpec.describe 'profile routes', type: :routing do
       .to route_to(
         controller: 'a/v1/me/profile',
         action: 'index',
-        format: :json)
+        format: :json
+      )
   end
 
   it do
@@ -14,6 +15,7 @@ RSpec.describe 'profile routes', type: :routing do
       .to route_to(
         controller: 'a/v1/me/profile',
         action: 'create',
-        format: :json)
+        format: :json
+      )
   end
 end

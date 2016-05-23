@@ -8,7 +8,8 @@ class PullFeedWorker
       feeder.feed_url,
       timeout: 5,
       followlocation: true,
-      accept_encoding: 'gzip')
+      accept_encoding: 'gzip'
+    )
     feed = Feedjira::Feed.parse(response.body)
 
     feeder.top_articles.delete_all
@@ -25,7 +26,8 @@ class PullFeedWorker
       feeder.top_articles.create!(
         content_url: Fave::Url.new(entry.url).canon,
         title: entry.title, image_url: get_image_url(entry),
-        published_at: entry.published)
+        published_at: entry.published
+      )
 
       update_content(entry)
     end

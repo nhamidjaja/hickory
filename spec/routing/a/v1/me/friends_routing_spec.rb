@@ -6,6 +6,7 @@ RSpec.describe 'friends routes', type: :routing do
       .to route_to(
         controller: 'a/v1/me/friends',
         action: 'index',
-        format: :json)
+        format: :json
+      )
   end
 end

@@ -90,6 +90,38 @@ CREATE TABLE feeders (
 
 
 --
+-- Name: gcms; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE gcms (
+    id integer NOT NULL,
+    user_id uuid,
+    registration_id character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: gcms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE gcms_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: gcms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE gcms_id_seq OWNED BY gcms.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -142,8 +174,16 @@ CREATE TABLE users (
     authentication_token character varying,
     description text,
     full_name character varying,
-    tsv tsvector
+    tsv tsvector,
+    profile_picture_url character varying
 );
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY gcms ALTER COLUMN id SET DEFAULT nextval('gcms_id_seq'::regclass);
 
 
 --
@@ -168,6 +208,14 @@ ALTER TABLE ONLY featured_users
 
 ALTER TABLE ONLY feeders
     ADD CONSTRAINT feeders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gcms_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gcms
+    ADD CONSTRAINT gcms_pkey PRIMARY KEY (id);
 
 
 --
@@ -205,6 +253,13 @@ CREATE UNIQUE INDEX index_admins_on_reset_password_token ON admins USING btree (
 --
 
 CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
+
+
+--
+-- Name: index_gcms_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_gcms_on_user_id ON gcms USING btree (user_id);
 
 
 --
@@ -308,4 +363,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150926084547');
 INSERT INTO schema_migrations (version) VALUES ('20151125082134');
 
 INSERT INTO schema_migrations (version) VALUES ('20151125164633');
+
+INSERT INTO schema_migrations (version) VALUES ('20160419103453');
+
+INSERT INTO schema_migrations (version) VALUES ('20160520091804');
 

@@ -32,7 +32,7 @@ RSpec.describe 'Sessions API', type: :request do
     context 'valid token' do
       before do
         double = instance_double('Koala::Facebook::API')
-        expect(Koala::Facebook::API)
+        allow(Koala::Facebook::API)
           .to receive(:new)
           .with('fb-token', kind_of(String))
           .and_return(double)
@@ -41,9 +41,14 @@ RSpec.describe 'Sessions API', type: :request do
           'email' => 'some@email.com',
           'id' => 'x123',
           'access_token' => 'fb-token',
-          'name' => 'John Doe'
+          'name' => 'John Doe',
+          'picture' =>
+          { 'data' =>
+            {
+              'url' => 'http://abc.com/123.jpg'
+            } }
         }
-        expect(double)
+        allow(double)
           .to receive(:get_object)
           .and_return(fb_user)
       end
@@ -73,6 +78,7 @@ RSpec.describe 'Sessions API', type: :request do
             expect(response.status).to eq(200)
             expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['authentication_token']).to_not be_blank
+            expect(json['user']['profile_picture_url']).to eq('http://abc.com/123.jpg')
           end
         end
 

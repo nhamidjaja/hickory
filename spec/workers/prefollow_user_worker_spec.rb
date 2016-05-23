@@ -22,12 +22,15 @@ RSpec.describe PrefollowUserWorker do
       before do
         user = FactoryGirl.build(
           :user,
-          id: '123e4567-e89b-12d3-a456-426655440000')
+          id: '123e4567-e89b-12d3-a456-426655440000'
+        )
         allow(FeaturedUser).to receive(:all)
           .and_return(
             [FactoryGirl.build(
               :featured_user,
-              user: user)])
+              user: user
+            )]
+          )
       end
 
       it do

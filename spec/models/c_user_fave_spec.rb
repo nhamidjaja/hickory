@@ -6,28 +6,32 @@ RSpec.describe CUserFave, type: :model do
   it do
     expect(FactoryGirl.build(
              :c_user_fave,
-             c_user_id: nil))
+             c_user_id: nil
+    ))
       .to_not be_valid
   end
 
   it do
     expect(FactoryGirl.build(
              :c_user_fave,
-             id: nil))
+             id: nil
+    ))
       .to_not be_valid
   end
 
   it do
     expect(FactoryGirl.build(
              :c_user_fave,
-             content_url: ''))
+             content_url: ''
+    ))
       .to_not be_valid
   end
 
   it do
     expect(FactoryGirl.build(
              :c_user_fave,
-             faved_at: nil))
+             faved_at: nil
+    ))
       .to_not be_valid
   end
 
@@ -91,7 +95,8 @@ RSpec.describe CUserFave, type: :model do
       expect(metal).to receive(:where)
         .with(
           c_user_id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'),
-          id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014'))
+          id: Cequel.uuid('de305d54-75b4-431b-adb2-eb6b9e546014')
+        )
       expect(metal).to receive(:increment).with(views: 1)
 
       fave.increment_view

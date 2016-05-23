@@ -83,7 +83,8 @@ RSpec.describe FaveWorker do
           followers = [instance_double(
             'Follower',
             c_user: c_user,
-            id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000'))]
+            id: Cequel.uuid('123e4567-e89b-12d3-a456-426655440000')
+          )]
           allow(c_user).to receive(:followers).and_return(followers)
         end
 
@@ -100,8 +101,7 @@ RSpec.describe FaveWorker do
                   'A headline',
                   'http://a.com/b.jpg',
                   '2014-03-11 08:00:00 UTC',
-                  '2015-08-18 05:31:28 UTC'
-                 )
+                  '2015-08-18 05:31:28 UTC')
 
           subject
         end
@@ -114,7 +114,8 @@ RSpec.describe FaveWorker do
             followers.push(
               instance_double('Follower',
                               c_user: c_user,
-                              id: Cequel.uuid))
+                              id: Cequel.uuid)
+            )
           end
           allow(c_user).to receive(:followers).and_return(followers)
         end

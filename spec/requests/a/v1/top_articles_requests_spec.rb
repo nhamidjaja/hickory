@@ -40,8 +40,7 @@ RSpec.describe 'Top Articles API', type: :request do
           feeder = FactoryGirl.create(:feeder)
           FactoryGirl.create(:top_article,
                              feeder: feeder,
-                             published_at: '2015-07-20 19:01:10 +03:00'
-                            )
+                             published_at: '2015-07-20 19:01:10 +03:00')
         end
 
         it 'has article' do

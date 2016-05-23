@@ -19,7 +19,8 @@ RSpec.describe CUserFaveUrl, type: :model do
       CUserFaveUrl
         .find_or_initialize_by(
           c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
-          content_url: 'http://example.com')
+          content_url: 'http://example.com'
+        )
     end
 
     context 'found' do

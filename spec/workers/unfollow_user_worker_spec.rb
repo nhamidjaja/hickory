@@ -6,12 +6,14 @@ RSpec.describe UnfollowUserWorker do
     let(:user) do
       instance_double(
         'CUser',
-        id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e'))
+        id: Cequel.uuid('4f16d362-a336-4b12-a133-4b8e39be7f8e')
+      )
     end
     let(:target) do
       instance_double(
         'CUser',
-        id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8'))
+        id: Cequel.uuid('9d6831a4-39d1-11e5-9128-17e501c711a8')
+      )
     end
 
     before do
@@ -30,7 +32,8 @@ RSpec.describe UnfollowUserWorker do
     subject do
       worker.perform(
         '4f16d362-a336-4b12-a133-4b8e39be7f8e',
-        '9d6831a4-39d1-11e5-9128-17e501c711a8')
+        '9d6831a4-39d1-11e5-9128-17e501c711a8'
+      )
     end
 
     it do
@@ -67,7 +70,8 @@ RSpec.describe UnfollowUserWorker do
             :c_user_fave,
             c_user_id: target.id,
             id: Cequel.uuid('05d08b05-f198-46c7-be00-e5fc848589c1')
-          )])
+          )]
+        )
       end
 
       it do
