@@ -1,0 +1,1 @@
+json.featured_users(@featured_users)
