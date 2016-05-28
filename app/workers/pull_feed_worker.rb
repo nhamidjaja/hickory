@@ -4,12 +4,10 @@ class PullFeedWorker
 
   def perform(feeder_id)
     feeder = Feeder.find(feeder_id)
-    response = Typhoeus.get(
-      feeder.feed_url,
-      timeout: 5,
-      followlocation: true,
-      accept_encoding: 'gzip'
-    )
+    response = Typhoeus.get(feeder.feed_url,
+                            timeout: 5,
+                            followlocation: true,
+                            accept_encoding: 'gzip')
     feed = Feedjira::Feed.parse(response.body)
 
     feeder.top_articles.delete_all

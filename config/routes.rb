@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       resources :search, only: [:index]
       resources :fave, only: [:index]
       resources :featured_users, only: [:index]
+      resources :friends, only: [:index]
 
       resources :sessions, only: [] do
         collection do
