@@ -20,7 +20,7 @@ RSpec.describe 'On-boarding Featured Users API', type: :request do
           authentication_token: 'validtoken'
         )
       end
-      
+
       let(:featured) do
         FactoryGirl.create(
           :user,
@@ -48,7 +48,7 @@ RSpec.describe 'On-boarding Featured Users API', type: :request do
         before { featured }
         before do
           FactoryGirl.create(:featured_user,
-            user: featured)
+                             user: featured)
         end
 
         it 'is successful' do
@@ -71,9 +71,9 @@ RSpec.describe 'On-boarding Featured Users API', type: :request do
         before do
           21.times do |i|
             u = FactoryGirl.create(:user,
-              username: 'user_' + i.to_s)
+                                   username: 'user_' + i.to_s)
             FactoryGirl.create(:featured_user,
-              user: u)
+                               user: u)
           end
         end
 
