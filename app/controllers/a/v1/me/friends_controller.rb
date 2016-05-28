@@ -1,6 +1,7 @@
 module A
   module V1
     module Me
+      # TODO: Deprecate this into /people
       class FriendsController < A::V1::ApplicationController
         def index
           @friends = fetch_friends
