@@ -20,7 +20,7 @@ RSpec.describe 'On-boarding Friends API', type: :request do
           authentication_token: 'validtoken'
         )
       end
-      
+
       let(:friend) do
         FactoryGirl.create(
           :user,
@@ -34,7 +34,6 @@ RSpec.describe 'On-boarding Friends API', type: :request do
       before { friend }
 
       context 'no friends' do
-        
         before { Friend.delete_all }
 
         it 'is successful' do

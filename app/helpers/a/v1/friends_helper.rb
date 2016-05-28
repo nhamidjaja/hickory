@@ -1,2 +1,6 @@
-module A::V1::FriendsHelper
+module A
+  module V1
+    module FriendsHelper
+    end
+  end
 end
