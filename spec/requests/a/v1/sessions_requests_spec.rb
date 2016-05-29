@@ -62,6 +62,8 @@ RSpec.describe 'Sessions API', type: :request do
 
           expect(response.status).to eq(404)
           expect(json['errors']['message']).to match(/Unregistered user/)
+          expect(json['user']['full_name']).to eq('John Doe')
+          expect(json['user']['profile_picture_url']).to eq('http://abc.com/123.jpg')
         end
       end
 
@@ -77,6 +79,7 @@ RSpec.describe 'Sessions API', type: :request do
                 'X-Facebook-Token' => 'fb-token'
 
             expect(response.status).to eq(200)
+            expect(json['user']['id']).to_not be_blank
             expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['authentication_token']).to_not be_blank
             expect(json['user']['profile_picture_url']).to eq('http://abc.com/123.jpg')
