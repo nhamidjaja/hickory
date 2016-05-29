@@ -30,7 +30,8 @@ RSpec.describe 'Stories API', type: :request do
         FactoryGirl.create(
           :user,
           id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
-          username: 'faver'
+          username: 'faver',
+          profile_picture_url: 'http://a.com/b.jpg'
         )
       end
 
@@ -85,6 +86,8 @@ RSpec.describe 'Stories API', type: :request do
           expect(story['faver']['id'])
             .to eq('de305d54-75b4-431b-adb2-eb6b9e546014')
           expect(story['faver']['username']).to eq('faver')
+          expect(story['faver']['profile_picture_url'])
+            .to eq('http://a.com/b.jpg')
         end
       end
 
