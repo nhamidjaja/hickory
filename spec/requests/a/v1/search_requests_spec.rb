@@ -52,10 +52,10 @@ RSpec.describe 'Search API', type: :request do
 
         it 'exact matches' do
           FactoryGirl.create(:user,
-            username: 'xo',
-            full_name: 'Xo Xo',
-            description: 'just a guy',
-            profile_picture_url: 'http://a.xyz/b.jpg')
+                             username: 'xo',
+                             full_name: 'Xo Xo',
+                             description: 'just a guy',
+                             profile_picture_url: 'http://a.xyz/b.jpg')
           FactoryGirl.create(:user, username: 'abc')
 
           subject
