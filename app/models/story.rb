@@ -25,4 +25,8 @@ class Story
 
     @counter
   end
+
+  def faver
+    User.find(faver_id)
+  end
 end

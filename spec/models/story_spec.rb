@@ -57,4 +57,19 @@ RSpec.describe Story, type: :model do
       it { expect(story.counter.views).to eq(23) }
     end
   end
+
+  describe '.faver' do
+    let(:story) do
+      FactoryGirl.build(:story,
+                        faver_id: '5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
+    end
+
+    it 'finds User' do
+      expect(User).to receive(:find).with(
+        Cequel.uuid('5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
+      )
+
+      story.faver
+    end
+  end
 end

@@ -51,7 +51,11 @@ RSpec.describe 'Search API', type: :request do
         end
 
         it 'exact matches' do
-          FactoryGirl.create(:user, username: 'xo', full_name: 'Xo Xo')
+          FactoryGirl.create(:user,
+                             username: 'xo',
+                             full_name: 'Xo Xo',
+                             description: 'just a guy',
+                             profile_picture_url: 'http://a.xyz/b.jpg')
           FactoryGirl.create(:user, username: 'abc')
 
           subject
@@ -60,6 +64,9 @@ RSpec.describe 'Search API', type: :request do
           expect(json['users'].size).to eq(1)
           expect(json['users'][0]['username']).to eq('xo')
           expect(json['users'][0]['full_name']).to eq('Xo Xo')
+          expect(json['users'][0]['description']).to eq('just a guy')
+          expect(json['users'][0]['profile_picture_url'])
+            .to eq('http://a.xyz/b.jpg')
         end
 
         it 'partial matches' do
