@@ -526,8 +526,9 @@ RSpec.describe 'Users API', type: :request do
           end
 
           it 'is limited to 30' do
-            31.times do
-              u = FactoryGirl.create(:user)
+            31.times do |i|
+              u = FactoryGirl.create(:user,
+                                     username: 'user' + i.to_s)
               FactoryGirl.create(
                 :follower,
                 c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
