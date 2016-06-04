@@ -29,7 +29,11 @@ RSpec.describe FaveWorker do
         worker.perform(
           'de305d54-75b4-431b-adb2-eb6b9e546014',
           'http://example.com/hello?source=xyz',
-          '2015-08-18 05:31:28 UTC'
+          '2015-08-18 05:31:28 UTC',
+          nil,
+          nil,
+          nil,
+          false
         )
       end
 
@@ -134,7 +138,8 @@ RSpec.describe FaveWorker do
             '2015-08-18 05:31:28 UTC',
             'some title',
             'an image',
-            '2015-04-16 03:11:28 UTC'
+            '2015-04-16 03:11:28 UTC',
+            false
           )
         end
 
@@ -146,7 +151,32 @@ RSpec.describe FaveWorker do
             '2015-08-18 05:31:28 UTC',
             'some title',
             'an image',
-            nil
+            nil,
+            false
+          )
+        end
+      end
+
+      describe 'open story' do
+        it 'creates new record' do
+          expect(OpenStory).to receive(:create).with(
+            id: fave_id.to_s,
+            faver_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+            content_url: 'http://example.com/hello',
+            title: 'A headline',
+            image_url: 'http://a.com/b.jpg',
+            published_at: Time.zone.parse('2014-03-11 11:00:00 +03:00').utc,
+            faved_at: faved_at
+          )
+
+          worker.perform(
+            'de305d54-75b4-431b-adb2-eb6b9e546014',
+            'http://example.com/hello?source=xyz',
+            '2015-08-18 05:31:28 UTC',
+            'A headline',
+            'http://a.com/b.jpg',
+            '2014-03-11 11:00:00 +03:00',
+            true
           )
         end
       end
