@@ -18,7 +18,8 @@ RSpec.describe FController, type: :controller do
             kind_of(String),
             'Something headline',
             'https://a.com/b.jpg',
-            '2015-12-06 16:35:02 +0700'
+            '2015-12-06 16:35:02 +0700',
+            false
           ).once
 
         get :index,
