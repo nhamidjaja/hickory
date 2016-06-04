@@ -192,7 +192,8 @@ CREATE TABLE users (
     description text,
     full_name character varying,
     tsv tsvector,
-    profile_picture_url character varying
+    profile_picture_url character varying,
+    open_stories boolean DEFAULT false NOT NULL
 );
 
 
@@ -401,4 +402,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160419103453');
 INSERT INTO schema_migrations (version) VALUES ('20160520091804');
 
 INSERT INTO schema_migrations (version) VALUES ('20160603075206');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603143833');
 
