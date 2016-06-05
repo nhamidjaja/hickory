@@ -1,7 +1,7 @@
 module A
   module V1
     class SearchController < ApplicationController
-      respond_to :json
+      skip_before_action :authenticate_user_from_token!
 
       def index
         @users = []

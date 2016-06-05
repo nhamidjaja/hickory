@@ -1,7 +1,8 @@
 module A
   module V1
     class UsersController < A::V1::ApplicationController
-      respond_to :json
+      skip_before_action :authenticate_user_from_token!,
+                         only: [:show, :faves, :followers, :followings]
 
       def show
         @user = User.find(params[:id])

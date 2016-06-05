@@ -1,7 +1,7 @@
 module A
   module V1
     class TopArticlesController < ApplicationController
-      respond_to :json
+      skip_before_action :authenticate_user_from_token!
 
       def index
         @top_articles = TopArticle.since(params[:last_published_at]).take(50)

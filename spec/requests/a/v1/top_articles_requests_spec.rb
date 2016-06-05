@@ -1,15 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Top Articles API', type: :request do
-  context 'unauthenticated' do
-    it 'is unauthorized' do
-      get '/a/v1/top_articles'
-
-      expect(response.status).to eq(401)
-      expect(json['errors']).to_not be_blank
-    end
-  end
-
   context 'authorized' do
     before do
       FactoryGirl.create(:user,
@@ -21,9 +12,7 @@ RSpec.describe 'Top Articles API', type: :request do
     context 'without parameters' do
       subject do
         get '/a/v1/top_articles',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
+            nil
       end
 
       context 'no articles' do
@@ -103,9 +92,7 @@ RSpec.describe 'Top Articles API', type: :request do
         # 1438176600 => '2015-07-29 20:30:00 +07:00'
 
         get '/a/v1/top_articles?last_published_at=1438176600',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
+            nil
 
         expect(response.status).to eq(200)
 
