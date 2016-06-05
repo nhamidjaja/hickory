@@ -2,15 +2,6 @@ require 'rails_helper'
 
 RSpec.describe 'Search API', type: :request do
   context 'unauthenticated' do
-    it 'is unauthorized' do
-      get '/a/v1/search'
-
-      expect(response.status).to eq(401)
-      expect(json['errors']).to_not be_blank
-    end
-  end
-
-  context 'authorized' do
     before do
       FactoryGirl.create(:user,
                          email: 'a@user.com',
@@ -26,9 +17,7 @@ RSpec.describe 'Search API', type: :request do
           expect(User).to_not receive(:search)
 
           get '/a/v1/search',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+              nil
 
           expect(response.status).to eq(200)
           expect(json['users']).to eq([])
@@ -38,9 +27,7 @@ RSpec.describe 'Search API', type: :request do
       context 'has query' do
         subject do
           get '/a/v1/search?query=xo',
-              nil,
-              'X-Email' => 'a@user.com',
-              'X-Auth-Token' => 'validtoken'
+              nil
         end
 
         it 'is empty when there is no match' do
@@ -102,9 +89,7 @@ RSpec.describe 'Search API', type: :request do
                            username: 'ab',
                            full_name: 'john')
         get '/a/v1/search?query=jo',
-            nil,
-            'X-Email' => 'a@user.com',
-            'X-Auth-Token' => 'validtoken'
+            nil
       end
     end
   end
