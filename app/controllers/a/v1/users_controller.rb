@@ -5,6 +5,7 @@ module A
                          only: [:show, :faves, :followers, :followings]
 
       def show
+        @current_user = current_user || NilUser.new
         @user = User.find(params[:id])
         @recent_faves = @user.faves(nil, 20)
       end
