@@ -1,18 +1,18 @@
 require 'rails_helper'
 
-RSpec.describe Story, type: :model do
-  it { expect(FactoryGirl.build(:story)).to be_valid }
+RSpec.describe OpenStory, type: :model do
+  it { expect(FactoryGirl.build(:open_story)).to be_valid }
 
   it do
-    expect(FactoryGirl.build(:story,
+    expect(FactoryGirl.build(:open_story,
                              faver_id: nil)).to_not be_valid
   end
   it do
-    expect(FactoryGirl.build(:story, content_url: nil))
+    expect(FactoryGirl.build(:open_story, content_url: nil))
       .to_not be_valid
   end
   it do
-    expect(FactoryGirl.build(:story, faved_at: nil))
+    expect(FactoryGirl.build(:open_story, faved_at: nil))
       .to_not be_valid
   end
 
@@ -22,8 +22,7 @@ RSpec.describe Story, type: :model do
                         id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
     end
     let(:story) do
-      FactoryGirl.build(:story,
-                        c_user: c_user,
+      FactoryGirl.build(:open_story,
                         id: '123e4567-e89b-12d3-a456-426655440000',
                         faver_id: '5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
     end
@@ -60,13 +59,13 @@ RSpec.describe Story, type: :model do
 
   describe '.faver' do
     let(:story) do
-      FactoryGirl.build(:story,
+      FactoryGirl.build(:open_story,
                         faver_id: '5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
     end
 
     it 'finds User' do
       expect(User).to receive(:find).with(
-        Cequel.uuid('5fa565e3-79ab-4e66-8e6f-3e4d9e343427')
+        '5fa565e3-79ab-4e66-8e6f-3e4d9e343427'
       )
 
       story.faver
