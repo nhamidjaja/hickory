@@ -1,6 +1,8 @@
 module A
   module V1
     class FriendsController < ApplicationController
+      before_action :require_authentication!
+
       def index
         @friends = fetch_friends
 

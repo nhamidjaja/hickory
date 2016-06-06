@@ -1,8 +1,6 @@
 module A
   module V1
     class RegistrationsController < A::V1::ApplicationController
-      skip_before_action :authenticate_user_from_token!
-
       def facebook
         token = grab_facebook_token!
         user = fetch_user_from_facebook(token)

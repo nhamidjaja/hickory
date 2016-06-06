@@ -3,9 +3,6 @@ module A
     module Me
       # TODO: Deprecate this into /people
       class FriendsController < A::V1::ApplicationController
-        skip_before_action :authenticate_user_from_token!,
-                           unless: -> { request.headers['X-Email'].present? }
-
         def index
           @friends = current_user ? fetch_friends : []
 

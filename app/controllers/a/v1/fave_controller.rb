@@ -1,7 +1,7 @@
 module A
   module V1
     class FaveController < ApplicationController
-      respond_to :json
+      before_action :require_authentication!
 
       # rubocop:disable Metrics/AbcSize
       def index

@@ -2,6 +2,8 @@ module A
   module V1
     module Me
       class ProfileController < A::V1::ApplicationController
+        before_action :require_authentication!
+
         def index
           @user = current_user
           @recent_faves = @user.faves(nil, 20)

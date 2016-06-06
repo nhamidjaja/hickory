@@ -2,9 +2,6 @@ module A
   module V1
     module Me
       class StoriesController < A::V1::ApplicationController
-        skip_before_action :authenticate_user_from_token!,
-                           unless: -> { request.headers['X-Email'].present? }
-
         # Not using Null Object Pattern because of two different databases
         def index
           stories = current_user ? fetch_user_stories : fetch_open_stories
