@@ -1,11 +1,10 @@
 module A
   module V1
     class UsersController < A::V1::ApplicationController
-      skip_before_action :authenticate_user_from_token!,
-                         only: [:show, :faves, :followers, :followings]
+      before_action :require_authentication!,
+                    only: [:follow, :unfollow]
 
       def show
-        authenticate_user_from_token! unless request.headers['X-Email'].blank?
         @current_user = current_user || NilUser.new
         @user = User.find(params[:id])
         @recent_faves = @user.faves(nil, 20)

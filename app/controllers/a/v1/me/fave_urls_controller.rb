@@ -2,6 +2,8 @@ module A
   module V1
     module Me
       class FaveUrlsController < ApplicationController
+        before_action :require_authentication!
+
         def index
           canon_url = Fave::Url.new(params[:url]).canon
 

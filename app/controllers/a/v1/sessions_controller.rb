@@ -1,8 +1,6 @@
 module A
   module V1
     class SessionsController < A::V1::ApplicationController
-      skip_before_action :authenticate_user_from_token!
-
       def facebook
         token = request.headers['X-Facebook-Token']
         raise(Errors::NotAuthorized, 'No Facebook token provided') unless token

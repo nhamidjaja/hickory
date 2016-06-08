@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
             uniqueness: true,
             format: { with: /\A[a-z0-9_]{2,30}\z/ }
 
+  validate :exclusive_username
+
   before_save :ensure_authentication_token
 
   pg_search_scope :search,
@@ -29,6 +31,14 @@ class User < ActiveRecord::Base
 
   def description
     self[:description] || ''
+  end
+
+  # Custom validations
+
+  def exclusive_username
+    if username.starts_with?('favebot') && !admin_managed
+      errors.add(:username, 'Username cannot start with favebot')
+    end
   end
 
   # Custom methods
