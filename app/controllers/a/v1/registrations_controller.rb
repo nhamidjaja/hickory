@@ -49,7 +49,7 @@ module A
       end
 
       def after_registration(user)
-        UserMailer.tcc_announce(user).deliver_later
+        UserMailer.welcome(user).deliver_later
         GetFriendsFromFacebookWorker.perform_async(user.id.to_s)
       end
     end
