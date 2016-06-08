@@ -35,6 +35,23 @@ RSpec.describe User, type: :model do
       end
     end
 
+    describe '.exclusive_username' do
+      it do
+        expect(FactoryGirl.build(
+                 :user,
+                 username: 'favebot',
+                 admin_managed: false
+        )).to_not be_valid
+      end
+      it do
+        expect(FactoryGirl.build(
+                 :user,
+                 username: 'favebot',
+                 admin_managed: true
+        )).to be_valid
+      end
+    end
+
     it 'is unique' do
       FactoryGirl.create(:user, username: 'nic')
 
