@@ -26,8 +26,10 @@ module A
           stories = OpenStory.all.order('faved_at DESC')
 
           if params[:last_id]
+            last_faved_at = Cequel.uuid(params[:last_id]).to_time
             stories = stories.where(
-              'faved_at < ?', Cequel.uuid(params[:last_id]).to_time
+              'faved_at < ?',
+              last_faved_at - 1.second
             )
           end
 
