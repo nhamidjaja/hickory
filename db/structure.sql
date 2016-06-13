@@ -71,7 +71,8 @@ CREATE TABLE admins (
 CREATE TABLE featured_users (
     user_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    priority integer DEFAULT 9 NOT NULL
 );
 
 
@@ -361,6 +362,14 @@ ALTER TABLE ONLY top_articles
 
 
 --
+-- Name: fk_rails_ffc924a487; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY featured_users
+    ADD CONSTRAINT fk_rails_ffc924a487 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -407,4 +416,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160603075206');
 INSERT INTO schema_migrations (version) VALUES ('20160603143833');
 
 INSERT INTO schema_migrations (version) VALUES ('20160608102216');
+
+INSERT INTO schema_migrations (version) VALUES ('20160613034908');
 
