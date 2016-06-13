@@ -4,7 +4,9 @@ module A
       before_action :require_authentication!
 
       def index
-        @featured_users = User.joins(:featured_user).limit(20)
+        @featured_users = User.joins(:featured_user)
+                              .order('priority ASC')
+                              .limit(20)
       end
     end
   end
