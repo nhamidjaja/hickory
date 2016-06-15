@@ -38,8 +38,6 @@ RSpec.describe FaveWorker do
       end
 
       before do
-        allow(Content).to receive(:find_or_initialize_by)
-          .and_return(content)
         allow(CUser).to receive(:new)
           .with(id: 'de305d54-75b4-431b-adb2-eb6b9e546014')
           .and_return(c_user)
@@ -55,13 +53,6 @@ RSpec.describe FaveWorker do
           faved_at: faved_at
         )
         allow(c_user).to receive(:fave).and_return(fave)
-      end
-
-      it 'finds with canon url' do
-        expect(Content).to receive(:find_or_initialize_by)
-          .with(url: 'http://example.com/hello')
-
-        subject
       end
 
       it 'faves' do
@@ -126,34 +117,6 @@ RSpec.describe FaveWorker do
 
         it do
           expect { subject }.to change(StoryWorker.jobs, :size).by(5)
-        end
-      end
-
-      describe 'manual override' do
-        it do
-          expect_any_instance_of(Content).to receive(:save!).and_return(content)
-          worker.perform(
-            'de305d54-75b4-431b-adb2-eb6b9e546014',
-            'http://example.com/hello?source=xyz',
-            '2015-08-18 05:31:28 UTC',
-            'some title',
-            'an image',
-            '2015-04-16 03:11:28 UTC',
-            false
-          )
-        end
-
-        it 'handles nil published_at' do
-          expect_any_instance_of(Content).to receive(:save!).and_return(content)
-          worker.perform(
-            'de305d54-75b4-431b-adb2-eb6b9e546014',
-            'http://example.com/hello?source=xyz',
-            '2015-08-18 05:31:28 UTC',
-            'some title',
-            'an image',
-            nil,
-            false
-          )
         end
       end
 

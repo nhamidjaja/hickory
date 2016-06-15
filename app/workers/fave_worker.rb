@@ -19,15 +19,12 @@ class FaveWorker
   private
 
   def get_content(url, title, image_url, published_at)
-    if title.present? || image_url.present? || published_at.present?
-      publish_time ||= Time.zone.now
-      return Content.new(url: url,
-                         title: title,
-                         image_url: image_url,
-                         published_at: publish_time).save!(consistency: :any)
-    else
-      return Content.find_or_initialize_by(url: url)
-    end
+    Content.new(
+      url: url,
+      title: title,
+      image_url: image_url,
+      published_at: published_at || Time.zone.now
+    )
   end
 
   def save_as_open_story(fave)
