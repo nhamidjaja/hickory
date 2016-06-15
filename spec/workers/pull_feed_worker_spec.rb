@@ -94,20 +94,6 @@ RSpec.describe PullFeedWorker do
 
         subject
       end
-
-      it 'creates Content' do
-        double = instance_double('Content')
-        expect(Content).to receive(:new).with(
-          url: 'http://example.com/article',
-          title: 'An article',
-          image_url: 'http://example.com/img.png',
-          published_at: Time.zone.local('2015-01-10 11:11:11 +01:00')
-        ).and_return(double)
-
-        expect(double).to receive(:save!).with(consistency: :any)
-
-        subject
-      end
     end
   end
 end
