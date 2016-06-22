@@ -1,3 +1,5 @@
+# TODO: getting fat, should move logic assertions to controller specs
+
 require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
