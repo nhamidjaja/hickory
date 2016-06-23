@@ -48,10 +48,9 @@ class User < ActiveRecord::Base
            find_by_provider_and_uid(auth.provider, auth.uid) ||
            User.new
     user.apply_third_party_auth(auth)
-
-    user
   end
 
+  # TODO: needs to be tested
   def apply_third_party_auth(auth)
     self.provider = auth.provider
     self.uid = auth.uid
@@ -59,6 +58,8 @@ class User < ActiveRecord::Base
     self.profile_picture_url = auth.picture
     self.email = auth.email if new_record?
     self.full_name = auth.full_name if new_record?
+
+    self
   end
 
   def ensure_authentication_token
