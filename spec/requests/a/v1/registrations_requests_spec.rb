@@ -60,7 +60,7 @@ RSpec.describe 'User Registrations API', type: :request do
         }
         allow(koala)
           .to receive(:get_object)
-          .with('me', 'fields' => 'email,name,id,picture')
+          .with('me', 'fields' => 'email,name,id,picture.type(normal)')
           .and_return(fb_user)
         allow(koala)
           .to receive(:get_connections)
