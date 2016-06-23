@@ -26,7 +26,10 @@ module A
         graph = Koala::Facebook::API.new(token, Figaro.env.facebook_app_secret!)
 
         begin
-          fb_user = graph.get_object('me', 'fields' => 'email,name,id,picture')
+          fb_user = graph.get_object(
+            'me',
+            'fields' => 'email,name,id,picture.type(normal)'
+          )
         rescue Koala::Facebook::APIError => e
           raise(Errors::NotAuthorized, e.message)
         end
