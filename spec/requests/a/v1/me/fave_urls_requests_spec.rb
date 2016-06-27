@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe 'Fave Urls API', type: :request do
   describe 'get a url' do
     context 'unauthenticated' do
-      it 'is unauthorized' do
+      it 'is successful' do
         get '/a/v1/me/fave_urls?url=http://example.com'
 
-        expect(response.status).to eq(401)
-        expect(json['errors']).to_not be_blank
+        expect(response.status).to eq(200)
+        expect(json['fave_url']).to be_nil
       end
     end
 
