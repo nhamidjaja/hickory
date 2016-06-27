@@ -2,21 +2,16 @@ module A
   module V1
     module Me
       class FaveUrlsController < ApplicationController
-        before_action :require_authentication!
-
         def index
           canon_url = Fave::Url.new(params[:url]).canon
 
           count_view
 
-          @fave_url = current_user
-                      .in_cassandra.c_user_fave_urls.consistency(:one)
-                      .find_by_content_url(canon_url)
+          render(json: { fave_url: nil }) && return unless current_user
 
-          if @fave_url
-            render
-            return
-          end
+          @fave_url = fetch_fave_url(canon_url)
+
+          render && return if @fave_url
 
           render json: { fave_url: nil }
         end
@@ -34,6 +29,12 @@ module A
         def count_as_view?
           params[:attribution_id].present? &&
             !params[:attribution_id].eql?(current_user.id.to_s)
+        end
+
+        def fetch_fave_url(canon_url)
+          @fave_url = current_user
+                      .in_cassandra.c_user_fave_urls.consistency(:one)
+                      .find_by_content_url(canon_url)
         end
       end
     end
