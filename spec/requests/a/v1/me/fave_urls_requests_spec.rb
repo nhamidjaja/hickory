@@ -4,10 +4,14 @@ RSpec.describe 'Fave Urls API', type: :request do
   describe 'get a url' do
     context 'unauthenticated' do
       it 'is successful' do
-        get '/a/v1/me/fave_urls?url=http://example.com'
+        Sidekiq::Testing.inline! do
+          expect_any_instance_of(CUserFave).to receive(:increment_view)
 
-        expect(response.status).to eq(200)
-        expect(json['fave_url']).to be_nil
+          get '/a/v1/me/fave_urls?url=http://example.com'
+
+          expect(response.status).to eq(200)
+          expect(json['fave_url']).to be_nil
+        end
       end
     end
 
