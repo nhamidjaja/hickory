@@ -19,7 +19,7 @@ module A
         private
 
         def count_view(canon_url)
-          return if current_user && view_as_self?
+          return if view_as_self?
 
           viewer_id = current_user ? current_user.id : nil
           ViewArticleWorker.perform_async(viewer_id,
@@ -29,7 +29,8 @@ module A
         end
 
         def view_as_self?
-          params[:attribution_id].eql?(current_user.id.to_s)
+          current_user &&
+            params[:attribution_id].eql?(current_user.id.to_s)
         end
 
         def fetch_fave_url(canon_url)
