@@ -1,2 +1,8 @@
-module A::V1::Me::GcmHelper
+module A
+  module V1
+    module Me
+      module GcmHelper
+      end
+    end
+  end
 end
