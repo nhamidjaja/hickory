@@ -23,7 +23,8 @@ RSpec.describe ViewArticleWorker do
 
       worker.perform('6e927505-dc1f-4b01-9490-a0d2523b904a',
                      'de305d54-75b4-431b-adb2-eb6b9e546014',
-                     '123e4567-e89b-12d3-a456-426655440000')
+                     '123e4567-e89b-12d3-a456-426655440000',
+                     'http://a.com')
     end
 
     it 'records event in GA' do
@@ -31,13 +32,23 @@ RSpec.describe ViewArticleWorker do
         .with('article',
               'de305d54-75b4-431b-adb2-eb6b9e546014',
               'de305d54-75b4-431b-adb2-eb6b9e546014/'\
-              '123e4567-e89b-12d3-a456-426655440000',
-              1,
+              '123e4567-e89b-12d3-a456-426655440000/'\
+              'http://a.com',
+              0,
               '6e927505-dc1f-4b01-9490-a0d2523b904a')
 
       worker.perform('6e927505-dc1f-4b01-9490-a0d2523b904a',
                      'de305d54-75b4-431b-adb2-eb6b9e546014',
-                     '123e4567-e89b-12d3-a456-426655440000')
+                     '123e4567-e89b-12d3-a456-426655440000',
+                     'http://a.com')
+    end
+
+    context 'without attributions' do
+      it 'does not increment view' do
+        expect(metal).to_not receive(:increment)
+
+        worker.perform(nil, nil, nil, nil)
+      end
     end
   end
 end

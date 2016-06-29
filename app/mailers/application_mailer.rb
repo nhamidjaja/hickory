@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: '"Flyer - News With Friends" <hello@readflyer.com>'
+  default from: '"Fave News App" <hello@readflyer.com>'
   layout 'mailer'
 end

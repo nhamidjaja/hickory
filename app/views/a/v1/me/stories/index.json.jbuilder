@@ -6,6 +6,6 @@ json.stories(@stories) do |story|
   json.published_at story.published_at.to_i
   json.faved_at     story.faved_at.to_i
   json.views_count  story.counter.views
-  faver = User.find_by_id(story.faver_id)
-  json.faver(faver, :id, :username)
+
+  json.faver(story.faver, :id, :username, :profile_picture_url)
 end

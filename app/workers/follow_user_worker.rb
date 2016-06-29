@@ -8,12 +8,11 @@ class FollowUserWorker
 
     user.follow(target)
 
-    GoogleAnalyticsApi.new.event(
-      'user_followers',
-      target_id,
-      user_id,
-      1,
-      user_id)
+    GoogleAnalyticsApi.new.event('user_followers',
+                                 target_id,
+                                 user_id,
+                                 1,
+                                 user_id)
 
     collect_target_faves(user, target)
   end

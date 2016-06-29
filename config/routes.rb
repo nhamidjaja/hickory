@@ -12,9 +12,11 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: { registrations: 'registrations',
+  scope '/u' do
+    devise_for :users, controllers: { registrations: 'registrations',
                                     omniauth_callbacks: 'omniauth_callbacks' }
-
+  end
+  
   resources :f, only: [:index] do
     collection do
       get 'preview'
@@ -43,6 +45,8 @@ Rails.application.routes.draw do
       resources :top_articles, only: [:index]
       resources :search, only: [:index]
       resources :fave, only: [:index]
+      resources :featured_users, only: [:index]
+      resources :friends, only: [:index]
 
       resources :sessions, only: [] do
         collection do

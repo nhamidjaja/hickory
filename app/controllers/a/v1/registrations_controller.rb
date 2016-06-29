@@ -1,8 +1,6 @@
 module A
   module V1
     class RegistrationsController < A::V1::ApplicationController
-      skip_before_action :authenticate_user_from_token!
-
       def facebook
         token = grab_facebook_token!
         user = fetch_user_from_facebook(token)
@@ -30,18 +28,21 @@ module A
         token
       end
 
+      # rubocop:disable Metrics/MethodLength
       def fetch_user_from_facebook(token)
         graph = Koala::Facebook::API.new(token, Figaro.env.facebook_app_secret!)
 
         begin
-          fb_user = graph.get_object('me')
+          fb_user = graph.get_object(
+            'me',
+            'fields' => 'email,name,id,picture.type(normal)'
+          )
         rescue Koala::Facebook::APIError => e
           raise(Errors::NotAuthorized, e.message)
         end
 
         user = User.new(user_params)
         user.apply_third_party_auth(Fave::Auth.from_koala(fb_user, token))
-
         user
       end
 
@@ -51,8 +52,7 @@ module A
       end
 
       def after_registration(user)
-        PrefollowUserWorker.perform_async(user.id.to_s)
-        UserMailer.tcc_announce(user).deliver_later
+        UserMailer.welcome(user).deliver_later
         GetFriendsFromFacebookWorker.perform_async(user.id.to_s)
       end
     end

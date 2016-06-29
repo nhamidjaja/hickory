@@ -1,7 +1,8 @@
 class UserMailer < ApplicationMailer
   def welcome(user)
     @user = user
-    mail(to: @user.email, subject: 'Welcome to Flyer')
+    mail(to: @user.email, subject: 'Selamat Datang ke Fave, '\
+     + @user.username)
   end
 
   def tcc_announce(user)

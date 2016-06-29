@@ -13,7 +13,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           'provider' => 'facebook',
           'uid' => '123',
           'info' => { 'email' => 'a@b.com' },
-          'credentials' => { 'token' => 'abc098' } }
+          'credentials' => { 'token' => 'abc098' }
+        }
 
         expect(User).to receive(:from_third_party_auth) { user }
       end
@@ -35,7 +36,8 @@ RSpec.describe OmniauthCallbacksController, type: :controller do
           'provider' => 'facebook',
           'uid' => '123',
           'info' => { 'email' => 'a@b.com' },
-          'credentials' => { 'token' => 'abc098' } }
+          'credentials' => { 'token' => 'abc098' }
+        }
 
         expect(User).to receive(:from_third_party_auth) { user }
       end

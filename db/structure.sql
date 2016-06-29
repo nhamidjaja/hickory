@@ -71,7 +71,8 @@ CREATE TABLE admins (
 CREATE TABLE featured_users (
     user_id uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    priority integer DEFAULT 9 NOT NULL
 );
 
 
@@ -119,6 +120,23 @@ CREATE SEQUENCE gcms_id_seq
 --
 
 ALTER SEQUENCE gcms_id_seq OWNED BY gcms.id;
+
+
+--
+-- Name: open_stories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE open_stories (
+    id uuid NOT NULL,
+    faver_id uuid NOT NULL,
+    content_url character varying NOT NULL,
+    title character varying,
+    image_url character varying,
+    published_at timestamp without time zone,
+    faved_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -174,7 +192,10 @@ CREATE TABLE users (
     authentication_token character varying,
     description text,
     full_name character varying,
-    tsv tsvector
+    tsv tsvector,
+    profile_picture_url character varying,
+    open_stories boolean DEFAULT false NOT NULL,
+    admin_managed boolean DEFAULT false NOT NULL
 );
 
 
@@ -215,6 +236,14 @@ ALTER TABLE ONLY feeders
 
 ALTER TABLE ONLY gcms
     ADD CONSTRAINT gcms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: open_stories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY open_stories
+    ADD CONSTRAINT open_stories_pkey PRIMARY KEY (id);
 
 
 --
@@ -259,6 +288,13 @@ CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
 --
 
 CREATE INDEX index_gcms_on_user_id ON gcms USING btree (user_id);
+
+
+--
+-- Name: index_open_stories_on_faved_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_open_stories_on_faved_at ON open_stories USING btree (faved_at DESC);
 
 
 --
@@ -326,6 +362,14 @@ ALTER TABLE ONLY top_articles
 
 
 --
+-- Name: fk_rails_ffc924a487; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY featured_users
+    ADD CONSTRAINT fk_rails_ffc924a487 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -364,4 +408,14 @@ INSERT INTO schema_migrations (version) VALUES ('20151125082134');
 INSERT INTO schema_migrations (version) VALUES ('20151125164633');
 
 INSERT INTO schema_migrations (version) VALUES ('20160419103453');
+
+INSERT INTO schema_migrations (version) VALUES ('20160520091804');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603075206');
+
+INSERT INTO schema_migrations (version) VALUES ('20160603143833');
+
+INSERT INTO schema_migrations (version) VALUES ('20160608102216');
+
+INSERT INTO schema_migrations (version) VALUES ('20160613034908');
 

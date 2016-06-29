@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
             uniqueness: true,
             format: { with: /\A[a-z0-9_]{2,30}\z/ }
 
+  validate :exclusive_username
+
   before_save :ensure_authentication_token
 
   pg_search_scope :search,
@@ -32,6 +34,14 @@ class User < ActiveRecord::Base
     self[:description] || ''
   end
 
+  # Custom validations
+
+  def exclusive_username
+    if username.starts_with?('favebot') && !admin_managed
+      errors.add(:username, 'Username cannot start with favebot')
+    end
+  end
+
   # Custom methods
 
   def self.from_third_party_auth(auth)
@@ -39,16 +49,18 @@ class User < ActiveRecord::Base
            find_by_provider_and_uid(auth.provider, auth.uid) ||
            User.new
     user.apply_third_party_auth(auth)
-
-    user
   end
 
+  # TODO: needs to be tested
   def apply_third_party_auth(auth)
     self.provider = auth.provider
     self.uid = auth.uid
     self.omniauth_token = auth.token
+    self.profile_picture_url = auth.picture
     self.email = auth.email if new_record?
     self.full_name = auth.full_name if new_record?
+
+    self
   end
 
   def ensure_authentication_token

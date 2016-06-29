@@ -24,7 +24,8 @@ RSpec.describe 'layouts/_google_analytics.html.slim', type: :view do
 
       expect(rendered).to include(
         "ga('create', 'UA-62541080-2', " \
-          "{ 'userId': '4f16d362-a336-4b12-a133-4b8e39be7f8e' });")
+          "{ 'userId': '4f16d362-a336-4b12-a133-4b8e39be7f8e' });"
+      )
     end
   end
 end

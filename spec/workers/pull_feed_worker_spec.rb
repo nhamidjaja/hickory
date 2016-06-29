@@ -7,7 +7,8 @@ RSpec.describe PullFeedWorker do
       FactoryGirl.build(
         :feeder,
         id: '55a27bc8-3db3-11e5-b5a1-13c85fe6896f',
-        feed_url: 'http://tryflyer.com/feed.rss')
+        feed_url: 'http://tryflyer.com/feed.rss'
+      )
     end
 
     before do
@@ -17,13 +18,15 @@ RSpec.describe PullFeedWorker do
 
       response = instance_double(
         'Typhoeus::Response',
-        body: '<rss></rss>')
+        body: '<rss></rss>'
+      )
       allow(Typhoeus).to receive(:get)
         .with(
           'http://tryflyer.com/feed.rss',
           timeout: 5,
           followlocation: true,
-          accept_encoding: 'gzip')
+          accept_encoding: 'gzip'
+        )
         .and_return(response)
 
       allow(feeder.top_articles).to receive(:create!)
@@ -88,20 +91,6 @@ RSpec.describe PullFeedWorker do
             image_url: 'http://example.com/img.png',
             published_at: Time.zone.local('2015-01-10 11:11:11 +01:00')
           )
-
-        subject
-      end
-
-      it 'creates Content' do
-        double = instance_double('Content')
-        expect(Content).to receive(:new).with(
-          url: 'http://example.com/article',
-          title: 'An article',
-          image_url: 'http://example.com/img.png',
-          published_at: Time.zone.local('2015-01-10 11:11:11 +01:00')
-        ).and_return(double)
-
-        expect(double).to receive(:save!).with(consistency: :any)
 
         subject
       end

@@ -3,11 +3,17 @@ require 'rails_helper'
 RSpec.describe 'Fave Urls API', type: :request do
   describe 'get a url' do
     context 'unauthenticated' do
-      it 'is unauthorized' do
-        get '/a/v1/me/fave_urls?url=http://example.com'
+      it 'is successful' do
+        Sidekiq::Testing.inline! do
+          expect_any_instance_of(CUserFave).to receive(:increment_view)
 
-        expect(response.status).to eq(401)
-        expect(json['errors']).to_not be_blank
+          get '/a/v1/me/fave_urls?url=http://example.com'\
+              '&attribution_id=de305d54-75b4-431b-adb2-eb6b9e546014'\
+              '&story_id=123e4567-e89b-12d3-a456-426655440000'
+
+          expect(response.status).to eq(200)
+          expect(json['fave_url']).to be_nil
+        end
       end
     end
 
@@ -17,7 +23,8 @@ RSpec.describe 'Fave Urls API', type: :request do
           :user,
           id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
           email: 'a@user.com',
-          authentication_token: 'validtoken')
+          authentication_token: 'validtoken'
+        )
 
         allow(Typhoeus).to receive(:post)
       end

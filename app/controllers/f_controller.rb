@@ -11,7 +11,8 @@ class FController < ApplicationController
       Time.zone.now.to_s,
       params[:title],
       params[:image_url],
-      params[:published_at]
+      params[:published_at],
+      current_user.open_stories
     )
   end
 

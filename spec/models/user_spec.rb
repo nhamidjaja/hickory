@@ -35,6 +35,23 @@ RSpec.describe User, type: :model do
       end
     end
 
+    describe '.exclusive_username' do
+      it do
+        expect(FactoryGirl.build(
+                 :user,
+                 username: 'favebot',
+                 admin_managed: false
+        )).to_not be_valid
+      end
+      it do
+        expect(FactoryGirl.build(
+                 :user,
+                 username: 'favebot',
+                 admin_managed: true
+        )).to be_valid
+      end
+    end
+
     it 'is unique' do
       FactoryGirl.create(:user, username: 'nic')
 
@@ -64,8 +81,7 @@ RSpec.describe User, type: :model do
   describe '#from_third_party_auth' do
     let(:user) do
       FactoryGirl.build(:user,
-                        email: 'a@b.com'
-                       )
+                        email: 'a@b.com')
     end
 
     let(:auth) do
@@ -74,8 +90,8 @@ RSpec.describe User, type: :model do
                       provider: 'fb',
                       uid: 'x123',
                       token: 'abc098',
-                      full_name: 'John Doe'
-                     )
+                      full_name: 'John Doe',
+                      picture: 'http://abc.com/pic.jpg')
     end
 
     subject { User.from_third_party_auth(auth) }
@@ -93,6 +109,7 @@ RSpec.describe User, type: :model do
         expect(subject.provider).to eq('fb')
         expect(subject.uid).to eq('x123')
         expect(subject.omniauth_token).to eq('abc098')
+        expect(subject.profile_picture_url).to eq('http://abc.com/pic.jpg')
       end
     end
 
@@ -102,8 +119,7 @@ RSpec.describe User, type: :model do
                                  email: 'x@y.com',
                                  provider: 'fb',
                                  uid: 'x123',
-                                 full_name: 'Do not change'
-                                )
+                                 full_name: 'Do not change')
 
         expect(User).to receive(:find_by_email).with('a@b.com').and_return(nil)
         expect(User).to receive(:find_by_provider_and_uid)
@@ -163,7 +179,8 @@ RSpec.describe User, type: :model do
     it do
       user = FactoryGirl.build(
         :user,
-        id: '99a89669-557c-4c7a-a533-d1163caad65f')
+        id: '99a89669-557c-4c7a-a533-d1163caad65f'
+      )
       expect(CUser).to receive(:new)
         .with(id: '99a89669-557c-4c7a-a533-d1163caad65f')
 
@@ -175,7 +192,8 @@ RSpec.describe User, type: :model do
     let(:user) do
       FactoryGirl.build(
         :user,
-        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+      )
     end
     let(:c_user) { CUser.new(id: '4f16d362-a336-4b12-a133-4b8e39be7f8e') }
     let(:expectation) do
@@ -218,7 +236,8 @@ RSpec.describe User, type: :model do
     let(:user) do
       FactoryGirl.build(
         :user,
-        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+      )
     end
     let(:c_user) do
       FactoryGirl.build(:c_user,
@@ -230,7 +249,8 @@ RSpec.describe User, type: :model do
         c_user: c_user,
         faves: 1,
         followers: 2,
-        followings: 3)
+        followings: 3
+      )
     end
 
     context 'counter not set' do
@@ -264,12 +284,14 @@ RSpec.describe User, type: :model do
     let(:user) do
       FactoryGirl.build(
         :user,
-        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e')
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+      )
     end
     let(:target) do
       FactoryGirl.build(
         :user,
-        id: '9d6831a4-39d1-11e5-9128-17e501c711a8')
+        id: '9d6831a4-39d1-11e5-9128-17e501c711a8'
+      )
     end
     let(:user_double) { instance_double('CUser') }
     let(:target_double) { instance_double('CUser') }

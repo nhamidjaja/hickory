@@ -20,7 +20,7 @@ RSpec.describe 'User Registrations API', type: :request do
           .with('invalid-token', kind_of(String))
           .and_return(double)
 
-        expect(double)
+        allow(double)
           .to receive(:get_object)
           .and_raise(Koala::Facebook::APIError.new(401, 'Invalid token'))
       end
@@ -51,10 +51,16 @@ RSpec.describe 'User Registrations API', type: :request do
           'email' => 'some@email.com',
           'id' => 'x123',
           'access_token' => 'fb-token',
-          'name' => 'John Doe'
+          'name' => 'John Doe',
+          'picture' =>
+          { 'data' =>
+            {
+              'url' => 'http://abc.com/123.jpg'
+            } }
         }
-        expect(koala)
+        allow(koala)
           .to receive(:get_object)
+          .with('me', 'fields' => 'email,name,id,picture.type(normal)')
           .and_return(fb_user)
         allow(koala)
           .to receive(:get_connections)
@@ -76,25 +82,8 @@ RSpec.describe 'User Registrations API', type: :request do
             expect(json['user']['email']).to match('some@email.com')
             expect(json['user']['username']).to match('nicholas')
             expect(json['user']['authentication_token']).to_not be_blank
+            expect(json['user']['profile_picture_url']).to eq('http://abc.com/123.jpg')
             expect(ActionMailer::Base.deliveries.count).to eq(1)
-          end
-        end
-
-        describe 'prefollow users' do
-          before do
-            FactoryGirl.create_list(:featured_user, 3)
-          end
-          it do
-            Sidekiq::Testing.inline! do
-              expect do
-                post '/a/v1/registrations/facebook',
-                     '{"user": {"username": "nicholas"}}',
-                     'Content-Type' => 'application/json',
-                     'X-Facebook-Token' => 'fb-token'
-              end.to change(Following, :count).by(3)
-
-              expect(response.status).to eq(201)
-            end
           end
         end
       end
@@ -175,13 +164,13 @@ RSpec.describe 'User Registrations API', type: :request do
                        '{"user": {"username": "nicholas"}}',
                        'Content-Type' => 'application/json',
                        'X-Facebook-Token' => 'fb-token'
-                end.to change(Follower, :count).by(2)
+                end.to change(Friend, :count).by(2)
 
                 expect(response.status).to eq(201)
-                expect(friend.in_cassandra.followers.size).to eq(1)
+                expect(friend.in_cassandra.friends.size).to eq(1)
 
                 user = User.find_by_username('nicholas')
-                expect(user.in_cassandra.followers.size).to eq(1)
+                expect(user.in_cassandra.friends.size).to eq(1)
               end
             end
           end
