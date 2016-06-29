@@ -97,7 +97,7 @@ CREATE TABLE feeders (
 CREATE TABLE gcms (
     id integer NOT NULL,
     user_id uuid,
-    registration_id character varying,
+    registration_token character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -418,4 +418,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160603143833');
 INSERT INTO schema_migrations (version) VALUES ('20160608102216');
 
 INSERT INTO schema_migrations (version) VALUES ('20160613034908');
+
+INSERT INTO schema_migrations (version) VALUES ('20160629063913');
 

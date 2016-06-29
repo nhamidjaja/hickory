@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         resources :fave_urls, only: [:index]
         resources :stories, only: [:index]
         resources :friends, only: [:index]
+        resources :gcm, only: [:create]
       end
 
       resources :top_articles, only: [:index]
