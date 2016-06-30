@@ -3,7 +3,7 @@ module A
     module Me
       class GcmController < A::V1::ApplicationController
         def create
-          @gcm = Gcm.new(gcm_params)
+          @gcm = fetch_gcm
           @gcm.user = current_user
 
           begin @gcm.save!
@@ -17,6 +17,16 @@ module A
 
         def gcm_params
           params.require(:gcm).permit(:registration_token)
+        end
+
+        def fetch_gcm
+          begin
+            gcm = Gcm.find(params[:gcm][:registration_token])
+          rescue ActiveRecord::RecordNotFound
+            gcm = Gcm.new(gcm_params)
+          end
+
+          gcm
         end
       end
     end

@@ -96,7 +96,7 @@ CREATE TABLE feeders (
 
 CREATE TABLE gcms (
     user_id uuid,
-    registration_token character varying,
+    registration_token character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -201,6 +201,14 @@ ALTER TABLE ONLY featured_users
 
 ALTER TABLE ONLY feeders
     ADD CONSTRAINT feeders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: gcms_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY gcms
+    ADD CONSTRAINT gcms_pkey PRIMARY KEY (registration_token);
 
 
 --
@@ -387,4 +395,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160613034908');
 INSERT INTO schema_migrations (version) VALUES ('20160629063913');
 
 INSERT INTO schema_migrations (version) VALUES ('20160630054222');
+
+INSERT INTO schema_migrations (version) VALUES ('20160630061724');
 
