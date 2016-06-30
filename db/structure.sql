@@ -95,31 +95,11 @@ CREATE TABLE feeders (
 --
 
 CREATE TABLE gcms (
-    id integer NOT NULL,
     user_id uuid,
     registration_token character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
-
-
---
--- Name: gcms_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE gcms_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: gcms_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE gcms_id_seq OWNED BY gcms.id;
 
 
 --
@@ -200,13 +180,6 @@ CREATE TABLE users (
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY gcms ALTER COLUMN id SET DEFAULT nextval('gcms_id_seq'::regclass);
-
-
---
 -- Name: admins_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -228,14 +201,6 @@ ALTER TABLE ONLY featured_users
 
 ALTER TABLE ONLY feeders
     ADD CONSTRAINT feeders_pkey PRIMARY KEY (id);
-
-
---
--- Name: gcms_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY gcms
-    ADD CONSTRAINT gcms_pkey PRIMARY KEY (id);
 
 
 --
@@ -420,4 +385,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160608102216');
 INSERT INTO schema_migrations (version) VALUES ('20160613034908');
 
 INSERT INTO schema_migrations (version) VALUES ('20160629063913');
+
+INSERT INTO schema_migrations (version) VALUES ('20160630054222');
 
