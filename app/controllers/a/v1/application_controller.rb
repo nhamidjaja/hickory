@@ -2,6 +2,7 @@ module A
   module V1
     class ApplicationController < ActionController::Base
       protect_from_forgery with: :null_session
+      skip_before_action :verify_authenticity_token
 
       rescue_from StandardError, with: :render_internal_server_error
       rescue_from Errors::NotFound, with: :render_not_found
