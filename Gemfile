@@ -106,6 +106,9 @@ gem 'simplecov', group: :test, require: false
 # PostgreSQL search
 gem 'pg_search'
 
+# Firebase cloud messaging
+gem 'fcm'
+
 gem 'redis-namespace'
 
 group :development, :test do
