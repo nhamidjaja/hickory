@@ -14,8 +14,16 @@ RSpec.describe 'feeder namespace task' do
     end
 
     context 'one feed' do
-      let(:feeder) { FactoryGirl.create(:feeder) }
-      before { feeder }
+      let(:feeder) do
+        FactoryGirl.build(
+          :feeder,
+          id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+        )
+      end
+
+      before do
+        allow(Feeder).to receive(:all).and_return([feeder])
+      end
 
       it do
         expect(PullFeedWorker).to receive(:perform_async)
