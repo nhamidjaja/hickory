@@ -14,7 +14,11 @@ RSpec.describe BroadcastFaveWorker do
     it 'sends notification' do
       expect(fcm).to receive(:send)
         .with(['token'],
-              notification: { body: '@username faved \'Some News Headline\'' })
+              notification: {
+                icon: 'ic_notify',
+                sound: 'default',
+                body: '@username faved \'Some News Headline\''
+              })
         .and_return(response: 'success',
                     canonical_ids: [],
                     not_registered_ids: [])

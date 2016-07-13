@@ -5,6 +5,8 @@ class BroadcastFaveWorker
     fcm = FCM.new(Figaro.env.fcm_server_key!)
 
     options = { notification: {
+      icon: 'ic_notify',
+      sound: 'default',
       body: "@#{username} faved '#{article_title}'"
     } }
     response = fcm.send([registration_token], options)
