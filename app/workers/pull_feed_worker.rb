@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PullFeedWorker
   include Sidekiq::Worker
   sidekiq_options queue: :pull_feed

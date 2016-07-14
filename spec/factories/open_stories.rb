@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :open_story do
     id { Cequel.uuid(Time.zone.now) }

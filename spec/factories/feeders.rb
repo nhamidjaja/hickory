@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :feeder do
     feed_url { Faker::Internet.url }

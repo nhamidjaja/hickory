@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :follower do
     association :c_user, factory: :c_user, strategy: :build

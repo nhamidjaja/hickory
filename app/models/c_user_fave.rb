@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # This is a reverse implementation of CUserFaveUrl
 class CUserFave
   include Cequel::Record

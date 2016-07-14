@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class FollowUserWorker
   include Sidekiq::Worker
   sidekiq_options queue: :high

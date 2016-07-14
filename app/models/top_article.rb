@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TopArticle < ActiveRecord::Base
   belongs_to :feeder
 

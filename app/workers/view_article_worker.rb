@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ViewArticleWorker
   include Sidekiq::Worker
 

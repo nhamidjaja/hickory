@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # TODO: Deprecate this
 module Cequelable
   extend ActiveSupport::Concern
