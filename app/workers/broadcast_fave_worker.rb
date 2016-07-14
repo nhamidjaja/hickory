@@ -8,7 +8,9 @@ class BroadcastFaveWorker
     options = { notification: {
       icon: 'ic_notify',
       sound: 'default',
-      body: "@#{username} faved '#{article_title}'"
+      color: '#FF9800',
+      title: "@#{username}",
+      body: article_title
     } }
     response = fcm.send([registration_token], options)
 
@@ -37,9 +39,9 @@ class BroadcastFaveWorker
     GoogleAnalyticsApi.new.event(
       'cloud_messaging',
       'broadcast_fave',
-      options[:notification][:body],
+      options[:notification][:title],
       0,
-      nil
+      options[:notification][:body]
     )
   end
 end

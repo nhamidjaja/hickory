@@ -17,7 +17,9 @@ RSpec.describe BroadcastFaveWorker do
               notification: {
                 icon: 'ic_notify',
                 sound: 'default',
-                body: '@username faved \'Some News Headline\''
+                color: '#FF9800',
+                title: '@username',
+                body: 'Some News Headline'
               })
         .and_return(response: 'success',
                     canonical_ids: [],
@@ -94,9 +96,9 @@ RSpec.describe BroadcastFaveWorker do
       expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
         .with('cloud_messaging',
               'broadcast_fave',
-              '@username faved \'Some News Headline\'',
+              '@username',
               0,
-              nil)
+              'Some News Headline')
 
       worker.perform(
         'token',
