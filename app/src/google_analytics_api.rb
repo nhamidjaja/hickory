@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class GoogleAnalyticsApi
   # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength
   def event(category, action, label = nil, value = nil,

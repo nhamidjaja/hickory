@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :top_article do
     content_url { Fave::Url.new(Faker::Internet.url).canon }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # TODO: getting fat, should move logic assertions to controller specs
 
 require 'rails_helper'

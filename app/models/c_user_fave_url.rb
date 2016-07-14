@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CUserFaveUrl
   include Cequel::Record
   include Cequelable

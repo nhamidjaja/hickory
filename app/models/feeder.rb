@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Feeder < ActiveRecord::Base
   has_many :top_articles, dependent: :destroy
 

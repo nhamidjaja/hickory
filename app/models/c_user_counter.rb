@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CUserCounter
   include Cequel::Record
   include Cequelable

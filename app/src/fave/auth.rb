@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Fave
   # Adapter class for third party authentications
   class Auth

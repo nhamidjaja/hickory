@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # User representation in cassandra
 class CUser
   include Cequel::Record

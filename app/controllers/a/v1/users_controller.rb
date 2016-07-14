@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module A
   module V1
     class UsersController < A::V1::ApplicationController

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class OpenStory < ActiveRecord::Base
   include Storyable
 
