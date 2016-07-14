@@ -5,12 +5,29 @@ namespace :story do
     story = OpenStory.order('faved_at DESC').first
     faver = story.faver
 
+    print "Begin story:anonymous broadcast"
     Gcm.where(user_id: nil).each do |g|
+      print "."
       BroadcastFaveWorker.perform_async(
-        g.token,
+        g.registration_token,
         faver.username,
-        s.title
+        story.title
         )
     end
+    print "\n"
+  end
+
+  task registered: :environment do
+    Rake::Task['story:registered'].reenable
+
+    print "Begin story:registered broadcast"
+    Gcm.where.not(user_id: nil).each do |g|
+      print "."
+      BroadcastUserStoryWorker.perform_async(
+        g.user_id,
+        g.registration_token
+        )
+    end
+    print "\n"
   end
 end
