@@ -84,5 +84,25 @@ RSpec.describe BroadcastFaveWorker do
         )
       end.to raise_error(RuntimeError, 'Server is temporarily unavailable.')
     end
+
+    it 'tracks event' do
+      allow(fcm).to receive(:send)
+        .and_return(response: 'success',
+                    canonical_ids: [],
+                    not_registered_ids: [])
+
+      expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
+        .with('cloud_messaging',
+              'broadcast_fave',
+              '@username faved \'Some News Headline\'',
+              0,
+              nil)
+
+      worker.perform(
+        'token',
+        'username',
+        'Some News Headline'
+      )
+    end
   end
 end

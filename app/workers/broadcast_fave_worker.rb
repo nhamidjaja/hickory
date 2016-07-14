@@ -1,6 +1,7 @@
 class BroadcastFaveWorker
   include Sidekiq::Worker
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def perform(registration_token, username, article_title)
     fcm = FCM.new(Figaro.env.fcm_server_key!)
 
@@ -15,6 +16,8 @@ class BroadcastFaveWorker
     update_canonical_token(registration_token, response[:canonical_ids].first)
 
     raise response[:response] unless response[:response].eql?('success')
+
+    track_event(options)
   end
 
   private
@@ -28,5 +31,15 @@ class BroadcastFaveWorker
       gcm = Gcm.find(original)
       gcm.update_attributes!(registration_token: canonical)
     end
+  end
+
+  def track_event(options)
+    GoogleAnalyticsApi.new.event(
+      'cloud_messaging',
+      'broadcast_fave',
+      options[:notification][:body],
+      0,
+      nil
+    )
   end
 end
