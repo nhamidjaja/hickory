@@ -429,7 +429,8 @@ RSpec.describe 'Users API', type: :request do
             FactoryGirl.create(:user,
                                id: '123e4567-e89b-12d3-a456-426655440000',
                                username: 'some_user',
-                               full_name: 'John Doe')
+                               full_name: 'John Doe',
+                               profile_picture_url: 'http://a.com/b.jpg')
             FactoryGirl.create(
               :follower,
               c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -448,6 +449,7 @@ RSpec.describe 'Users API', type: :request do
             expect(follower['id']).to eq('123e4567-e89b-12d3-a456-426655440000')
             expect(follower['username']).to eq('some_user')
             expect(follower['full_name']).to eq('John Doe')
+            expect(follower['profile_picture_url']).to eq('http://a.com/b.jpg')
           end
         end
 
@@ -537,7 +539,8 @@ RSpec.describe 'Users API', type: :request do
             FactoryGirl.create(:user,
                                id: '123e4567-e89b-12d3-a456-426655440000',
                                username: 'some_user',
-                               full_name: 'John Doe')
+                               full_name: 'John Doe',
+                               profile_picture_url: 'http://a.com/b.jpg')
             FactoryGirl.create(
               :following,
               c_user_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
@@ -557,6 +560,7 @@ RSpec.describe 'Users API', type: :request do
               .to eq('123e4567-e89b-12d3-a456-426655440000')
             expect(following['username']).to eq('some_user')
             expect(following['full_name']).to eq('John Doe')
+            expect(following['profile_picture_url']).to eq('http://a.com/b.jpg')
           end
         end
 
