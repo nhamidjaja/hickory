@@ -3,4 +3,5 @@ json.followings(@followings) do |f|
   json.id               user.id.to_s
   json.username         user.username
   json.full_name        user.full_name
+  json.profile_picture_url  user.profile_picture_url
 end
