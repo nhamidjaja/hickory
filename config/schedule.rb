@@ -4,6 +4,10 @@ every :hour do
   rake 'feeder:refresh'
 end
 
+every :day, at: '11:00' do
+  rake 'story:registered'
+end
+
 # Use this file to easily define all of your cron jobs.
 #
 # It's helpful, but not entirely necessary to understand cron before proceeding.
