@@ -4,7 +4,11 @@ every :hour do
   rake 'feeder:refresh'
 end
 
-every :day, at: '5am' do
+every :weekday, at: '7pm' do
+  rake 'story:registered'
+end
+
+every :weekend, at: '11am' do
   rake 'story:registered'
 end
 
