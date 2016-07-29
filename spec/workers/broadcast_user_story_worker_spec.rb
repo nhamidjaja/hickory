@@ -8,7 +8,8 @@ RSpec.describe BroadcastUserStoryWorker do
     let(:user) do
       FactoryGirl.build(
         :user,
-        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
+        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+        current_sign_in_at: nil
       )
     end
     let(:faver) { FactoryGirl.build(:user, username: 'faver') }
@@ -39,6 +40,7 @@ RSpec.describe BroadcastUserStoryWorker do
         allow(c_user).to receive(:stories)
           .and_return(stories)
       end
+
       it 'queues notification' do
         expect(BroadcastFaveWorker).to receive(:perform_async)
           .with('token', 'faver', 'Some Headline')
@@ -47,6 +49,21 @@ RSpec.describe BroadcastUserStoryWorker do
           user.id.to_s,
           'token'
         )
+      end
+
+      context 'user is active' do
+        before do
+          allow(user).to receive(:active_recently?).and_return(true)
+        end
+
+        it 'does not queue notification' do
+          expect(BroadcastFaveWorker).to_not receive(:perform_async)
+
+          worker.perform(
+            user.id.to_s,
+            'token'
+          )
+        end
       end
     end
 

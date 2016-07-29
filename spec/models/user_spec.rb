@@ -336,17 +336,17 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.proactive?' do
+  describe '.active_recently?' do
     let(:user) { FactoryGirl.build(:user) }
 
     it do
-      expect(user.proactive?).to eq(false)
+      expect(user.active_recently?).to eq(false)
     end
 
     it do
       user.current_sign_in_at = (Time.zone.now - 6.hours)
 
-      expect(user.proactive?).to eq(true)
+      expect(user.active_recently?).to eq(true)
     end
   end
 

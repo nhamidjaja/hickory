@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
     self.current_sign_in_at = Time.zone.now
   end
 
-  def proactive?
+  def active_recently?
     current = current_sign_in_at || Time.at(0).utc
     current > 1.day.ago
   end
