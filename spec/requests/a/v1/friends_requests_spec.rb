@@ -4,11 +4,11 @@ require 'rails_helper'
 RSpec.describe 'On-boarding Friends API', type: :request do
   describe 'get list of friends' do
     context 'unauthenticated' do
-      it 'is unauthorized' do
+      it 'is empty' do
         get '/a/v1/friends'
 
-        expect(response.status).to eq(401)
-        expect(json['errors']).to_not be_blank
+        expect(response.status).to eq(200)
+        expect(json['friends']).to eq([])
       end
     end
 
