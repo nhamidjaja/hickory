@@ -2,10 +2,10 @@
 module A
   module V1
     class FriendsController < ApplicationController
-      before_action :require_authentication!
-
       def index
-        @friends = fetch_friends
+        @friends = []
+
+        @friends = fetch_friends if current_user
 
         render 'a/v1/me/friends/index.json'
       end
