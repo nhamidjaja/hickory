@@ -4,11 +4,10 @@ require 'rails_helper'
 RSpec.describe 'On-boarding Featured Users API', type: :request do
   describe 'get list of featured users' do
     context 'unauthenticated' do
-      it 'is unauthorized' do
+      it 'is successful' do
         get '/a/v1/featured_users'
 
-        expect(response.status).to eq(401)
-        expect(json['errors']).to_not be_blank
+        expect(response.status).to eq(200)
       end
     end
 
