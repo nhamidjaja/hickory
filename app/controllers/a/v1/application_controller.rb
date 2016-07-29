@@ -68,7 +68,7 @@ module A
       end
 
       def record_request(user)
-        return if user.proactive?
+        return if user.active_recently?
 
         user.record_current_request
         user.save
