@@ -69,7 +69,7 @@ RSpec.describe 'On-boarding Featured Users API', type: :request do
 
       context 'many featured users' do
         before do
-          21.times do |i|
+          51.times do |i|
             u = FactoryGirl.create(:user,
                                    username: 'user_' + i.to_s)
             FactoryGirl.create(:featured_user,
@@ -77,14 +77,14 @@ RSpec.describe 'On-boarding Featured Users API', type: :request do
           end
         end
 
-        it 'is limited to 20' do
+        it 'is limited to 50' do
           get '/a/v1/featured_users',
               nil,
               'X-Email' => 'a@user.com',
               'X-Auth-Token' => 'validtoken'
 
           expect(response.status).to eq(200)
-          expect(json['featured_users'].size).to eq(20)
+          expect(json['featured_users'].size).to eq(50)
         end
       end
     end
