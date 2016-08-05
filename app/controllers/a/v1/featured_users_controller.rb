@@ -5,7 +5,13 @@ module A
       def index
         @featured_users = User.joins(:featured_user)
                               .order('priority ASC')
-                              .limit(20)
+                              .limit(50).to_a
+
+        if current_user
+          @featured_users = @featured_users.delete_if do |f|
+            current_user.in_cassandra.following?(f)
+          end
+        end
       end
     end
   end
