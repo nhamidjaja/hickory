@@ -6,6 +6,10 @@ namespace :story do
     faver = story.faver
 
     print "Begin story:anonymous broadcast"
+    print "#{story.faver.username}\n"
+    print "#{story.content_url}\n"
+    print "#{story.title}\n"
+
     Gcm.where(user_id: nil).each do |g|
       print "."
       BroadcastFaveWorker.perform_async(
