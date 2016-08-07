@@ -8,7 +8,7 @@ every :weekday, at: '7pm' do
   rake 'story:registered'
 end
 
-every :weekend, at: '11am' do
+every :weekend, at: '4pm' do
   rake 'story:registered'
 end
 
