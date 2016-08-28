@@ -4,17 +4,24 @@ module A
     class FaveController < ApplicationController
       before_action :require_authentication!
 
-      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def index
-        FaveWorker.perform_async(
-          current_user.id.to_s,
-          params['url'],
-          Time.zone.now.utc.to_s,
-          params['title'],
-          params['image_url'],
-          params['published_at'],
-          current_user.open_stories
-        )
+        url = Fave::Url.new(params['url'])
+        if url.valid?
+          FaveWorker.perform_async(
+            current_user.id.to_s,
+            url.canon,
+            Time.zone.now.utc.to_s,
+            params['title'],
+            params['image_url'],
+            params['published_at'],
+            current_user.open_stories
+          )
+        else
+          render json: {
+            errors: { message: 'Invalid URL' }
+          }, status: 422
+        end
       end
     end
   end
