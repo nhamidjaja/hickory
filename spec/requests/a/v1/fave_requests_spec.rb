@@ -51,5 +51,15 @@ RSpec.describe 'Fave API', type: :request do
         expect(Story.count).to eq(4)
       end
     end
+
+    context 'invalid' do
+      it 'is unprocessable entity' do
+        get '/a/v1/fave?url=x.com',
+            nil,
+            'X-Email' => 'a@user.com',
+            'X-Auth-Token' => 'validtoken'
+        expect(response.status).to eq(422)
+      end
+    end
   end
 end
