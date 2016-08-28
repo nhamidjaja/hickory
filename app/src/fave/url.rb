@@ -13,7 +13,7 @@ module Fave
     end
 
     def valid?
-      @parsed.kind_of?(URI::HTTP)
+      @parsed.is_a?(URI::HTTP)
     end
   end
 end
