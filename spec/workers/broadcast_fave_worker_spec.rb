@@ -17,7 +17,6 @@ RSpec.describe BroadcastFaveWorker do
         .with(['token'],
               notification: {
                 icon: 'ic_notify',
-                sound: 'default',
                 color: '#FF9800',
                 title: '@username',
                 body: 'Some News Headline'
