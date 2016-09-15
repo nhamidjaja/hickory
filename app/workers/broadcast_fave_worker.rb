@@ -8,7 +8,6 @@ class BroadcastFaveWorker
 
     options = { notification: {
       icon: 'ic_notify',
-      sound: 'default',
       color: '#FF9800',
       title: "@#{username}",
       body: article_title

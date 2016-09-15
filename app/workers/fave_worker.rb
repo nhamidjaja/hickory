@@ -4,7 +4,7 @@ class FaveWorker
 
   # rubocop:disable Metrics/ParameterLists
   def perform(user_id, url, faved_time,
-              title, image_url, published_at, _open_story)
+              title, image_url, published_at, open_story)
     canon_url = Fave::Url.new(url).canon
     content = get_content(canon_url, title, image_url, published_at)
     faver = CUser.new(id: user_id)
@@ -12,7 +12,7 @@ class FaveWorker
 
     fave = faver.fave(content, faved_at)
 
-    save_as_open_story(fave) # if open_story
+    save_as_open_story(fave) if open_story
 
     propagate_to_followers(faver, fave)
   end
