@@ -4,10 +4,10 @@ class FollowUserWorker
   sidekiq_options queue: :high
 
   def perform(user_id, target_id)
-    user = CUser.new(id: user_id)
-    target = CUser.new(id: target_id)
+    @user = User.find(user_id)
+    @target = User.find(target_id)
 
-    user.follow(target)
+    @user.in_cassandra.follow(@target.in_cassandra)
 
     GoogleAnalyticsApi.new.event('user_followers',
                                  target_id,
@@ -15,21 +15,35 @@ class FollowUserWorker
                                  1,
                                  user_id)
 
-    collect_target_faves(user, target)
+    forward_faves_to_user_timeline
+
+    notify_target
   end
 
+  private
+
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def collect_target_faves(user, target)
-    target.c_user_faves.each do |fave|
+  def forward_faves_to_user_timeline
+    @target.in_cassandra.c_user_faves.each do |fave|
       StoryWorker.perform_async(
-        user.id.to_s,
-        target.id.to_s,
+        @user.id.to_s,
+        @target.id.to_s,
         fave.id.to_s,
         fave.content_url,
         fave.title,
         fave.image_url,
         fave.published_at.to_s,
         fave.faved_at.to_s
+      )
+    end
+  end
+
+  def notify_target
+    @target.gcms.each do |g|
+      NotifyNewFollowerWorker.perform_async(
+        g.registration_token,
+        @user.id.to_s,
+        @user.username
       )
     end
   end
