@@ -3,16 +3,19 @@ class BroadcastFaveWorker
   include Sidekiq::Worker
   include CloudMessageable
 
-  # rubocop:disable Metrics/MethodLength
-  def perform(registration_token, username, article_title)
+  # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+  def perform(registration_token, faver_id, username, id, url, title, image_url)
     @token = registration_token
     fcm = FCM.new(Figaro.env.fcm_server_key!)
 
-    options = { notification: {
-      icon: 'ic_notify',
-      color: '#FF9800',
-      title: "@#{username}",
-      body: article_title
+    options = { data: {
+      type: 'story',
+      faver_id: faver_id,
+      faver_username: username,
+      story_id: id,
+      story_url: url,
+      story_title: title,
+      story_image_url: image_url
     } }
     response = fcm.send([@token], options)
 
@@ -21,7 +24,7 @@ class BroadcastFaveWorker
 
     raise response[:response] unless response[:response].eql?('success')
 
-    track_event(options)
+    # track_event(options)
   end
 
   private

@@ -12,24 +12,35 @@ RSpec.describe BroadcastFaveWorker do
         .and_return(fcm)
     end
 
+    subject do
+      worker.perform(
+        'token',
+        'de305d54-75b4-431b-adb2-eb6b9e546014',
+        'someuser',
+        '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+        'http://example.com/article',
+        'Some News Headline',
+        'http://example.com/a.jpg'
+      )
+    end
+
     it 'sends notification' do
       expect(fcm).to receive(:send)
         .with(['token'],
-              notification: {
-                icon: 'ic_notify',
-                color: '#FF9800',
-                title: '@username',
-                body: 'Some News Headline'
+              data: {
+                type: 'story',
+                faver_id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+                faver_username: 'someuser',
+                story_id: '4f16d362-a336-4b12-a133-4b8e39be7f8e',
+                story_url: 'http://example.com/article',
+                story_title: 'Some News Headline',
+                story_image_url: 'http://example.com/a.jpg'
               })
         .and_return(response: 'success',
                     canonical_ids: [],
                     not_registered_ids: [])
 
-      worker.perform(
-        'token',
-        'username',
-        'Some News Headline'
-      )
+      subject
     end
 
     it 'deletes unregistered tokens' do
@@ -44,11 +55,7 @@ RSpec.describe BroadcastFaveWorker do
         .and_return(double)
       expect(double).to receive(:destroy_all)
 
-      worker.perform(
-        'token',
-        'username',
-        'Some News Headline'
-      )
+      subject
     end
 
     it 'updates token' do
@@ -65,11 +72,7 @@ RSpec.describe BroadcastFaveWorker do
       expect(gcm).to receive(:update_attributes!)
         .with(registration_token: 'canon')
 
-      worker.perform(
-        'token',
-        'username',
-        'Some News Headline'
-      )
+      subject
     end
 
     it 'fails on error' do
@@ -79,32 +82,24 @@ RSpec.describe BroadcastFaveWorker do
                     not_registered_ids: [])
 
       expect do
-        worker.perform(
-          'token',
-          'username',
-          'Some News Headline'
-        )
+        subject
       end.to raise_error(RuntimeError, 'Server is temporarily unavailable.')
     end
 
-    it 'tracks event' do
-      allow(fcm).to receive(:send)
-        .and_return(response: 'success',
-                    canonical_ids: [],
-                    not_registered_ids: [])
+    # it 'tracks event' do
+    #   allow(fcm).to receive(:send)
+    #     .and_return(response: 'success',
+    #                 canonical_ids: [],
+    #                 not_registered_ids: [])
 
-      expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
-        .with('cloud_messaging',
-              'broadcast_fave',
-              '@username',
-              0,
-              'Some News Headline')
+    #   expect_any_instance_of(GoogleAnalyticsApi).to receive(:event)
+    #     .with('cloud_messaging',
+    #           'broadcast_fave',
+    #           '@username',
+    #           0,
+    #           'Some News Headline')
 
-      worker.perform(
-        'token',
-        'username',
-        'Some News Headline'
-      )
-    end
+    #   subject
+    # end
   end
 end
