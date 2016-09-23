@@ -38,9 +38,9 @@ class User < ActiveRecord::Base
   # Custom validations
 
   def exclusive_username
-    if username.starts_with?('favebot') && !admin_managed
-      errors.add(:username, 'Username cannot start with favebot')
-    end
+    return if admin_managed || !username.starts_with?('favebot')
+
+    errors.add(:username, 'Username cannot start with favebot')
   end
 
   # Custom methods

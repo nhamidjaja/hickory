@@ -71,7 +71,7 @@ RSpec.describe 'Fave Urls API', type: :request do
             expect(response.status).to eq(200)
             expect(json['fave_url']['content_url']).to eq('http://example.com')
             expect(json['fave_url']['faved_at']).to_not be_blank
-            expect(json['fave_url']['faved_at']).to be_a(Fixnum)
+            expect(json['fave_url']['faved_at']).to be_a(Integer)
           end
         end
       end
