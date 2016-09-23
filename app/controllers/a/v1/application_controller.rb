@@ -25,11 +25,11 @@ module A
         # in the database with the token given in the params, mitigating
         # timing attacks.
 
-        if user && Devise.secure_compare(user.authentication_token, token)
-          record_request(user)
-          sign_in user, store: false
-          return
-        end
+        return unless user &&
+                      Devise.secure_compare(user.authentication_token, token)
+
+        record_request(user)
+        sign_in(user, store: false)
       end
 
       protected

@@ -7,10 +7,10 @@ module A
                               .order('priority ASC')
                               .limit(50).to_a
 
-        if current_user
-          @featured_users = @featured_users.delete_if do |f|
-            current_user.in_cassandra.following?(f)
-          end
+        return if current_user
+
+        @featured_users = @featured_users.delete_if do |f|
+          current_user.in_cassandra.following?(f)
         end
       end
     end

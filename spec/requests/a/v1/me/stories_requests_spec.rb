@@ -51,8 +51,8 @@ RSpec.describe 'Stories API', type: :request do
           expect(story['content_url']).to eq('http://a.com/b')
           expect(story['title']).to eq('A headline')
           expect(story['image_url']).to eq('http://a.com/i.jpg')
-          expect(story['published_at']).to be_a(Fixnum)
-          expect(story['faved_at']).to be_a(Fixnum)
+          expect(story['published_at']).to be_a(Integer)
+          expect(story['faved_at']).to be_a(Integer)
           expect(story['views_count']).to be(0)
 
           expect(story['faver']['id'])
@@ -160,8 +160,8 @@ RSpec.describe 'Stories API', type: :request do
           expect(story['content_url']).to eq('http://a.com/b')
           expect(story['title']).to eq('A headline')
           expect(story['image_url']).to eq('http://a.com/i.jpg')
-          expect(story['published_at']).to be_a(Fixnum)
-          expect(story['faved_at']).to be_a(Fixnum)
+          expect(story['published_at']).to be_a(Integer)
+          expect(story['faved_at']).to be_a(Integer)
           expect(story['views_count']).to be(0)
 
           expect(story['faver']['id'])

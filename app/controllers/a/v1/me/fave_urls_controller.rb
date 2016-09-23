@@ -22,7 +22,8 @@ module A
         def count_view(canon_url)
           return if view_as_self?
 
-          viewer_id = current_user ? current_user.id : nil
+          viewer_id = current_user&.id
+
           ViewArticleWorker.perform_async(viewer_id,
                                           params[:attribution_id],
                                           params[:story_id],

@@ -5,7 +5,7 @@ namespace :story do
     story = OpenStory.order('faved_at DESC').first
     faver = story.faver
 
-    print "Begin story:anonymous broadcast"
+    print "Begin story:anonymous broadcast\n"
     print "#{story.faver.username}\n"
     print "#{story.content_url}\n"
     print "#{story.title}\n"
@@ -14,8 +14,12 @@ namespace :story do
       print "."
       BroadcastFaveWorker.perform_async(
         g.registration_token,
+        faver.id,
         faver.username,
-        story.title
+        story.id,
+        story.content_url,
+        story.title,
+        story.image_url
         )
     end
     print "\n"
