@@ -87,7 +87,8 @@ CREATE TABLE feeders (
     description character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    priority integer DEFAULT 9 NOT NULL
+    priority integer DEFAULT 9 NOT NULL,
+    icon_url character varying
 );
 
 
@@ -441,4 +442,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160630061724');
 INSERT INTO schema_migrations (version) VALUES ('20160923062536');
 
 INSERT INTO schema_migrations (version) VALUES ('20160924084940');
+
+INSERT INTO schema_migrations (version) VALUES ('20160925073449');
 

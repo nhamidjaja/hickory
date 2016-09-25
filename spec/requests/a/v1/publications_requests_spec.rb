@@ -116,6 +116,7 @@ RSpec.describe 'Publications API', type: :request do
         expect(json['publication']['feed_url']).to_not be_empty
         expect(json['publication']['title']).to_not be_empty
         expect(json['publication']['description']).to_not be_empty
+        expect(json['publication']['icon_url']).to_not be_empty
       end
     end
   end
