@@ -150,7 +150,8 @@ RSpec.describe FollowUserWorker do
           expect(NotifyNewFollowerWorker).to receive(:perform_async)
             .with('token',
                   user.id.to_s,
-                  user.username)
+                  user.username,
+                  user.profile_picture_url)
 
           subject
         end

@@ -21,7 +21,8 @@ RSpec.describe NotifyNewFollowerWorker do
               data: {
                 type: 'new_follower',
                 user_id: 'target-id',
-                user_username: 'target-username'
+                user_username: 'target-username',
+                user_profile_picture_url: 'target-picture'
               })
         .and_return(response: 'success',
                     canonical_ids: [],
@@ -30,7 +31,8 @@ RSpec.describe NotifyNewFollowerWorker do
       worker.perform(
         'token',
         'target-id',
-        'target-username'
+        'target-username',
+        'target-picture'
       )
     end
 
@@ -40,7 +42,8 @@ RSpec.describe NotifyNewFollowerWorker do
       worker.perform(
         'token',
         'target-id',
-        'target-username'
+        'target-username',
+        'target-picture'
       )
     end
 
@@ -54,7 +57,8 @@ RSpec.describe NotifyNewFollowerWorker do
         worker.perform(
           'token',
           'target-id',
-          'target-username'
+          'target-username',
+          'target-picture'
         )
       end.to raise_error(RuntimeError, 'Server is temporarily unavailable.')
     end
