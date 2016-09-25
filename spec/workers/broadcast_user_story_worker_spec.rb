@@ -12,12 +12,21 @@ RSpec.describe BroadcastUserStoryWorker do
         current_sign_in_at: nil
       )
     end
-    let(:faver) { FactoryGirl.build(:user, username: 'faver') }
+    let(:faver) do
+      FactoryGirl.build(
+        :user,
+        id: 'de305d54-75b4-431b-adb2-eb6b9e546014',
+        username: 'faver'
+      )
+    end
     let(:c_user) { instance_double('CUser') }
     let(:story) do
       FactoryGirl.build(
         :story,
-        title: 'Some Headline'
+        id: 'f8acce33-805d-4d40-995c-4db4a0dc656e',
+        content_url: 'http://example.com/article',
+        title: 'Some Headline',
+        image_url: 'http://example.com/image.jpg'
       )
     end
     let(:stories) { [story] }
@@ -43,7 +52,13 @@ RSpec.describe BroadcastUserStoryWorker do
 
       it 'queues notification' do
         expect(BroadcastFaveWorker).to receive(:perform_async)
-          .with('token', 'faver', 'Some Headline')
+          .with('token',
+                'de305d54-75b4-431b-adb2-eb6b9e546014',
+                'faver',
+                'f8acce33-805d-4d40-995c-4db4a0dc656e',
+                'http://example.com/article',
+                'Some Headline',
+                'http://example.com/image.jpg')
 
         worker.perform(
           user.id.to_s,

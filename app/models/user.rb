@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
 
   has_one :featured_user
   has_many :gcms
+  has_many :feeders_users
+  has_many :feeders, through: :feeders_users
+  has_many :top_articles, through: :feeders_users
 
   validates :username,
             uniqueness: true,
@@ -38,9 +41,9 @@ class User < ActiveRecord::Base
   # Custom validations
 
   def exclusive_username
-    if username.starts_with?('favebot') && !admin_managed
-      errors.add(:username, 'Username cannot start with favebot')
-    end
+    return if admin_managed || !username.starts_with?('favebot')
+
+    errors.add(:username, 'Username cannot start with favebot')
   end
 
   # Custom methods

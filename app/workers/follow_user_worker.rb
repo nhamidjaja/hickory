@@ -43,7 +43,8 @@ class FollowUserWorker
       NotifyNewFollowerWorker.perform_async(
         g.registration_token,
         @user.id.to_s,
-        @user.username
+        @user.username,
+        @user.profile_picture_url
       )
     end
   end

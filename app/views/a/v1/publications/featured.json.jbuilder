@@ -1,0 +1,1 @@
+json.publications @publications, partial: 'feeder', as: :publication

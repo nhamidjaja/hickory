@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class TopArticle < ActiveRecord::Base
   belongs_to :feeder
+  belongs_to :feeders_user, foreign_key: :feeder_id, primary_key: :id
 
   validates :content_url, presence: true
   validates :title, presence: true
