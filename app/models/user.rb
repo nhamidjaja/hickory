@@ -10,6 +10,9 @@ class User < ActiveRecord::Base
 
   has_one :featured_user
   has_many :gcms
+  has_many :feeders_users
+  has_many :feeders, through: :feeders_users
+  has_many :top_articles, through: :feeders_users
 
   validates :username,
             uniqueness: true,

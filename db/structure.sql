@@ -86,7 +86,18 @@ CREATE TABLE feeders (
     title character varying,
     description character varying,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    priority integer DEFAULT 9 NOT NULL
+);
+
+
+--
+-- Name: feeders_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE feeders_users (
+    feeder_id uuid,
+    user_id uuid
 );
 
 
@@ -257,6 +268,27 @@ CREATE UNIQUE INDEX index_feeders_on_feed_url ON feeders USING btree (feed_url);
 
 
 --
+-- Name: index_feeders_on_priority; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feeders_on_priority ON feeders USING btree (priority);
+
+
+--
+-- Name: index_feeders_users_on_feeder_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feeders_users_on_feeder_id ON feeders_users USING btree (feeder_id);
+
+
+--
+-- Name: index_feeders_users_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feeders_users_on_user_id ON feeders_users USING btree (user_id);
+
+
+--
 -- Name: index_gcms_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -335,6 +367,14 @@ ALTER TABLE ONLY top_articles
 
 
 --
+-- Name: fk_rails_a69f82cb31; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY feeders_users
+    ADD CONSTRAINT fk_rails_a69f82cb31 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
 -- Name: fk_rails_ffc924a487; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -397,4 +437,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160629063913');
 INSERT INTO schema_migrations (version) VALUES ('20160630054222');
 
 INSERT INTO schema_migrations (version) VALUES ('20160630061724');
+
+INSERT INTO schema_migrations (version) VALUES ('20160923062536');
+
+INSERT INTO schema_migrations (version) VALUES ('20160924084940');
 

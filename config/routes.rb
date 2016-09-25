@@ -35,6 +35,17 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :publications, only: [:index, :show] do
+        collection do
+          get 'featured'
+        end
+
+        member do
+          get 'subscribe'
+          get 'unsubscribe'
+        end
+      end
+
       namespace :me do
         resources :profile, only: [:index, :create]
         resources :fave_urls, only: [:index]
@@ -43,6 +54,7 @@ Rails.application.routes.draw do
         resources :gcm, only: [:create]
       end
 
+      resources :feed, only: [:index]
       resources :top_articles, only: [:index]
       resources :search, only: [:index]
       resources :fave, only: [:index]
