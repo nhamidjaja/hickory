@@ -12,6 +12,8 @@ module A
 
       def show
         @publication = Feeder.find(params[:id])
+        user = current_user || NilUser.new
+        @is_subscribing = user.subscribing?(@publication)
       end
 
       # TODO: Write test
