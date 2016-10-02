@@ -1,6 +1,6 @@
 RailsAdmin.config do |config|
 
-  config.excluded_models << "FeedersUser"
+  config.excluded_models << 'FeedersUser'
 
   ### Popular gems integration
 
