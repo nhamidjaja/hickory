@@ -308,6 +308,12 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '.subscribing?' do
+    # TODO: Currently tested on request spec
+
+    it { expect(FactoryGirl.build(:user)).to respond_to(:subscribing?) }
+  end
+
   describe '.record_new_session' do
     let(:user) { FactoryGirl.build(:user) }
 

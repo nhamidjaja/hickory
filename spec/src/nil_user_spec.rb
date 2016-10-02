@@ -2,11 +2,21 @@
 require 'rails_helper'
 
 RSpec.describe NilUser do
+  let(:user) { NilUser.new }
+
   describe '.following?' do
     it 'is false' do
-      user = FactoryGirl.build(:user)
+      target = FactoryGirl.build(:user)
 
-      expect(NilUser.new.following?(user)).to eq(false)
+      expect(user.following?(target)).to eq(false)
+    end
+  end
+
+  describe '.subscribing?' do
+    it 'is false' do
+      feeder = FactoryGirl.build(:feeder)
+
+      expect(user.subscribing?(feeder)).to eq(false)
     end
   end
 end
