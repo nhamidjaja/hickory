@@ -88,12 +88,7 @@ RSpec.describe 'Publications API', type: :request do
   end
 
   describe 'get a publication' do
-    before do
-      FactoryGirl.create(
-        :feeder,
-        id: '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-      )
-    end
+    before { feeder }
 
     context 'does not exist' do
       it 'is not found' do
@@ -105,18 +100,42 @@ RSpec.describe 'Publications API', type: :request do
     end
 
     context 'exists' do
-      it 'is successful' do
-        get '/a/v1/publications/4f16d362-a336-4b12-a133-4b8e39be7f8e'
+      context 'not subscribing' do
+        it 'is successful' do
+          get '/a/v1/publications/123e4567-e89b-12d3-a456-426655440000'
 
-        expect(response.status).to eq(200)
+          expect(response.status).to eq(200)
 
-        expect(json['publication']['id']).to eq(
-          '4f16d362-a336-4b12-a133-4b8e39be7f8e'
-        )
-        expect(json['publication']['feed_url']).to_not be_empty
-        expect(json['publication']['title']).to_not be_empty
-        expect(json['publication']['description']).to_not be_empty
-        expect(json['publication']['icon_url']).to_not be_empty
+          expect(json['publication']['id']).to eq(
+            '123e4567-e89b-12d3-a456-426655440000'
+          )
+          expect(json['publication']['feed_url']).to_not be_empty
+          expect(json['publication']['title']).to_not be_empty
+          expect(json['publication']['description']).to_not be_empty
+          expect(json['publication']['icon_url']).to_not be_empty
+          expect(json['publication']['is_subscribing']).to eq(false)
+        end
+      end
+
+      context 'subscribing' do
+        before { user.feeders << feeder }
+        it 'is successful' do
+          get '/a/v1/publications/123e4567-e89b-12d3-a456-426655440000',
+              nil,
+              'X-Email' => 'a@user.com',
+              'X-Auth-Token' => 'validtoken'
+
+          expect(response.status).to eq(200)
+
+          expect(json['publication']['id']).to eq(
+            '123e4567-e89b-12d3-a456-426655440000'
+          )
+          expect(json['publication']['feed_url']).to_not be_empty
+          expect(json['publication']['title']).to_not be_empty
+          expect(json['publication']['description']).to_not be_empty
+          expect(json['publication']['icon_url']).to_not be_empty
+          expect(json['publication']['is_subscribing']).to eq(true)
+        end
       end
     end
   end

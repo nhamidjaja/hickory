@@ -99,6 +99,10 @@ class User < ActiveRecord::Base
     in_cassandra.following?(target.in_cassandra)
   end
 
+  def subscribing?(feeder)
+    feeders_users.find_by_feeder_id(feeder).present?
+  end
+
   def record_new_session
     self.sign_in_count += 1
     self.last_sign_in_at = Time.zone.now
