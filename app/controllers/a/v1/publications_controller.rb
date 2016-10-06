@@ -16,7 +16,7 @@ module A
         @is_subscribing = user.subscribing?(@publication)
       end
 
-      # TODO: Write test
+      # TODO: Write controller test
       def featured
         unless current_user
           return @publications = Feeder.order(priority: :asc).limit(30)
@@ -27,6 +27,7 @@ module A
                         .from("(#{subquery.to_sql}) AS fu "\
                           'RIGHT JOIN feeders ON fu.feeder_id = feeders.id')
                         .where('fu.user_id IS NULL')
+                        .order(priority: :asc).limit(30)
       end
 
       def subscribe
