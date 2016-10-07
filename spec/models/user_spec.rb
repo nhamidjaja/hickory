@@ -309,9 +309,32 @@ RSpec.describe User, type: :model do
   end
 
   describe '.subscribing?' do
-    # TODO: Currently tested on request spec
+    let(:user) { FactoryGirl.build(:user) }
+    let(:feeder) { instance_double('Feeder') }
+    let(:association) { double('AssociationCollection') }
+    before { allow(user).to receive(:feeders_users).and_return(association) }
 
-    it { expect(FactoryGirl.build(:user)).to respond_to(:subscribing?) }
+    context 'not subscribed' do
+      before do
+        allow(association).to receive(:find_by_feeder_id)
+          .with(feeder).and_return(nil)
+      end
+
+      it 'is false' do
+        expect(user.subscribing?(feeder)).to eq(false)
+      end
+    end
+
+    context 'subscribed' do
+      before do
+        allow(association).to receive(:find_by_feeder_id)
+          .with(feeder).and_return(feeder)
+      end
+
+      it 'is true' do
+        expect(user.subscribing?(feeder)).to eq(true)
+      end
+    end
   end
 
   describe '.record_new_session' do

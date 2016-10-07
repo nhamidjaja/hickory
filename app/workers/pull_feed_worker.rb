@@ -32,6 +32,17 @@ class PullFeedWorker
 
   # TODO: untested
   def get_image_url(entry)
-    entry.try(:image) || entry.try(:enclosure_url)
+    # NOTE: nil is an acceptable return value
+    # but try statements should be used with caution
+    entry.try(:image) || entry.try(:enclosure_url) || parse_image_url(entry)
+  end
+
+  # TODO: untested
+  def parse_image_url(entry)
+    img = Nokogiri::HTML(entry.content).xpath('//img').first
+
+    return img['src'] if img
+
+    nil
   end
 end
