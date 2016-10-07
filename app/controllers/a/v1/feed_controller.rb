@@ -3,7 +3,9 @@ module A
   module V1
     class FeedController < A::V1::ApplicationController
       def index
-        return [] unless current_user
+        unless current_user
+          return @entries = TopArticle.order('RANDOM()').limit(30)
+        end
 
         @entries = current_user.top_articles.order(published_at: :desc)
 
