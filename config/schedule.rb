@@ -4,13 +4,13 @@ every :hour do
   rake 'feeder:refresh'
 end
 
-every :weekday, at: '7pm' do
-  rake 'story:registered'
-end
+# every :weekday, at: '7pm' do
+#   rake 'story:registered'
+# end
 
-every :weekend, at: '4pm' do
-  rake 'story:registered'
-end
+# every :weekend, at: '4pm' do
+#   rake 'story:registered'
+# end
 
 # Use this file to easily define all of your cron jobs.
 #
