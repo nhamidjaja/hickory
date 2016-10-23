@@ -228,4 +228,68 @@ RSpec.describe 'Publications API', type: :request do
       end
     end
   end
+
+  describe 'search for publications' do
+    context 'blank query' do
+      it 'is empty' do
+        expect(Feeder).to_not receive(:search)
+
+        get '/a/v1/publications/search',
+            nil
+
+        expect(response.status).to eq(200)
+        expect(json['publications']).to eq([])
+      end
+    end
+
+    context 'has query' do
+      subject do
+        get '/a/v1/publications/search?query=xo',
+            nil
+      end
+
+      it 'is empty when there is no match' do
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications']).to eq([])
+      end
+
+      it 'exact matches' do
+        FactoryGirl.create(:feeder,
+                           title: 'xo')
+        FactoryGirl.create(:feeder, title: 'abc')
+
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications'].size).to eq(1)
+        expect(json['publications'][0]['title']).to eq('xo')
+      end
+
+      it 'partial matches' do
+        FactoryGirl.create(:feeder, title: 'xoy')
+        FactoryGirl.create(:feeder, title: 'abc')
+
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications'].size).to eq(1)
+        expect(json['publications'][0]['title']).to eq('xoy')
+      end
+
+      context 'several matches' do
+        it 'is limited to 10' do
+          11.times do |i|
+            FactoryGirl.create(:feeder, title: 'xo' + i.to_s)
+          end
+
+          subject
+
+          expect(response.status).to eq(200)
+          expect(json['publications'].size).to eq(10)
+        end
+      end
+    end
+  end
 end

@@ -2,6 +2,7 @@
 module A
   module V1
     class FeedController < A::V1::ApplicationController
+      # rubocop:disable Metrics/MethodLength
       def index
         unless current_user
           return @entries = TopArticle.order('RANDOM()').limit(30)

@@ -38,4 +38,11 @@ RSpec.describe 'publications routes', type: :routing do
                    id: 'some-id',
                    format: :json)
   end
+
+  it 'GET search' do
+    expect(get('a/v1/publications/search'))
+      .to route_to(controller: 'a/v1/publications',
+                   action: 'search',
+                   format: :json)
+  end
 end

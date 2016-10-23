@@ -39,6 +39,13 @@ module A
         @publication = Feeder.find(params[:id])
         current_user.feeders.destroy(@publication)
       end
+
+      def search
+        @publications = []
+        return unless params[:query]
+
+        @publications = Feeder.search(params[:query]).take(10)
+      end
     end
   end
 end
