@@ -89,6 +89,7 @@ RSpec.describe 'Publications API', type: :request do
 
   describe 'get a publication' do
     before { feeder }
+    before { feeder.top_articles = FactoryGirl.create_list(:top_article, 40) }
 
     context 'does not exist' do
       it 'is not found' do
@@ -114,6 +115,7 @@ RSpec.describe 'Publications API', type: :request do
           expect(json['publication']['description']).to_not be_empty
           expect(json['publication']['icon_url']).to_not be_empty
           expect(json['publication']['is_subscribing']).to eq(false)
+          expect(json['publication']['recent_entries'].size).to eq(30)
         end
       end
 

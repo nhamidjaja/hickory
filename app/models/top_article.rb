@@ -6,6 +6,8 @@ class TopArticle < ActiveRecord::Base
   validates :content_url, presence: true
   validates :title, presence: true
 
+  scope :newest, -> { order(published_at: :desc).limit(30) }
+
   def self.since(last_published_at)
     articles = TopArticle.all.order(published_at: :desc)
 
