@@ -88,7 +88,8 @@ CREATE TABLE feeders (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     priority integer DEFAULT 9 NOT NULL,
-    icon_url character varying
+    icon_url character varying,
+    tsv tsvector
 );
 
 
@@ -276,6 +277,13 @@ CREATE INDEX index_feeders_on_priority ON feeders USING btree (priority);
 
 
 --
+-- Name: index_feeders_on_tsv; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_feeders_on_tsv ON feeders USING gist (tsv);
+
+
+--
 -- Name: index_feeders_users_on_feeder_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -357,6 +365,13 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 --
 
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv', 'pg_catalog.simple', 'username', 'full_name');
+
+
+--
+-- Name: tsvectorupdate; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON feeders FOR EACH ROW EXECUTE PROCEDURE tsvector_update_trigger('tsv', 'pg_catalog.simple', 'title');
 
 
 --
@@ -444,4 +459,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160923062536');
 INSERT INTO schema_migrations (version) VALUES ('20160924084940');
 
 INSERT INTO schema_migrations (version) VALUES ('20160925073449');
+
+INSERT INTO schema_migrations (version) VALUES ('20161023143407');
 

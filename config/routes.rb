@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       resources :publications, only: [:index, :show] do
         collection do
           get 'featured'
+          get 'search'
         end
 
         member do

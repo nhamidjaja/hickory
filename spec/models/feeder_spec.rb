@@ -18,4 +18,8 @@ RSpec.describe Feeder, type: :model do
   describe '.title' do
     it { expect(FactoryGirl.build(:feeder, title: '')).to_not be_valid }
   end
+
+  describe '#search' do
+    it { expect(Feeder).to respond_to(:search) }
+  end
 end

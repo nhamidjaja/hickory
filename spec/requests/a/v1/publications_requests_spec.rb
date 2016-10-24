@@ -89,6 +89,7 @@ RSpec.describe 'Publications API', type: :request do
 
   describe 'get a publication' do
     before { feeder }
+    before { feeder.top_articles = FactoryGirl.create_list(:top_article, 40) }
 
     context 'does not exist' do
       it 'is not found' do
@@ -114,6 +115,7 @@ RSpec.describe 'Publications API', type: :request do
           expect(json['publication']['description']).to_not be_empty
           expect(json['publication']['icon_url']).to_not be_empty
           expect(json['publication']['is_subscribing']).to eq(false)
+          expect(json['publication']['recent_entries'].size).to eq(30)
         end
       end
 
@@ -224,6 +226,70 @@ RSpec.describe 'Publications API', type: :request do
           end.to change { FeedersUser.count }.by(-1)
 
           expect(response.status).to eq(200)
+        end
+      end
+    end
+  end
+
+  describe 'search for publications' do
+    context 'blank query' do
+      it 'is empty' do
+        expect(Feeder).to_not receive(:search)
+
+        get '/a/v1/publications/search',
+            nil
+
+        expect(response.status).to eq(200)
+        expect(json['publications']).to eq([])
+      end
+    end
+
+    context 'has query' do
+      subject do
+        get '/a/v1/publications/search?query=xo',
+            nil
+      end
+
+      it 'is empty when there is no match' do
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications']).to eq([])
+      end
+
+      it 'exact matches' do
+        FactoryGirl.create(:feeder,
+                           title: 'xo')
+        FactoryGirl.create(:feeder, title: 'abc')
+
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications'].size).to eq(1)
+        expect(json['publications'][0]['title']).to eq('xo')
+      end
+
+      it 'partial matches' do
+        FactoryGirl.create(:feeder, title: 'xoy')
+        FactoryGirl.create(:feeder, title: 'abc')
+
+        subject
+
+        expect(response.status).to eq(200)
+        expect(json['publications'].size).to eq(1)
+        expect(json['publications'][0]['title']).to eq('xoy')
+      end
+
+      context 'several matches' do
+        it 'is limited to 10' do
+          11.times do |i|
+            FactoryGirl.create(:feeder, title: 'xo' + i.to_s)
+          end
+
+          subject
+
+          expect(response.status).to eq(200)
+          expect(json['publications'].size).to eq(10)
         end
       end
     end
